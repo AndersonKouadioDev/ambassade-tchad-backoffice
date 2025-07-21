@@ -1501,15 +1501,15 @@ export function getHorizontalMenuList(pathname: string, t: any): Group[] {
       menus: [
         {
           id: "auth",
-          href: "/auth/login",
+          href: "/",
           label: t("authentication"),
           active: pathname.includes("/auth"),
           icon: "heroicons-outline:lock-closed",
           submenus: [
             {
-              href: "/auth/login",
+              href: "/",
               label: t("signInOne"),
-              active: pathname === "/auth/login",
+              active: pathname === "/",
               icon: "",
               children: [],
             },

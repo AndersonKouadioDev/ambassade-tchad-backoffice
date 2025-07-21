@@ -22,16 +22,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import TablePagination from "./table-pagination";
 import { columns } from "./column";
 import type { DataProps } from "./column";
 import { Button } from "@/components/ui/button";
-import {data as initialData} from "@/app/[locale]/(protected)/contenu/galerie-photo/data"
-// import { ViewDemandeModal } from "../demande-modal/view-demand";
-// import { EditDemandeModal } from "../demande-modal/edit-demand";
-// import { DeleteDemandeModal } from "../demande-modal/delete-demand";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RefreshCw, Plus } from "lucide-react";
+import { usePhotos, usePhotoStats } from "@/hooks/use-photos";
+import { PhotoFiltersWithPagination, Photo } from "@/lib/api/photos.service";
+import { useMemo } from "react";
 
-// This component displays a list of demands with functionalities to view, edit, and delete them.
+// Fonction pour convertir les données Photo en DataProps
+const photoToDataProps = (photo: Photo): DataProps => ({
+  id: photo.id,
+  document: photo.title,
+  date: new Date(photo.createdAt).toLocaleDateString('fr-FR'),
+  statut: photo.isPublished ? 'Publié' : 'Brouillon',
+  auteur: photo.author || 'Inconnu'
+});
+
+// This component displays a list of photos with functionalities to view, edit, and delete them.
 
 const PhotoList = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -41,22 +52,39 @@ const PhotoList = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = React.useState<DataProps[]>(initialData);
 
+  // États pour l'API
+  const [filters, setFilters] = React.useState<PhotoFiltersWithPagination>({
+    page: 1,
+    limit: 10
+  });
+
+  // États pour les modales
   const [viewOpen, setViewOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
-  const [currentDemande, setCurrentDemande] = React.useState<DataProps | null>(
+  const [currentPhoto, setCurrentPhoto] = React.useState<DataProps | null>(
     null
   );
 
+  // Hooks pour récupérer les données
+  const { data: photosData, isLoading, error, refetch } = usePhotos(filters);
+  const { data: statsData } = usePhotoStats();
+
+  // Conversion des données pour le tableau
+  const tableData = useMemo(() => {
+    if (!photosData?.photos) return [];
+    return photosData.photos.map(photoToDataProps);
+  }, [photosData]);
+
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    pageCount: photosData?.totalPages ?? 0,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -68,136 +96,218 @@ const PhotoList = () => {
       rowSelection,
     },
     meta: {
-      onView: (demande: DataProps) => {
-        setCurrentDemande(demande);
+      onView: (photo: DataProps) => {
+        setCurrentPhoto(photo);
         setViewOpen(true);
       },
-      onEdit: (demande: DataProps) => {
-        setCurrentDemande(demande);
+      onEdit: (photo: DataProps) => {
+        setCurrentPhoto(photo);
         setEditOpen(true);
       },
-      onDelete: (demande: DataProps) => {
-        setCurrentDemande(demande);
+      onDelete: (photo: DataProps) => {
+        setCurrentPhoto(photo);
         setDeleteOpen(true);
       },
     },
   });
 
-  const handleChangeEdit = (field: string, value: string) => {
-    if (!currentDemande) return;
-    setCurrentDemande({
-      ...currentDemande,
-      [field]: value,
-    });
+  // Gestionnaires pour les filtres
+  const handleSearchChange = (value: string) => {
+    setFilters(prev => ({ ...prev, title: value, page: 1 }));
   };
 
-  const handleSubmitEdit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentDemande) return;
-
-    setData((prev) =>
-      prev.map((item) =>
-        item.id === currentDemande.id ? currentDemande : item
-      )
-    );
-    setEditOpen(false);
+  const handleStatusFilter = (value: string) => {
+    const isPublished = value === 'published' ? true : value === 'draft' ? false : undefined;
+    setFilters(prev => ({ ...prev, isPublished, page: 1 }));
   };
 
-  const handleDelete = () => {
-    if (!currentDemande) return;
-    setData((prev) => prev.filter((item) => item.id !== currentDemande.id));
-    setDeleteOpen(false);
+  const handlePageChange = (page: number) => {
+    setFilters(prev => ({ ...prev, page }));
   };
+
+  const handleRefresh = () => {
+    refetch();
+  };
+
+  // Composant de squelette pour le chargement
+  const TableSkeleton = () => (
+    <div className="space-y-3">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="flex space-x-4 p-4 border rounded">
+          <Skeleton className="h-4 w-[200px]" />
+          <Skeleton className="h-4 w-[100px]" />
+          <Skeleton className="h-4 w-[80px]" />
+          <Skeleton className="h-4 w-[120px]" />
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between py-4 px-5">
-        <div className="text-xl font-medium text-default-900">
-          Liste des évènements
+      {/* En-tête avec statistiques */}
+      <div className="flex items-center justify-between py-4 px-5 border-b">
+        <div className="flex items-center space-x-6">
+          <div className="text-xl font-medium text-default-900">
+            Liste des photos
+          </div>
+          {statsData && (
+            <div className="flex items-center space-x-4">
+              <Badge variant="outline" className="text-sm">
+                Total: {statsData.total}
+              </Badge>
+              <Badge variant="default" className="text-sm bg-green-100 text-green-800">
+                Publiées: {statsData.published}
+              </Badge>
+              <Badge variant="secondary" className="text-sm">
+                Brouillons: {statsData.drafts}
+              </Badge>
+            </div>
+          )}
         </div>
         <div className="flex items-center space-x-3">
-                  <Input
-                    placeholder="Filtrer par document..."
-                    value={
-                      (table.getColumn("document")?.getFilterValue() as string) ?? ""
-                    }
-                    onChange={(e) =>
-                      table.getColumn("document")?.setFilterValue(e.target.value)
-                    }
-                    className="max-w-sm"
-                  />
-              <Button
-                color="destructive"
-                onClick={() => setEditOpen(true)}
-                size="md"
-                className="ml-3"
-                shadow="md"
-              >
-                Ajouter une photo
-              </Button>
-                  {/* <Button variant="secondary" onClick={() => setViewOpen(true)}>
-                    Voir
-                  </Button> */}
-                  
-                </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isLoading}
+          >
+            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          </Button>
+          <Button
+            onClick={() => setEditOpen(true)}
+            size="sm"
+            className="bg-primary"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Nouvelle photo
+          </Button>
+        </div>
       </div>
 
-      <Table>
-        <TableHeader className="bg-default-200">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                Aucun résultat
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <TablePagination table={table} />
+      {/* Filtres */}
+      <div className="flex items-center space-x-4 py-4 px-5">
+        <Input
+          placeholder="Rechercher par titre..."
+          value={filters.title || ''}
+          onChange={(e) => handleSearchChange(e.target.value)}
+          className="max-w-sm"
+        />
+        <Select
+          value={filters.isPublished === true ? 'published' : filters.isPublished === false ? 'draft' : 'all'}
+          onValueChange={handleStatusFilter}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Statut" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tous</SelectItem>
+            <SelectItem value="published">Publiées</SelectItem>
+            <SelectItem value="draft">Brouillons</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-      {/* {currentDemande && (
+      {/* Contenu du tableau */}
+      {error ? (
+        <div className="flex items-center justify-center h-32 text-red-500">
+          Erreur lors du chargement des photos: {error.message}
+        </div>
+      ) : isLoading ? (
+        <TableSkeleton />
+      ) : (
         <>
-          <ViewDemandeModal
+          <Table>
+            <TableHeader className="bg-default-200">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="hover:bg-muted/50"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    Aucune photo trouvée
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+
+          {/* Pagination personnalisée */}
+          {photosData && photosData.totalPages > 1 && (
+            <div className="flex items-center justify-between px-5 py-4 border-t">
+              <div className="text-sm text-muted-foreground">
+                Page {filters.page} sur {photosData.totalPages} ({photosData.total} photos au total)
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handlePageChange(filters.page - 1)}
+                  disabled={filters.page <= 1}
+                >
+                  Précédent
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handlePageChange(filters.page + 1)}
+                  disabled={filters.page >= photosData.totalPages}
+                >
+                  Suivant
+                </Button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* TODO: Implémenter les modales pour les photos */}
+      {/* {currentPhoto && (
+        <>
+          <ViewPhotoModal
             isOpen={viewOpen}
             setIsOpen={setViewOpen}
-            demande={currentDemande}
+            photo={currentPhoto}
           />
-          <EditDemandeModal
+          <EditPhotoModal
             isOpen={editOpen}
             setIsOpen={setEditOpen}
-            demande={currentDemande}
-            onChange={handleChangeEdit}
-            onSubmit={handleSubmitEdit}
+            photo={currentPhoto}
           />
+          <DeletePhotoModal
+            isOpen={deleteOpen}
+            setIsOpen={setDeleteOpen}
+            photo={currentPhoto}
+          />
+        </>
+      )} */}
           <DeleteDemandeModal
             isOpen={deleteOpen}
             setIsOpen={setDeleteOpen}

@@ -10,80 +10,109 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { format } from "date-fns"
+import { fr } from "date-fns/locale"
+import type { Demande } from "@/lib/api"
 
-export type DataProps = {
-  id: string | number
-  user: {
-    name: string
-    image: string
-  }
-  document: string
-  demandeStatus: "nouvelle" | "attente_documents" | "pret_a_retirer" | "traitee"
-  demandeTraitée: "approuvée" | "archivée" | "rejetée"
-}
+export type DataProps = Demande
 
 export const columns: ColumnDef<DataProps>[] = [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => <span>{row.getValue("id")}</span>,
+    cell: ({ row }) => <span className="font-mono text-xs">{row.getValue("id")}</span>,
   },
   {
     accessorKey: "user",
-    header: "Nom Complet",
+    header: "Demandeur",
     cell: ({ row }) => {
-      const user = row.original.user
+      const demande = row.original
+      const user = demande.user
+      const initials = `${user?.firstName?.charAt(0) || ''}${user?.lastName?.charAt(0) || ''}`
       return (
         <div className="flex gap-3 items-center font-medium text-card-foreground/80">
           <Avatar className="w-8 h-8">
-            {user?.image ? (
-              <AvatarImage src={user.image} />
-            ) : (
-              <AvatarFallback>AB</AvatarFallback>
-            )}
+            <AvatarFallback className="text-xs">{initials}</AvatarFallback>
           </Avatar>
-          <span className="text-sm text-default-600">{user?.name}</span>
+          <div className="flex flex-col">
+            <span className="text-sm text-default-900">{user?.firstName} {user?.lastName}</span>
+            <span className="text-xs text-default-500">{user?.email}</span>
+          </div>
         </div>
       )
     },
   },
   {
-    accessorKey: "document",
-    header: "Document",
-    cell: ({ row }) => <span>{row.getValue("document")}</span>,
+    accessorKey: "serviceType",
+    header: "Service",
+    cell: ({ row }) => {
+      const service = row.getValue<string>("serviceType")
+      const serviceLabels: Record<string, string> = {
+        VISA: "Visa",
+        BIRTH_ACT_APPLICATION: "Acte de naissance",
+        CONSULAR_CARD: "Carte consulaire",
+        LAISSEZ_PASSER: "Laissez-passer",
+        MARRIAGE_CAPACITY_ACT: "Acte de capacité de mariage",
+        DEATH_ACT_APPLICATION: "Acte de décès",
+        POWER_OF_ATTORNEY: "Procuration",
+        NATIONALITY_CERTIFICATE: "Certificat de nationalité"
+      }
+      return <span className="text-sm">{serviceLabels[service] || service}</span>
+    },
   },
   {
-    accessorKey: "demandeStatus",
-    header: "Statut de la Demande",
+    accessorKey: "ticketNumber",
+    header: "Numéro de Ticket",
+    cell: ({ row }) => <span className="text-sm font-mono">{row.getValue("ticketNumber")}</span>,
+  },
+  {
+    accessorKey: "status",
+    header: "Statut",
     cell: ({ row }) => {
-      const value = row.getValue<string>("demandeStatus")
-      const colorMap: Record<string, string> = {
-        nouvelle: "bg-blue-100 text-blue-700",
-        attente_documents: "bg-yellow-100 text-yellow-700",
-        pret_a_retirer: "bg-green-100 text-green-700",
-        traitee: "bg-gray-100 text-gray-700",
+      const status = row.getValue<string>("status")
+      const statusConfig: Record<string, { label: string; className: string }> = {
+        NEW: { label: "Nouvelle", className: "bg-blue-100 text-blue-700" },
+        IN_REVIEW_DOCS: { label: "En révision", className: "bg-yellow-100 text-yellow-700" },
+        PENDING_ADDITIONAL_INFO: { label: "Infos manquantes", className: "bg-orange-100 text-orange-700" },
+        APPROVED_BY_AGENT: { label: "Approuvé par agent", className: "bg-green-100 text-green-700" },
+        APPROVED_BY_CHEF: { label: "Approuvé par chef", className: "bg-green-200 text-green-800" },
+        APPROVED_BY_CONSUL: { label: "Approuvé par consul", className: "bg-green-300 text-green-900" },
+        REJECTED: { label: "Rejetée", className: "bg-red-100 text-red-700" },
+        READY_FOR_PICKUP: { label: "Prête pour retrait", className: "bg-purple-100 text-purple-700" },
+        DELIVERED: { label: "Délivrée", className: "bg-gray-100 text-gray-700" },
+        ARCHIVED: { label: "Archivée", className: "bg-gray-200 text-gray-600" },
+        EXPIRED: { label: "Expirée", className: "bg-red-200 text-red-800" },
+        RENEWAL_REQUESTED: { label: "Renouvellement", className: "bg-indigo-100 text-indigo-700" }
       }
+      const config = statusConfig[status] || { label: status, className: "bg-gray-100 text-gray-700" }
       return (
-        <Badge className={cn("rounded-full px-3 py-1 text-xs capitalize", colorMap[value])}>
-          {value.replace(/_/g, " ")}
+        <Badge className={cn("rounded-full px-3 py-1 text-xs", config.className)}>
+          {config.label}
         </Badge>
       )
     },
   },
   {
-    accessorKey: "demandeTraitée",
-    header: "Traitement",
+    accessorKey: "submissionDate",
+    header: "Date de soumission",
     cell: ({ row }) => {
-      const value = row.getValue<string>("demandeTraitée")
-      const colorMap: Record<string, string> = {
-        approuvée: "bg-emerald-100 text-emerald-700",
-        archivée: "bg-gray-100 text-gray-600",
-        rejetée: "bg-red-100 text-red-600",
-      }
+      const date = row.getValue<string>("submissionDate")
       return (
-        <Badge className={cn("rounded-full px-3 py-1 text-xs capitalize", colorMap[value])}>
-          {value}
-        </Badge>
+        <span className="text-sm text-default-600">
+          {format(new Date(date), "dd MMM yyyy", { locale: fr })}
+        </span>
+      )
+    },
+  },
+  {
+    accessorKey: "amount",
+    header: "Montant",
+    cell: ({ row }) => {
+      const amount = row.getValue<number>("amount")
+      return (
+        <span className="text-sm font-semibold">
+          {amount} €
+        </span>
       )
     },
   },
@@ -92,11 +121,11 @@ export const columns: ColumnDef<DataProps>[] = [
     header: "Actions",
     enableHiding: false,
     cell: ({ row, table }) => {
-      const user = row.original
+      const demande = row.original
       const meta = table.options.meta as {
-        onView: (user: DataProps) => void
-        onEdit: (user: DataProps) => void
-        onDelete: (user: DataProps) => void
+        onView: (demande: DataProps) => void
+        onEdit: (demande: DataProps) => void
+        onDelete: (demande: DataProps) => void
       }
 
       return (
@@ -107,13 +136,13 @@ export const columns: ColumnDef<DataProps>[] = [
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => meta.onView(user)}
+                  onClick={() => meta.onView(demande)}
                   className="w-7 h-7"
                 >
                   <Eye className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Voir</TooltipContent>
+              <TooltipContent>Voir les détails</TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
@@ -123,13 +152,13 @@ export const columns: ColumnDef<DataProps>[] = [
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => meta.onEdit(user)}
+                  onClick={() => meta.onEdit(demande)}
                   className="w-7 h-7"
                 >
                   <SquarePen className="w-3 h-3" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Modifier</TooltipContent>
+              <TooltipContent>Modifier la demande</TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
@@ -139,13 +168,16 @@ export const columns: ColumnDef<DataProps>[] = [
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => meta.onDelete(user)}
+                  onClick={() => meta.onDelete(demande)}
                   className="w-7 h-7"
+                  disabled={demande.status === 'COMPLETED'}
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Supprimer</TooltipContent>
+              <TooltipContent>
+                {demande.status === 'COMPLETED' ? 'Impossible de supprimer une demande terminée' : 'Supprimer la demande'}
+              </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
