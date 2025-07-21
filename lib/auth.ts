@@ -2,7 +2,8 @@ import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { getUserByEmail, type User } from "./data";
+import { baseURL } from '@/config';
+import axios from 'axios';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   session: {
@@ -18,6 +19,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.id = user.id
         token.email = user.email
         token.name = user.name
+        token.accessToken = user.accessToken
+        token.refreshToken = user.refreshToken
+        token.userType = user.userType
       }
       return token
     },
@@ -26,6 +30,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.id = token.id as string
         session.user.email = token.email as string
         session.user.name = token.name as string
+        session.user.accessToken = token.accessToken as string
+        session.user.refreshToken = token.refreshToken as string
+        session.user.userType = token.userType as string
       }
       return session
     }
@@ -51,13 +58,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }
         
         try {
-          const user = getUserByEmail(credentials.email as string);
-          if (user && user.password === credentials.password) {
+          const response = await axios.post(`${baseURL}/auth/login`, {
+            email: credentials.email,
+            password: credentials.password,
+          });
+          
+          if (response.data && response.data.user) {
+            const { user, accessToken, refreshToken } = response.data;
             return {
-              id: "1",
+              id: user.id.toString(),
               email: user.email,
-              name: user.name,
-              image: user.image,
+              name: user.firstName + ' ' + user.lastName,
+              image: user.avatar || null,
+              accessToken,
+              refreshToken,
+              userType: user.userType,
             };
           }
           return null;
