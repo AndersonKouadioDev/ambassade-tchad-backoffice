@@ -4,12 +4,12 @@ import { cn } from "@/lib/utils";
 import { InputColor } from "@/lib/type";
 
 export const inputVariants = cva(
-  " w-full  bg-background  rounded py-2 px-3 h-9 border text-sm font-normal border border-solid border-default-200 outline-none focus:outline-none  file:border-0 file:bg-transparent file:text-sm file:font-medium read-only:bg-default-200 disabled:cursor-not-allowed disabled:opacity-50  transition-all duration-300 ",
+  " w-full bg-background dark:bg-gray-800 rounded py-2 px-3 h-9 border text-sm font-normal border border-solid border-default-200 dark:border-gray-600 outline-none focus:outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium read-only:bg-default-200 dark:read-only:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 text-gray-900 dark:text-gray-100 ",
   {
     variants: {
       color: {
         default:
-          "border-default-200 text-default-500 focus:outline-none focus:border-default dark:focus:border-default-500 disabled:bg-default-200  dark:disabled:bg-default-500  placeholder:text-accent-foreground/50",
+          "border-default-200 dark:border-gray-600 text-default-500 dark:text-gray-100 focus:outline-none focus:border-default dark:focus:border-gray-400 hover:border-gray-300 dark:hover:border-gray-500 disabled:bg-default-200 dark:disabled:bg-gray-700 placeholder:text-accent-foreground/50 dark:placeholder:text-gray-400",
         primary:
           "border-primary/50 text-primary focus:border-primary disabled:bg-primary/30 disabled:placeholder:text-primary  placeholder:text-primary/70",
         secondary:

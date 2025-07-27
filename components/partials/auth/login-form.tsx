@@ -14,12 +14,16 @@ import { Loader2 } from 'lucide-react';
 import { loginUser } from '@/action/auth-action';
 import { toast } from "sonner"
 import { useRouter } from '@/components/navigation';
+import { useTranslations } from 'next-intl';
 
-const schema = z.object({
-  email: z.string().email({ message: "Votre email est invalide." }),
-  password: z.string().min(4, { message: "Le mot de passe doit contenir au moins 4 caractères." }),
-});
 const LoginForm = () => {
+  const t = useTranslations('LoginForm');
+  
+  const schema = z.object({
+    email: z.string().email({ message: t('email_invalid') }),
+    password: z.string().min(4, { message: t('password_min_length') }),
+  });
+  
   const [isPending, startTransition] = React.useTransition();
   const router = useRouter();
   const [passwordType, setPasswordType] = React.useState("password");
@@ -55,12 +59,12 @@ const LoginForm = () => {
         const response = await loginUser(data);
 
         if (!!response.error) {
-          toast.error("Erreur de connexion", {
-            description: "Veuillez vérifier vos identifiants.",
+          toast.error(t('error_title'), {
+            description: t('error_description'),
           })
         } else {
           router.push('/dashboard/analytics');
-          toast.success("Connexion réussie");
+          toast.success(t('success_message'));
         }
       } catch (err: any) {
         toast.error(err.message);
@@ -71,8 +75,8 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-5 2xl:mt-7 space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="email" className=" font-medium text-default-600">
-          Adresse email{" "}
+        <Label htmlFor="email" className=" font-medium text-default-600 dark:text-gray-300">
+          {t('email_label')}{" "}
         </Label>
         <Input size="lg"
           disabled={isPending}
@@ -91,8 +95,8 @@ const LoginForm = () => {
       )}
 
       <div className="mt-3.5 space-y-2">
-        <Label htmlFor="password" className="mb-2 font-medium text-default-600">
-          Mot de passe{" "}
+        <Label htmlFor="password" className="mb-2 font-medium text-default-600 dark:text-gray-300">
+          {t('password_label')}{" "}
         </Label>
         <div className="relative">
           <Input size="lg"
@@ -128,18 +132,18 @@ const LoginForm = () => {
       <div className="flex justify-between">
         <div className="flex gap-2 items-center">
           <Checkbox id="checkbox" defaultChecked />
-          <Label htmlFor="checkbox">Rester connecté</Label>
+          <Label htmlFor="checkbox" className="dark:text-gray-300">{t('remember_me')}</Label>
         </div>
         <Link
           href="/forgot-password"
-          className="text-sm text-default-800 dark:text-default-400 leading-6 font-medium"
+          className="text-sm text-default-800 dark:text-gray-300 leading-6 font-medium hover:text-embassy-blue-600 dark:hover:text-embassy-blue-400 transition-colors"
         >
-          Mot de passe oublié ?
+          {t('forgot_password')}
         </Link>
       </div>
       <Button fullWidth disabled={isPending}>
         {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {isPending ? "Connexion..." : "Se connecter"}
+        {isPending ? t('signing_in') : t('sign_in')}
       </Button>
     </form>
   );

@@ -15,6 +15,8 @@ export interface PaginatedResponse<T> {
     page: number;
     limit: number;
     totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
 }
 
 export interface ApiResponse<T> {

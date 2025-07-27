@@ -47,15 +47,19 @@ const DashCodeFooter = async () => {
                     className="relative bg-card bg-no-repeat backdrop-filter backdrop-blur-[40px] rounded-full footer-bg dark:bg-default-300 h-[65px] w-[65px] z-[-1] -mt-[40px] flex justify-center items-center"
                 >
                     <div className="h-[50px] w-[50px] rounded-full relative left-[0px] top-[0px] custom-dropshadow">
-                        <Image
-                            src={session?.user?.image as string}
-                            alt={session?.user?.name?.charAt(0) as string}
-                            width={50}
-                            height={50}
-                            className="w-full h-full rounded-full border-2"
-
-
-                        />
+                        {session?.user?.image ? (
+                            <Image
+                                src={session.user.image}
+                                alt={session?.user?.name?.charAt(0) || 'User'}
+                                width={50}
+                                height={50}
+                                className="w-full h-full rounded-full border-2"
+                            />
+                        ) : (
+                            <div className="w-full h-full rounded-full border-2 bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                                {session?.user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                            </div>
+                        )}
                     </div>
                 </Link>
                 <Link href="notifications">

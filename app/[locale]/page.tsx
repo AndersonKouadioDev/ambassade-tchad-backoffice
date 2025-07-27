@@ -4,13 +4,15 @@ import LoginForm from "@/components/partials/auth//login-form";
 import Image from "next/image";
 import Logo from "@/components/logo";
 import DashCodeLogo from "@/components/dascode-logo";
+import { getTranslations } from 'next-intl/server';
 
-const Login3 = () => {
+const Login3 = async () => {
+  const t = await getTranslations('LoginPage');
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Background pour la partie droite */}
+      {/* Background pour la partie droite avec support dark mode */}
       <div 
-        className="absolute inset-0 lg:left-1/2 bg-gradient-to-br from-gray-50 to-white"
+        className="absolute inset-0 lg:left-1/2 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800"
         style={{
           backgroundImage: `
             radial-gradient(circle at 25% 25%, rgba(0, 51, 153, 0.05) 0%, transparent 50%),
@@ -92,7 +94,7 @@ const Login3 = () => {
         </div>
 
         {/* Section droite - Formulaire de connexion */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-6 lg:p-12 bg-gradient-to-br from-gray-50 to-white lg:bg-none">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-6 lg:p-12 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 lg:bg-none">
           <div className="w-full max-w-md">
             
             {/* Logo mobile */}
@@ -112,7 +114,7 @@ const Login3 = () => {
             </div>
 
             {/* Carte de connexion */}
-            <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 lg:p-10 relative overflow-hidden">
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/20 p-8 lg:p-10 relative overflow-hidden">
               
               {/* Effets décoratifs de la carte */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-embassy-yellow-400/10 to-transparent rounded-full blur-2xl"></div>
@@ -121,12 +123,12 @@ const Login3 = () => {
               <div className="relative z-10">
                 {/* En-tête */}
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold text-embassy-blue-800 mb-2">
-                    Connexion
+                  <h2 className="text-3xl font-bold text-embassy-blue-800 dark:text-embassy-blue-400 mb-2">
+                    {t('title')}
                   </h2>
                   <div className="h-1 w-16 bg-gradient-to-r from-embassy-blue-600 to-embassy-yellow-500 mx-auto rounded-full mb-4"></div>
-                  <p className="text-gray-600">
-                    Accédez à votre espace administratif
+                  <p className="text-gray-600 dark:text-gray-300">
+                    {t('subtitle')}
                   </p>
                 </div>
 
@@ -135,22 +137,31 @@ const Login3 = () => {
                   <LoginForm />
                 </div>
 
+                {/* Lien d'inscription */}
+                <div className="text-center mt-6">
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {t('no_account')}{" "}
+                    <Link href="/auth/register" className="text-embassy-blue-600 dark:text-embassy-blue-400 hover:text-embassy-blue-700 dark:hover:text-embassy-blue-300 font-medium transition-colors">
+                      {t('register')}
+                    </Link>
+                  </p>
+                </div>
              
                 {/* Contact rapide */}
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <div className="flex items-center justify-center space-x-6 text-sm text-gray-500">
-                    <a href="#" className="flex items-center space-x-1 hover:text-embassy-blue-600 transition-colors">
+                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-600">
+                  <div className="flex items-center justify-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
+                    <a href="#" className="flex items-center space-x-1 hover:text-embassy-blue-600 dark:hover:text-embassy-blue-400 transition-colors">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                       </svg>
-                      <span>Contact</span>
+                      <span>{t('contact')}</span>
                     </a>
-                    <a href="#" className="flex items-center space-x-1 hover:text-embassy-blue-600 transition-colors">
+                    <a href="#" className="flex items-center space-x-1 hover:text-embassy-blue-600 dark:hover:text-embassy-blue-400 transition-colors">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"></path>
                       </svg>
-                      <span>Aide</span>
+                      <span>{t('help')}</span>
                     </a>
                   </div>
                 </div>

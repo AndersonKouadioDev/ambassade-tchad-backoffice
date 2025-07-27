@@ -7,6 +7,10 @@ export default async function middleware(request: NextRequest) {
   // Étape 1: Gestion de l'authentification
   const session = await auth();
   const isLoggedIn = !!session?.user;
+  
+  console.log("🔍 Middleware - Path:", request.nextUrl.pathname);
+  console.log("🔍 Middleware - Session:", !!session);
+  console.log("🔍 Middleware - User:", !!session?.user);
   const isOnLoginPage = request.nextUrl.pathname.includes('/auth/login');
   const isOnProtectedRoute = request.nextUrl.pathname.includes('/dashboard') || 
                             request.nextUrl.pathname.includes('/app') ||
@@ -15,12 +19,12 @@ export default async function middleware(request: NextRequest) {
   // Redirection vers login si pas connecté et sur une route protégée
   if (isOnProtectedRoute && !isLoggedIn) {
     const locale = request.nextUrl.pathname.split('/')[1];
-    const loginUrl = new URL(`/${locale}/auth/login`, request.url);
+    const loginUrl = new URL(`/${locale}`, request.url);
     return NextResponse.redirect(loginUrl);
   }
 
   // Redirection vers dashboard si connecté et sur la page de login
-  if (isOnLoginPage && isLoggedIn) {
+  if ((isOnLoginPage || request.nextUrl.pathname === `/${request.nextUrl.pathname.split('/')[1]}`) && isLoggedIn) {
     const locale = request.nextUrl.pathname.split('/')[1];
     const dashboardUrl = new URL(`/${locale}/dashboard/analytics`, request.url);
     return NextResponse.redirect(dashboardUrl);

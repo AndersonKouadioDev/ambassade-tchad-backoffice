@@ -1,8 +1,11 @@
 "use client"
 
 import { useTheme } from "next-themes";
-import Chart from "react-apexcharts";
+import dynamic from "next/dynamic";
 import { colors } from "@/lib/colors";
+import { useEffect, useState } from "react";
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 interface OverviewRadialChartProps {
   height?: number;
   series?: number[];
@@ -16,8 +19,16 @@ const OverviewRadialChart = ({
   chartType = "radialBar",
   chartColor=["#2563eb"],
 }: OverviewRadialChartProps) => {
-
+  const [mounted, setMounted] = useState(false);
   const {theme:mode} = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div style={{ height: `${height}px` }} className="flex items-center justify-center">Loading chart...</div>;
+  }
 
   const options:any = {
     chart: {

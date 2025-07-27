@@ -12,9 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon"
-import { signOut, auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import Image from "next/image";
-import { Link } from '@/i18n/routing'; 
+import { Link } from '@/i18n/routing';
+import { LogoutButton } from "./logout-button"; 
 
 const ProfileInfo = async () => {
   const session = await auth();
@@ -28,7 +29,7 @@ const ProfileInfo = async () => {
           <div className="flex items-center gap-3 text-embassy-blue-800 hover:bg-embassy-blue-50  bg-embassy-blue-50 rounded-lg px-2 py-1 transition-all duration-200 dark:text-embassy-blue-200 dark:hover:bg-embassy-blue-800/30">
             <Image
               src="/images/all-img/user3.png"
-              alt={session?.user?.name?.charAt(0) as string}
+              alt={session?.user?.name?.charAt(0) || "User"}
               width={36}
               height={36}
               className="rounded-full border-2 border-embassy-blue-200 dark:border-embassy-blue-600"
@@ -44,8 +45,8 @@ const ProfileInfo = async () => {
         <DropdownMenuContent className="w-56 p-0 bg-white/95 backdrop-blur-sm border border-embassy-blue-200 shadow-xl dark:bg-slate-800/95 dark:border-embassy-blue-400/30" align="end">
           <DropdownMenuLabel className="flex gap-3 items-center mb-1 p-4 border-b border-embassy-blue-100 dark:border-embassy-blue-700/30">
             <Image
-              src={session?.user?.image as string}
-              alt={session?.user?.name?.charAt(0) as string}
+              src={session?.user?.image || "/images/all-img/user3.png"}
+              alt={session?.user?.name?.charAt(0) || "User"}
               width={40}
               height={40}
               className="rounded-full border-2 border-embassy-blue-200 dark:border-embassy-blue-600"
@@ -121,17 +122,7 @@ const ProfileInfo = async () => {
           <DropdownMenuSeparator className="mb-0 bg-embassy-blue-100 dark:bg-embassy-blue-700/30" />
           <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-embassy-red-600 capitalize my-2 px-3 cursor-pointer hover:bg-embassy-red-50 rounded-lg mx-2 transition-colors duration-200 dark:text-embassy-red-400 dark:hover:bg-embassy-red-900/30">
             <div>
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut();
-                }}
-              >
-                <button type="submit" className="w-full flex items-center gap-2">
-                  <Icon icon="heroicons:power" className="w-4 h-4" />
-                  Déconnexion
-                </button>
-              </form>
+              <LogoutButton />
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

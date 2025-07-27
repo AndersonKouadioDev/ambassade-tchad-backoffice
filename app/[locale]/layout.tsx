@@ -13,6 +13,7 @@ import { getMessages } from 'next-intl/server';
 import DirectionProvider from "@/providers/direction-provider";
 import AuthProvider from "@/providers/auth.provider";
 import QueryProvider from "@/providers/query-provider";
+import { SessionManager } from "@/components/session-manager";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
@@ -47,6 +48,7 @@ export default async function RootLayout({
                     <MountedProvider>
 
                       <DirectionProvider direction={direction}>
+                        <SessionManager />
                         {children}
                       </DirectionProvider>
 
