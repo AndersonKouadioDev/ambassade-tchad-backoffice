@@ -1,17 +1,16 @@
 import { StatusBlock } from "@/components/blocks/status-block";
-import ModernDemandeTable from "@/components/demande/demande-list/modern-table"; 
+import ModernDemandeTable from "@/components/demande/demande-list/modern-table";
 import { Clock, CheckCircle2, XCircle, Archive } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export default function UserLispage() {
-  const t = useTranslations("gestionDemande");
+export default async function UserLispage() {
+  const t = await getTranslations("gestionDemande");
 
   return (
     <div className="container">
       <div className="grid grid-cols-12 gap-6 mt-6">
         <div className="col-span-12">
           <h1 className="text-2xl font-bold">{t("title")}</h1>
-        
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
             <StatusBlock
@@ -44,7 +43,6 @@ export default function UserLispage() {
             />
           </div>
         </div>
-
 
         <div className="col-span-12">
           <ModernDemandeTable />

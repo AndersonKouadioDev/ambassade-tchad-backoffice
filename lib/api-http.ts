@@ -10,7 +10,7 @@ export const api = axios.create({
 
 // Config pour la base url : 
 export const API_CONFIG = {
-    baseURL: (process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8083') + '/api/v1'
+    baseURL: (process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8081') + '/api/v1'
 }
 // Intercepteur pour les requêtes (ajout du token d'authentification)
 api.interceptors.request.use(

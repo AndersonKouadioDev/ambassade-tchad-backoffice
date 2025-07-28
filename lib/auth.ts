@@ -69,7 +69,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.accessToken = user.accessToken
         token.refreshToken = user.refreshToken
         token.userType = user.userType
-        token.role = user.role
+        // token.role = user.role
         token.accessTokenExpires = Date.now() + 15 * 60 * 1000; // 15 minutes
         console.log('🎫 JWT Token created:', {
           id: token.id,
@@ -77,6 +77,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           userType: token.userType,
           role: token.role
         });
+
         return token;
       }
 
@@ -122,12 +123,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.accessToken = token.accessToken as string
         session.user.refreshToken = token.refreshToken as string
         session.user.userType = token.userType as string
-        session.user.role = token.role as string
+        // session.user.role = token.role as string
         console.log('📋 Session created:', {
           id: session.user.id,
           email: session.user.email,
           userType: session.user.userType,
-          role: session.user.role
+          // role: session.user.role
         });
       }
       return session
