@@ -1,36 +1,45 @@
-import NextAuth from "next-auth"
+import { DefaultJWT } from "next-auth/jwt";
 
 declare module "next-auth" {
   interface Session {
     user: {
-      id: string
-      email: string
-      name: string
-      image?: string
-      accessToken: string
-      refreshToken: string
-      userType: string
-    }
+      id: string;
+      email: string;
+      name: string;
+      role: UserRole;
+      type: UserType;
+      status: UserStatus;
+      isPasswordChangeRequired: boolean;
+    } & DefaultSession["user"];
+    error?: string;
   }
 
-  interface User {
-    id: string
-    email: string
-    name: string
-    image?: string
-    accessToken: string
-    refreshToken: string
-    userType: string
+  interface User extends DefaultUser {
+    id: string;
+    email: string;
+    name: string;
+    role: UserRole;
+    type: UserType;
+    status: UserStatus;
+    isPasswordChangeRequired: boolean;
+    accessToken: string;
+    refreshToken?: string;
   }
 }
 
 declare module "next-auth/jwt" {
-  interface JWT {
-    id: string
-    email: string
-    name: string
-    accessToken: string
-    refreshToken: string
-    userType: string
+  interface JWT extends DefaultJWT {
+    id: string;
+    email: string;
+    name: string;
+    role: UserRole;
+    type: UserType;
+    status: UserStatus;
+    isPasswordChangeRequired: boolean;
+    accessToken: string;
+    refreshToken?: string;
+    accessTokenExpires: number;
+    refreshTokenExpires: number;
+    error?: "RefreshAccessTokenError";
   }
 }

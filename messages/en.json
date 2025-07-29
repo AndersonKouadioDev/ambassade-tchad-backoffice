@@ -106,10 +106,7 @@
     "remember_me": "Stay logged in",
     "forgot_password": "Forgot password?",
     "sign_in": "Sign in",
-    "signing_in": "Signing in...",
-    "error_title": "Login error",
-    "error_description": "Please check your credentials.",
-    "success_message": "Login successful"
+    "signing_in": "Signing in..."
   },
   "gestionDemande": {
     "title": "Request Management",

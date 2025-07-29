@@ -409,7 +409,7 @@ const PassportForm: React.FC<PassportFormProps> = ({ onSubmit, isLoading = false
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="employerName">Nom de l'employeur</Label>
+            <Label htmlFor="employerName">Nom de l&apos;employeur</Label>
             <Input
               id="employerName"
               {...form.register('employerName')}
@@ -418,21 +418,21 @@ const PassportForm: React.FC<PassportFormProps> = ({ onSubmit, isLoading = false
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="employerAddress">Adresse de l'employeur</Label>
+            <Label htmlFor="employerAddress">Adresse de l&apos;employeur</Label>
             <Textarea
               id="employerAddress"
               {...form.register('employerAddress')}
-              placeholder="Adresse complète de l'employeur (optionnel)"
+              placeholder="Adresse complète de l&apos;employeur (optionnel)"
               rows={3}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="employerPhoneNumber">Téléphone de l'employeur</Label>
+            <Label htmlFor="employerPhoneNumber">Téléphone de l&apos;employeur</Label>
             <Input
               id="employerPhoneNumber"
               {...form.register('employerPhoneNumber')}
-              placeholder="Numéro de téléphone de l'employeur (optionnel)"
+              placeholder="Numéro de téléphone de l&apos;employeur (optionnel)"
             />
           </div>
         </CardContent>
@@ -484,7 +484,7 @@ const PassportForm: React.FC<PassportFormProps> = ({ onSubmit, isLoading = false
               {...form.register('isRenewal')}
               className="rounded border-gray-300"
             />
-            <Label htmlFor="isRenewal">Il s'agit d'un renouvellement</Label>
+            <Label htmlFor="isRenewal">Il s&apos;agit d&apos;un renouvellement</Label>
           </div>
 
           {form.watch('isRenewal') && (
@@ -503,7 +503,7 @@ const PassportForm: React.FC<PassportFormProps> = ({ onSubmit, isLoading = false
       {/* Contact d'urgence */}
       <Card>
         <CardHeader>
-          <CardTitle>Contact d'urgence</CardTitle>
+          <CardTitle>Contact d&apos;urgence</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

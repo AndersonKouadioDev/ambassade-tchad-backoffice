@@ -1,56 +1,53 @@
-import createMiddleware from 'next-intl/middleware';
-import { NextRequest, NextResponse } from 'next/server';
-import { locales } from '@/config';
-import { auth } from '@/lib/auth';
+import { NextRequest } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+import { auth } from "@/lib/auth";
+import { getTokenInfo } from "@/features/auth/actions/auth.action";
 
-export default async function middleware(request: NextRequest) {
-  // Étape 1: Gestion de l'authentification
+export const publicRoutes = ["/"];
+
+// Middleware d'internationalisation
+const intlMiddleware = createIntlMiddleware(routing);
+
+export default async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
   const session = await auth();
-  const isLoggedIn = !!session?.user;
-  
-  console.log("🔍 Middleware - Path:", request.nextUrl.pathname);
-  console.log("🔍 Middleware - Session:", !!session);
-  console.log("🔍 Middleware - User:", !!session?.user);
-  const isOnLoginPage = request.nextUrl.pathname.includes('/auth/login');
-  const isOnProtectedRoute = request.nextUrl.pathname.includes('/dashboard') || 
-                            request.nextUrl.pathname.includes('/app') ||
-                            request.nextUrl.pathname.includes('/protected');
 
-  // Redirection vers login si pas connecté et sur une route protégée
-  if (isOnProtectedRoute && !isLoggedIn) {
-    const locale = request.nextUrl.pathname.split('/')[1];
-    const loginUrl = new URL(`/${locale}`, request.url);
-    return NextResponse.redirect(loginUrl);
+  const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/';
+  if (process.env.NODE_ENV === "production") {
+    console.log(`Page dans le middleware : "${pathWithoutLocale}"`)
+    console.log(session)
+    console.log(await getTokenInfo())
+  };
+
+  if (pathWithoutLocale.startsWith("/api/auth")) {
+    return;
   }
 
-  // Redirection vers dashboard si connecté et sur la page de login
-  if ((isOnLoginPage || request.nextUrl.pathname === `/${request.nextUrl.pathname.split('/')[1]}`) && isLoggedIn) {
-    const locale = request.nextUrl.pathname.split('/')[1];
-    const dashboardUrl = new URL(`/${locale}/dashboard/analytics`, request.url);
-    return NextResponse.redirect(dashboardUrl);
+  const isPublicPage = publicRoutes.some(route => pathWithoutLocale === route || pathWithoutLocale.startsWith(route + '/'));
+
+  if (isPublicPage) {
+    return intlMiddleware(req);
+  } else {
+    if (!session) {
+      let callbackUrl = pathname;
+      if (req.nextUrl.search) {
+        callbackUrl += req.nextUrl.search;
+      }
+
+      const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+      const loginUrl = new URL(`/?callbackUrl=${encodedCallbackUrl}`, req.url);
+
+      return Response.redirect(loginUrl);
+    }
+
+    return intlMiddleware(req);
   }
-
-  // Étape 2: Utilisez la requête entrante pour la locale
-  const defaultLocale = request.headers.get('dashcode-locale') || 'fr';
-
-  // Étape 3: Appel du middleware de next-intl
-  const handleI18nRouting = createMiddleware({
-    locales,
-    defaultLocale
-  });
-  const response = handleI18nRouting(request);
-
-  // Étape 4: Alterez la réponse
-  response.headers.set('dashcode-locale', defaultLocale);
-
-  return response;
 }
-
 export const config = {
-  // Match only internationalized pathnames
   matcher: [
-    '/',
-    '/((?!api|trpc|_next|_vercel|.*\\..*).*)',
-    '/(ar|en|fr)/:path*'
+    "/((?!.+\\.[\\w]+$|_next|_vercel).*)",
+    "/",
+    "/(api|trpc)(.*)",
   ]
 };

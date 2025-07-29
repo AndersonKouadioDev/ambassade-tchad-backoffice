@@ -11,9 +11,6 @@ const getQueryClient = cache(() => new QueryClient({
                 return failureCount < 3;
             },
         },
-        mutations: {
-            retry: 1,
-        },
     },
 }));
 

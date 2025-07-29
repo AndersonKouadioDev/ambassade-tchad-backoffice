@@ -1,7 +1,6 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { API_CONFIG } from "@/lib/api-http";
 import {
   ServiceType,
   RequestStatus,
@@ -10,6 +9,7 @@ import {
   RequestStats,
 } from "@/types/demande.types";
 import { PaginatedResponse } from "@/types";
+import { baseURL } from "@/config";
 
 // Service sécurisé pour les demandes - Server-side uniquement
 
@@ -61,7 +61,7 @@ async function getMultipartHeaders() {
 export async function getStats(): Promise<RequestStats> {
   try {
     const headers = await getAuthHeaders();
-    const response = await fetch(`${API_CONFIG.baseURL}/demandes/stats`, {
+    const response = await fetch(`${baseURL}/demandes/stats`, {
       method: "GET",
       headers,
       cache: "no-store", // Toujours récupérer les données fraîches
@@ -99,7 +99,7 @@ export async function getRequests(
       searchParams.append("serviceType", params.serviceType);
     if (params.search) searchParams.append("search", params.search);
 
-    const url = `${API_CONFIG.baseURL}/demandes`;
+    const url = `${baseURL}/demandes`;
     console.log("🔗 Fetching requests from:", url);
     console.log("📋 Headers:", headers);
 
@@ -131,7 +131,7 @@ export async function getRequests(
 export async function getRequestById(id: string): Promise<Demande> {
   try {
     const headers = await getAuthHeaders();
-    const response = await fetch(`${API_CONFIG.baseURL}/demandes/${id}`, {
+    const response = await fetch(`${baseURL}/demandes/${id}`, {
       method: "GET",
       headers,
       cache: "no-store",
@@ -160,7 +160,7 @@ export async function updateRequestStatus(
   try {
     const headers = await getAuthHeaders();
     const response = await fetch(
-      `${API_CONFIG.baseURL}/demandes/${id}/status`,
+      `${baseURL}/demandes/${id}/status`,
       {
         method: "PUT",
         headers,
@@ -184,7 +184,7 @@ export async function updateRequestStatus(
 export async function deleteRequest(id: string): Promise<void> {
   try {
     const headers = await getAuthHeaders();
-    const response = await fetch(`${API_CONFIG.baseURL}/demandes/${id}`, {
+    const response = await fetch(`${baseURL}/demandes/${id}`, {
       method: "DELETE",
       headers,
     });

@@ -32,7 +32,7 @@ export function EditUserModal({ isOpen, setIsOpen, user, onChange, onSubmit }: E
             <Transition.Child as={Fragment}>
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-xl">
                 <Dialog.Title className="text-lg font-medium text-gray-900">
-                  Modifier l'utilisateur
+                  Modifier l&apos;utilisateur
                 </Dialog.Title>
                 <form className="mt-4 space-y-3" onSubmit={onSubmit}>
                   <Input

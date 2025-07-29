@@ -1,17 +1,12 @@
 "use client";
 
-import { signOut } from "next-auth/react";
 import { Icon } from "@/components/ui/icon";
+import { logout } from "@/features/auth/actions/auth.action";
 
 export const LogoutButton = () => {
-  const handleLogout = () => {
-    console.log("🔴 Déconnexion côté client...");
-    signOut({ callbackUrl: "/" });
-  };
-
   return (
-    <button 
-      onClick={handleLogout}
+    <button
+      onClick={async () => await logout()}
       className="w-full flex items-center gap-2"
     >
       <Icon icon="heroicons:power" className="w-4 h-4" />

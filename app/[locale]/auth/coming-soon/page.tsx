@@ -1,5 +1,5 @@
 
-import Logo from "@/components/partials/auth/logo";
+import Logo from "@/components/auth/logo";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";

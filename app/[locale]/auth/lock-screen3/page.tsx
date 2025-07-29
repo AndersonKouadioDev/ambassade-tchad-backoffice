@@ -1,4 +1,4 @@
-import Lock from "@/components/partials/auth/lock";
+import Lock from "@/components/auth/lock";
 import { Link } from '@/i18n/routing';
 import Image from "next/image";
 import Logo from "@/components/logo";

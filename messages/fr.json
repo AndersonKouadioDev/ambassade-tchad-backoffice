@@ -106,10 +106,7 @@
         "remember_me": "Rester connecté",
         "forgot_password": "Mot de passe oublié ?",
         "sign_in": "Se connecter",
-        "signing_in": "Connexion...",
-        "error_title": "Erreur de connexion",
-        "error_description": "Veuillez vérifier vos identifiants.",
-        "success_message": "Connexion réussie"
+        "signing_in": "Connexion..."
     },
     "gestionDemande": {
         "title": "Gestion des Demandes",

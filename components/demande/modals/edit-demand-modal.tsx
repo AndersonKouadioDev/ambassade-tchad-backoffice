@@ -291,7 +291,7 @@ export function EditDemandModal({ isOpen, onClose, demande, onSubmit }: EditDema
                     rows={5}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Ce commentaire sera ajouté à l'historique de la demande
+                    Ce commentaire sera ajouté à l&apos;historique de la demande
                   </p>
                 </div>
 

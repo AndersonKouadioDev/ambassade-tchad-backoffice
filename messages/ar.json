@@ -106,10 +106,7 @@
     "remember_me": "ابقني متصلاً",
     "forgot_password": "هل نسيت كلمة المرور؟",
     "sign_in": "تسجيل الدخول",
-    "signing_in": "جاري تسجيل الدخول...",
-    "error_title": "خطأ في تسجيل الدخول",
-    "error_description": "يرجى التحقق من بيانات اعتمادك.",
-    "success_message": "تم تسجيل الدخول بنجاح"
+    "signing_in": "جاري تسجيل الدخول..."
   },
   "gestionDemande": {
     "title": "إدارة الطلبات",

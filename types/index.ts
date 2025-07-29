@@ -11,12 +11,12 @@ export enum SortOrder {
 
 export interface PaginatedResponse<T> {
     data: T[];
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
+    meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    }
 }
 
 export interface ApiResponse<T> {
@@ -32,5 +32,3 @@ export interface ApiPaginatedResponse<T> extends ApiResponse<PaginatedResponse<T
 export * from './actualite.types';
 export * from './evenement.types';
 export * from './galerie.types';
-export { IService as ServiceIService } from './service.types';
-export { OtherServiceType1 } from './service.types';

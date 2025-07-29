@@ -1,4 +1,4 @@
-import Logo from "@/components/partials/auth/logo";
+import Logo from "@/components/auth/logo";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import Image from "next/image";
