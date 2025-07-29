@@ -1,3 +1,5 @@
+import { IDemande } from "./demande.type";
+
 export enum DocumentJustificationType {
     PASSPORT = 'PASSPORT',
     NATIONAL_ID_CARD = 'NATIONAL_ID_CARD',
@@ -23,4 +25,6 @@ export interface ICarteConsulaireDetails {
     cardExpirationDate?: Date;
     createdAt: Date;
     updatedAt: Date;
+
+    request?: IDemande;
 }

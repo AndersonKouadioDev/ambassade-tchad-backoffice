@@ -1,3 +1,4 @@
+import { IDemande } from "./demande.type";
 
 export enum PaysParentType {
     FATHER = 'FATHER',
@@ -17,4 +18,5 @@ export interface ICertificatNationaliteDetails {
     originCountryParentRelationship: PaysParentType;
     createdAt: Date;
     updatedAt: Date;
+    request?: IDemande;
 }

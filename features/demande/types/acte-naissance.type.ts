@@ -1,3 +1,5 @@
+import { IDemande } from "./demande.type";
+
 export enum ActeNaissanceType {
     NEWBORN = 'NEWBORN',
     RENEWAL = 'RENEWAL'
@@ -16,4 +18,5 @@ export interface IActeNaissanceDetails {
     requestType: ActeNaissanceType;
     createdAt: Date;
     updatedAt: Date;
+    request?: IDemande;
 }

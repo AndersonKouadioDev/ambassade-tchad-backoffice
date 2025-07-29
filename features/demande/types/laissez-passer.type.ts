@@ -1,4 +1,5 @@
 import { DocumentJustificationType } from "./carte-consulaire.type ";
+import { IDemande } from "./demande.type";
 
 export interface ILaissezPasserDetails {
     id: string;
@@ -22,6 +23,8 @@ export interface ILaissezPasserDetails {
     updatedAt: Date;
 
     accompaniers?: IAccompagnateur[];
+
+    request?: IDemande;
 }
 
 

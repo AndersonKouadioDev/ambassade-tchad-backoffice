@@ -1,12 +1,11 @@
 import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
 
-export interface IEvenement {
+
+export interface IActualite {
     id: string;
     title: string;
-    description: string;
-    eventDate: Date;
-    location?: string;
-    imageUrl: string[];
+    content: string;
+    imageUrls: string[];
     published: boolean;
     authorId: string;
     createdAt: Date;

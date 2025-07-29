@@ -1,5 +1,5 @@
 import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
-import { ServiceType } from "./service.type";
+import { ServiceType } from "@/features/service/types/service.type";
 import { IVisaDetails } from "./visa.type";
 import { IActeNaissanceDetails } from "./acte-naissance.type";
 import { ICarteConsulaireDetails } from "./carte-consulaire.type ";

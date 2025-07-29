@@ -1,4 +1,5 @@
 import { DocumentJustificationType } from "./carte-consulaire.type ";
+import { IDemande } from "./demande.type";
 
 
 export interface IProcurationDetails {
@@ -18,4 +19,8 @@ export interface IProcurationDetails {
     reason?: string;
     createdAt: Date;
     updatedAt: Date;
+
+
+
+    request?: IDemande;
 }
