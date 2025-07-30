@@ -37,7 +37,6 @@ export const evenementStatsQueryOption = () => {
                 }
 
                 // Fallback: calculer les stats côté client
-                console.log('Fallback: calcul des stats côté client...');
                 const allEvenements = await evenementAPI.getAll({});
                 const evenements = allEvenements.data || [];
                 console.log('Événements récupérés:', evenements.length);
