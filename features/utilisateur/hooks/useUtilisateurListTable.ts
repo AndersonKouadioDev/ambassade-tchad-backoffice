@@ -1,30 +1,37 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
     SortingState,
     VisibilityState,
     useReactTable,
     getCoreRowModel,
     getSortedRowModel,
+    ColumnDef,
 } from "@tanstack/react-table";
 import { useQueryStates } from 'nuqs';
 import { utilisateurFiltersClient } from '../filters/utilisateur.filters';
-import { IUtilisateursRechercheParams } from "../types/utilisateur.type";
-import { useUtilisateursList } from "../queries/utilisateur-list.query";
+import { useUtilisateursListQuery } from "../queries/utilisateur-list.query";
 import { DataProps } from '../components/user-list-table/column';
+import { UtilisateursParamsDTO } from "../schema/utilisateur-params.schema";
+import { IUtilisateur } from "../types/utilisateur.type";
 
-export function useUtilisateurListTable(columns: any[]) {
-    // États pour le tri et la visibilité des colonnes et la sélection des lignes gérés par React Table
+export interface IUtilisateurListTableProps {
+    columns: ColumnDef<IUtilisateur>[];
+}
+
+export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps) {
+    // États pour le tri et la visibilité des colonnes et la sélection des lignes
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
 
-    // Gestion des paramètres d'URL via Nuqs
+    // Gestion des paramètres d'URL via Nuqs avec throttling
     const [filters, setFilters] = useQueryStates(utilisateurFiltersClient, {
-        clearOnDefault: true
+        clearOnDefault: true,
+        throttleMs: 500, // 500ms de délai pour les filtres textuels
     });
 
-    // Construction des paramètres de recherche par défaut pour React Query
-    const currentSearchParams: IUtilisateursRechercheParams = useMemo(() => {
+    // Construction des paramètres de recherche
+    const currentSearchParams: UtilisateursParamsDTO = useMemo(() => {
         return {
             page: filters.page,
             limit: filters.limit,
@@ -38,8 +45,8 @@ export function useUtilisateurListTable(columns: any[]) {
         };
     }, [filters]);
 
-    // Récupération des données
-    const { data, isLoading, isError, error } = useUtilisateursList(currentSearchParams);
+    // Récupération des données avec options React Query optimisées
+    const { data, isLoading, isError, error, isFetching } = useUtilisateursListQuery(currentSearchParams);
 
     const users = data?.data || [];
     const totalPages = data?.meta?.totalPages || 1;
@@ -51,67 +58,64 @@ export function useUtilisateurListTable(columns: any[]) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState<DataProps | null>(null);
 
-    const handleViewUser = (user: DataProps) => {
+    const handleViewUser = useCallback((user: DataProps) => {
         setCurrentUser(user);
         setViewOpen(true);
-    };
+    }, []);
 
-    const handleEditUser = (user: DataProps) => {
+    const handleEditUser = useCallback((user: DataProps) => {
         setCurrentUser(user);
         setEditOpen(true);
-    };
+    }, []);
 
-    const handleDeleteUser = (user: DataProps) => {
+    const handleDeleteUser = useCallback((user: DataProps) => {
         setCurrentUser(user);
         setDeleteOpen(true);
-    };
+    }, []);
 
     /**
-     * @function handleTextFilterChange
-     * @description Gère les changements pour les champs de filtre textuels.
-     * Met à jour le filtre correspondant dans l'état Nuqs et réinitialise la page à 1.
-     * @param {'firstName' | 'lastName' | 'email' | 'phoneNumber'} filterName Le nom du filtre.
-     * @param {string} value La nouvelle valeur.
+     * Gère les changements pour les champs de filtre textuels
+     * Nuqs throttle automatiquement les mises à jour URL/serveur
      */
-    const handleTextFilterChange = (filterName: 'firstName' | 'lastName' | 'email' | 'phoneNumber', value: string) => {
+    const handleTextFilterChange = useCallback((
+        filterName: 'firstName' | 'lastName' | 'email' | 'phoneNumber',
+        value: string
+    ) => {
         setFilters(prev => ({
             ...prev,
             [filterName]: value,
             page: 1, // Réinitialise à la première page
         }));
-    };
+    }, [setFilters]);
 
     /**
-     * @function handleEnumFilterChange
-     * @description Gère les changements pour les champs de filtre d'enum.
-     * Met à jour le filtre correspondant dans l'état Nuqs et réinitialise la page à 1.
-     * @param {'type' | 'status' | 'role'} filterName Le nom du filtre.
-     * @param {string} value La nouvelle valeur (chaîne).
+     * Gère les changements pour les champs de filtre d'enum
+     * Pas de throttling nécessaire pour ces filtres (changements moins fréquents)
      */
-    const handleEnumFilterChange = (filterName: 'type' | 'status' | 'role', value: string) => {
+    const handleEnumFilterChange = useCallback((
+        filterName: 'type' | 'status' | 'role',
+        value: string
+    ) => {
         setFilters(prev => ({
             ...prev,
             [filterName]: value === "_all_" ? "" : value,
-            page: 1, // Réinitialise à la première page
+            page: 1,
         }));
-    };
+    }, [setFilters]);
 
     // Configuration de TanStack Table
     const table = useReactTable({
         data: users,
         columns,
         onSortingChange: setSorting,
-        // onColumnFiltersChange: setColumnFilters, // Nuqs gère le filtrage
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        // getFilteredRowModel n'est pas nécessaire car le filtrage est côté serveur
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
         manualPagination: true,
         pageCount: totalPages,
         state: {
             sorting,
-            // columnFilters, // Géré par Nuqs
             columnVisibility,
             rowSelection,
             pagination: {
@@ -139,6 +143,7 @@ export function useUtilisateurListTable(columns: any[]) {
         isLoading,
         isError,
         error,
+        isFetching,
         handleTextFilterChange,
         handleEnumFilterChange,
         modalStates: {
@@ -154,6 +159,6 @@ export function useUtilisateurListTable(columns: any[]) {
             setDeleteOpen,
         },
         currentUser,
-        filters
+        filters,
     };
 }

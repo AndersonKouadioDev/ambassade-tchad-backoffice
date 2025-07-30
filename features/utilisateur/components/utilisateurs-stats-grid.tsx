@@ -3,11 +3,11 @@
 import { StatusBlock } from "@/components/blocks/status-block";
 import { User, CheckCircle, PauseCircle, Ban } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useUtilisateurStats } from "@/features/utilisateur/queries/utilisateur-stats.query";
+import { useUtilisateurStatsQuery } from "@/features/utilisateur/queries/utilisateur-stats.query";
 
 export default function UtilisateursStatsGrid() {
   const t = useTranslations("gestionUtilisateur");
-  const { data } = useUtilisateurStats();
+  const { data } = useUtilisateurStatsQuery();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">

@@ -51,19 +51,7 @@ export interface IUtilisateur {
   notifications?: INotification[];
 }
 
-export interface IUtilisateursRechercheParams {
-  type?: UtilisateurType;
-  status?: UtilisateurStatus;
-  role?: UtilisateurRole;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  phoneNumber?: string;
-  page?: number;
-  limit?: number;
-}
-
-export interface IUtilisateurStats {
+export interface IUtilisateurStatsResponse {
   allUsers: number;
   allUsersSeries: { date: string; value: number }[]
   activeUsers: number;
@@ -73,3 +61,14 @@ export interface IUtilisateurStats {
   bannedUsers: number;
   bannedUsersSeries: { date: string; value: number }[]
 }
+
+export interface IUtilisateurAddUpdateResponse extends Pick<IUtilisateur,
+  'id' | 'email' | 'firstName' | 'lastName' | 'phoneNumber' | 'role' | 'type'
+  | 'status' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'isPasswordChangeRequired'> {
+  generatedPassword: string
+}
+
+export interface IUtilisateurActiveDesactiveDeleteResponse {
+  success: true,
+  message: 'Utilisateur activé avec succès.',
+};

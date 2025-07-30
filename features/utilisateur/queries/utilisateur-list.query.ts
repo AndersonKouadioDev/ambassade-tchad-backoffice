@@ -1,46 +1,49 @@
 import {
     useQuery,
 } from '@tanstack/react-query';
-import { utilisateurAPI } from '../apis/utilisateur.api';
-import { IUtilisateursRechercheParams } from '../types/utilisateur.type';
 import getQueryClient from '@/lib/get-query-client';
+import { obtenirTousUtilisateurs } from '../actions/utilisateur.action';
+import { UtilisateursParamsDTO } from '../schema/utilisateur-params.schema';
 
 const queryClient = getQueryClient();
 
-// Clé de cache 
-export const utilisateurQueryKey = ['utilisateur'] as const;
+//1- Clé de cache
+export const utilisateurQueryKey = (utilisateursParamsDTO: UtilisateursParamsDTO) => ['utilisateur', 'list', utilisateursParamsDTO] as const;
 
-// Option de requête
-export const utilisateursListQueryOption = (utilisateursSearchParams: IUtilisateursRechercheParams) => {
+//2- Option de requête optimisée
+export const utilisateursListQueryOption = (utilisateursParamsDTO: UtilisateursParamsDTO) => {
     return {
-        queryKey: [...utilisateurQueryKey, 'list', utilisateursSearchParams],
+        queryKey: utilisateurQueryKey(utilisateursParamsDTO),
         queryFn: async () => {
-            const data = await utilisateurAPI.getAll(utilisateursSearchParams);
-            return data;
+            return obtenirTousUtilisateurs(utilisateursParamsDTO);
         },
-
         keepPreviousData: true,
-        staleTime: 5 * 60 * 1000,
+        placeholderData: (previousData: any) => previousData,
+        staleTime: 30 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
     };
 };
 
-// Hook pour récupérer les utilisateurs
-export const useUtilisateursList = (
-    utilisateursSearchParams: IUtilisateursRechercheParams
+//3- Hook pour récupérer les utilisateurs
+export const useUtilisateursListQuery = (
+    utilisateursParamsDTO: UtilisateursParamsDTO
 ) => {
-    return useQuery(utilisateursListQueryOption(utilisateursSearchParams));
+    return useQuery(utilisateursListQueryOption(utilisateursParamsDTO));
 };
 
-// Hook pour précharger les utilisateurs
-export const prefetchUtilisateurs = (
-    utilisateursSearchParams: IUtilisateursRechercheParams
+//4- Fonction pour précharger les utilisateurs
+export const prefetchUtilisateursListQuery = (
+    utilisateursParamsDTO: UtilisateursParamsDTO
 ) => {
-    return queryClient.prefetchQuery(utilisateursListQueryOption(utilisateursSearchParams));
+    return queryClient.prefetchQuery(utilisateursListQueryOption(utilisateursParamsDTO));
 }
 
-// Fonction pour invalider le cache
-export const invalidateUtilisateurs = (utilisateursSearchParams: IUtilisateursRechercheParams) => {
+//5- Fonction pour invalider le cache
+export const invalidateUtilisateursListQuery = (utilisateursParamsDTO?: Partial<UtilisateursParamsDTO>) => {
     return queryClient.invalidateQueries({
-        queryKey: [...utilisateurQueryKey, 'list', utilisateursSearchParams],
+        queryKey: utilisateursParamsDTO ?
+            utilisateurQueryKey(utilisateursParamsDTO as UtilisateursParamsDTO) :
+            ['utilisateur', 'list'], // Invalide toutes les requêtes de liste
     });
 }

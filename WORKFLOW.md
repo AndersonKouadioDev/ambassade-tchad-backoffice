@@ -8,9 +8,9 @@
 
 # 5. Ajouter les API routes dans /features/[module]/api/ : Créer le dossier api dans le dossier du module. C'est le dossier des API routes (on crée les requêtes et on retourne les données, en cas d'echec une exception est levée automatiquement).
 
-# 6. Ajouter les actions (les requêtes de mutations) dans /features/[module]/actions/ : Créer le dossier actions dans le dossier du module. C'est le dossier des actions serveurs (server action). On utilise les API routes pour les requêtes de mutations.
+# 6. Ajouter les actions (les requêtes de mutations) dans /features/[module]/actions/ : Créer le dossier actions dans le dossier du module. C'est le dossier des actions serveurs (server action). On utilise toutes les API routes crées pour les requêtes.
 
-# 7. Ajouter les queries (les requêtes de lecture) dans /features/[module]/queries/ : Créer le dossier queries dans le dossier du module. C'est le dossier des queries tanstack. On utilise les API routes pour les requêtes de lecture.
+# 7. Ajouter les queries (les requêtes de lecture) dans /features/[module]/queries/ : Créer le dossier queries dans le dossier du module. C'est le dossier des queries tanstack. On utilise les actions serveur pour optimiser les requêtes de lecture avec le cache.
 
 # 8. Ajouter les pages dans /app/[locale]/[module]/ : Créer les pages dans le dossier app/local pour le module. C'est le dossier des pages. Préférer les pages server components avec un preloader avec tanstack.
 
@@ -34,3 +34,8 @@
 
 # Remarque 03: Les mêmes éléments dans des dossiers à la racine du dossier
 - lorsqu'il y a des types globaux, des utils, des helpers, des styles... globaux, on les met dans des dossiers à la racine du dossier. components/(ui, partials, layout, navigation, blocks), utils/ , helpers/, styles/,...
+
+# A ne pas faire 01:
+- Passer toujours les services API routes dans les actions serveur et utiliser les actions serveur dans les queries et non l'inverse.
+- Ne pas appeler les API routes directement dans les queries, utiliser plutôt les actions serveur de peur d'exposer les informations sensibles du backend.
+
