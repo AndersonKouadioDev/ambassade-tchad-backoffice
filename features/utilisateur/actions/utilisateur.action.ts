@@ -1,10 +1,10 @@
 "use server"
 import { utilisateurAPI } from "../apis/utilisateur.api";
-import { UtilisateurAddUpdateDTO, UtilisateurAddUpdateSchema } from "../schema/utilisateur.schema";
+import { UtilisateurAddUpdateDTO, UtilisateurAddUpdateSchema } from "../schema/utilisateur-add-update.schema";
 import { processAndValidateFormData } from "ak-zod-form-kit";
 import { UtilisateursParamsDTO, UtilisateursParamsSchema } from "../schema/utilisateur-params.schema";
 
-export const obtenirTousUtilisateurs = (params: UtilisateursParamsDTO) => {
+export const obtenirTousUtilisateursAction = (params: UtilisateursParamsDTO) => {
     const result = processAndValidateFormData(UtilisateursParamsSchema, params,
         {
             outputFormat: "object",
@@ -19,16 +19,16 @@ export const obtenirTousUtilisateurs = (params: UtilisateursParamsDTO) => {
     return utilisateurAPI.obtenirTousUtilisateurs(result.data as UtilisateursParamsDTO);
 }
 
-export const obtenirUnUtilisateur = (id: string) => {
+export const obtenirUnUtilisateurAction = (id: string) => {
     if (!id) throw new Error("L'identifiant utilisateur est requis");
     return utilisateurAPI.obtenirUtilisateur(id);
 }
 
-export const obtenirStatsUtilisateurs = () => {
+export const obtenirStatsUtilisateursAction = () => {
     return utilisateurAPI.obtenirStatsUtilisateurs();
 }
 
-export const ajouterUtilisateur = async (data: UtilisateurAddUpdateDTO) => {
+export const ajouterUtilisateurAction = async (data: UtilisateurAddUpdateDTO) => {
     const result = processAndValidateFormData(UtilisateurAddUpdateSchema, data,
         {
             outputFormat: "object"
@@ -55,7 +55,7 @@ export const ajouterUtilisateur = async (data: UtilisateurAddUpdateDTO) => {
     }
 }
 
-export const modifierUtilisateur = async (data: UtilisateurAddUpdateDTO) => {
+export const modifierUtilisateurAction = async (data: UtilisateurAddUpdateDTO) => {
     const result = processAndValidateFormData(UtilisateurAddUpdateSchema, data,
         {
             outputFormat: "object"
@@ -83,7 +83,7 @@ export const modifierUtilisateur = async (data: UtilisateurAddUpdateDTO) => {
     }
 }
 
-export const activerUtilisateur = async (id: string) => {
+export const activerUtilisateurAction = async (id: string) => {
     try {
         await utilisateurAPI.activerUtilisateur(id);
         return {
@@ -98,7 +98,7 @@ export const activerUtilisateur = async (id: string) => {
     }
 }
 
-export const desactiverUtilisateur = async (id: string) => {
+export const desactiverUtilisateurAction = async (id: string) => {
     try {
         await utilisateurAPI.desactiverUtilisateur(id);
         return {
@@ -113,7 +113,7 @@ export const desactiverUtilisateur = async (id: string) => {
     }
 }
 
-export const supprimerUtilisateur = async (id: string) => {
+export const supprimerUtilisateurAction = async (id: string) => {
     try {
         await utilisateurAPI.supprimerUtilisateur(id);
         return {

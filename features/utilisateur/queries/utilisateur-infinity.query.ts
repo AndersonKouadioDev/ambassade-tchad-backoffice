@@ -4,7 +4,7 @@ import {
 import { IUtilisateur } from '../types/utilisateur.type';
 import { PaginatedResponse } from '@/types';
 import getQueryClient from '@/lib/get-query-client';
-import { obtenirTousUtilisateurs } from '../actions/utilisateur.action';
+import { obtenirTousUtilisateursAction } from '../actions/utilisateur.action';
 import { UtilisateursParamsDTO } from '../schema/utilisateur-params.schema';
 
 const queryClient = getQueryClient();
@@ -17,7 +17,7 @@ export const utilisateursInfinityQueryOption = (utilisateursParamsDTO: Utilisate
     return {
         queryKey: utilisateurQueryKey(utilisateursParamsDTO),
         queryFn: async ({ pageParam = 1 }) => {
-            const data = await obtenirTousUtilisateurs({
+            const data = await obtenirTousUtilisateursAction({
                 ...utilisateursParamsDTO,
                 page: pageParam,
             });

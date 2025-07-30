@@ -2,7 +2,7 @@ import {
     useQuery,
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
-import { obtenirStatsUtilisateurs } from '../actions/utilisateur.action';
+import { obtenirStatsUtilisateursAction } from '../actions/utilisateur.action';
 
 const queryClient = getQueryClient();
 
@@ -14,7 +14,7 @@ export const utilisateurStatsQueryOption = () => {
     return {
         queryKey: utilisateurQueryKey(),
         queryFn: async () => {
-            return await obtenirStatsUtilisateurs();
+            return await obtenirStatsUtilisateursAction();
         },
 
         keepPreviousData: true,

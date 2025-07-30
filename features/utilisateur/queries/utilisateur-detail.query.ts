@@ -2,7 +2,7 @@ import {
     useQuery,
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
-import { obtenirUnUtilisateur } from '../actions/utilisateur.action';
+import { obtenirUnUtilisateurAction } from '../actions/utilisateur.action';
 
 const queryClient = getQueryClient();
 
@@ -15,7 +15,7 @@ export const utilisateurQueryOption = (id: string) => {
     return {
         queryKey: utilisateurQueryKey(id),
         queryFn: async () => {
-            return obtenirUnUtilisateur(id);
+            return obtenirUnUtilisateurAction(id);
         },
         enabled: !!id,
     };

@@ -3,7 +3,7 @@ import { IUtilisateur } from "../types/utilisateur.type";
 import { IUtilisateurStatsResponse, IUtilisateurAddUpdateResponse, IUtilisateurActiveDesactiveDeleteResponse } from "../types/utilisateur.type";
 import { PaginatedResponse } from "@/types";
 import { SearchParams } from "ak-api-http";
-import { UtilisateurAddUpdateDTO } from "../schema/utilisateur.schema";
+import { UtilisateurAddUpdateDTO } from "../schema/utilisateur-add-update.schema";
 import { UtilisateursParamsDTO } from "../schema/utilisateur-params.schema";
 
 export interface IUtilisateurAPI {

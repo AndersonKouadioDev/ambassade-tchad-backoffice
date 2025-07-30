@@ -2,7 +2,7 @@ import {
     useQuery,
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
-import { obtenirTousUtilisateurs } from '../actions/utilisateur.action';
+import { obtenirTousUtilisateursAction } from '../actions/utilisateur.action';
 import { UtilisateursParamsDTO } from '../schema/utilisateur-params.schema';
 
 const queryClient = getQueryClient();
@@ -15,7 +15,7 @@ export const utilisateursListQueryOption = (utilisateursParamsDTO: UtilisateursP
     return {
         queryKey: utilisateurQueryKey(utilisateursParamsDTO),
         queryFn: async () => {
-            return obtenirTousUtilisateurs(utilisateursParamsDTO);
+            return obtenirTousUtilisateursAction(utilisateursParamsDTO);
         },
         keepPreviousData: true,
         placeholderData: (previousData: any) => previousData,

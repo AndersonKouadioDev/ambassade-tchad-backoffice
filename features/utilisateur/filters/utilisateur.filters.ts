@@ -11,7 +11,6 @@ import { getEnumValues } from '@/utils/getEnumValues';
  * et sa valeur par défaut.
  */
 export const utilisateurFiltersClient = {
-
     type: parseAsStringEnum<UtilisateurType>(getEnumValues(UtilisateurType)).withDefault(UtilisateurType.PERSONNEL),
     status: parseAsStringEnum<UtilisateurStatus>(getEnumValues(UtilisateurStatus)).withDefault(UtilisateurStatus.ACTIVE),
     role: parseAsStringEnum<UtilisateurRole>(getEnumValues(UtilisateurRole)),
