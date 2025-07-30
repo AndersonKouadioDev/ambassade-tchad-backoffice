@@ -4,6 +4,12 @@ import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTheme } from "next-themes";
+import {
+  formatSeriesForChart,
+  generateChartOptions,
+  type SeriesData,
+  type PeriodType,
+} from "@/utils/chart.utils";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -12,11 +18,12 @@ interface StatusBlockProps {
   icon?: React.ReactNode;
   title?: string;
   total?: number | string;
-  series?: number[];
+  series?: SeriesData[];
   chartColor?: string;
   iconWrapperClass?: string;
-  chartType?: 'area' | 'bar' | 'line' | 'pie' | 'donut' | 'radialBar';
+  chartType?: "area" | "bar" | "line" | "pie" | "donut" | "radialBar";
   opacity?: number;
+  period?: PeriodType;
 }
 
 const StatusBlock = ({
@@ -24,33 +31,24 @@ const StatusBlock = ({
   total,
   className,
   icon,
-  series = [800, 600, 1000, 800, 600, 1000, 800, 900],
+  series = [{ date: "", value: 0 }],
   chartColor = "#0ce7fa",
   iconWrapperClass,
   chartType = "area",
   opacity = 0.1,
+  period = "month",
 }: StatusBlockProps) => {
   const { theme: mode } = useTheme();
 
-  const chartSeries = [{ data: series }];
-
-  const options: any = {
-    chart: {
-      toolbar: { show: false },
-      zoom: { enabled: false },
-      sparkline: { enabled: true },
-    },
-    plotOptions: { bar: { columnWidth: "60%" } },
-    dataLabels: { enabled: false },
-    stroke: { curve: "smooth", width: 2 },
-    colors: [chartColor],
-    tooltip: { theme: mode === "dark" ? "dark" : "light" },
-    grid: { show: false },
-    yaxis: { show: false },
-    fill: { type: "solid", opacity: [opacity] },
-    legend: { show: false },
-    xaxis: { show: false },
-  };
+  // Utiliser les fonctions utilitaires
+  const chartSeries = formatSeriesForChart(series);
+  const options = generateChartOptions(
+    chartColor,
+    mode,
+    series,
+    period,
+    opacity
+  );
 
   return (
     <Card className={cn("", className)}>
@@ -72,9 +70,7 @@ const StatusBlock = ({
 
         {/* Bottom: Total + Chart */}
         <div className="flex items-center justify-between">
-          {total && (
-            <div className="text-2xl font-bold text-blue-700">{total}</div>
-          )}
+          <div className="text-2xl font-bold text-blue-700">{total}</div>
           <div className="max-w-[124px]">
             <Chart
               options={options}

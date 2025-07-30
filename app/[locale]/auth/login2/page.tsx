@@ -1,8 +1,8 @@
 import { Link } from '@/i18n/routing';
-import LoginForm from "@/components/partials/auth/login-form";
-import Social from "@/components/partials/auth/social";
+import LoginForm from "@/features/auth/components/login-form";
+import Social from "@/components/auth/social";
 import Image from "next/image";
-import Copyright from "@/components/partials/auth/copyright";
+import Copyright from "@/components/auth/copyright";
 import Logo from "@/components/logo";
 const Login2 = () => {
   return (

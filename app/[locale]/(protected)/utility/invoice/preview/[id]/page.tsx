@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import Logo from "@/components/partials/auth/logo";
+import Logo from "@/components/auth/logo";
 import { Button } from "@/components/ui/button";
 import TotalTable from "./totaltable";
 

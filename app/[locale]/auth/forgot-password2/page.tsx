@@ -1,7 +1,7 @@
 import { Link } from '@/i18n/routing';
-import ForgotPass from "@/components/partials/auth/forgot-pass";
+import ForgotPass from "@/components/auth/forgot-pass";
 import Image from "next/image";
-import Copyright from "@/components/partials/auth/copyright";
+import Copyright from "@/components/auth/copyright";
 import Logo from "@/components/logo";
 
 const ForgotPass2 = () => {

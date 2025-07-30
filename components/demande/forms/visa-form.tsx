@@ -330,7 +330,7 @@ const VisaForm: React.FC<VisaFormProps> = ({ onSubmit, isLoading = false, initia
             </div>
 
             <div className="space-y-2">
-              <Label>Date d'expiration *</Label>
+              <Label>Date d&apos;expiration *</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -344,7 +344,7 @@ const VisaForm: React.FC<VisaFormProps> = ({ onSubmit, isLoading = false, initia
                     {form.watch('passportExpirationDate') ? (
                       format(form.watch('passportExpirationDate'), "PPP", { locale: fr })
                     ) : (
-                      <span>Date d'expiration</span>
+                      <span>Date d&apos;expiration</span>
                     )}
                   </Button>
                 </PopoverTrigger>
@@ -445,21 +445,21 @@ const VisaForm: React.FC<VisaFormProps> = ({ onSubmit, isLoading = false, initia
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="employerAddress">Adresse de l'employeur</Label>
+            <Label htmlFor="employerAddress">Adresse de l&apos;employeur</Label>
             <Textarea
               id="employerAddress"
               {...form.register('employerAddress')}
-              placeholder="Adresse complète de l'employeur"
+              placeholder="Adresse complète de l&apos;employeur"
               rows={3}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="employerPhoneNumber">Téléphone de l'employeur</Label>
+            <Label htmlFor="employerPhoneNumber">Téléphone de l&apos;employeur</Label>
             <Input
               id="employerPhoneNumber"
               {...form.register('employerPhoneNumber')}
-              placeholder="Numéro de téléphone de l'employeur"
+              placeholder="Numéro de téléphone de l&apos;employeur"
             />
           </div>
 

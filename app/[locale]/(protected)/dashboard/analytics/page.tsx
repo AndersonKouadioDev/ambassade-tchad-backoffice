@@ -1,7 +1,4 @@
 "use client";
-
-import Image from "next/image";
-import { useTranslations } from "next-intl";
 import { StatusBlock } from "@/components/blocks/status-block";
 import TransactionsTable from "../crm/components/transactions";
 import { Box, DollarSign, TrendingUp, LineChart } from "lucide-react";
@@ -11,11 +8,11 @@ import DashboardDropdown from "@/components/dashboard-dropdown";
 import TeamTable from "@/components/project/team-table";
 import { teamData } from "../project/data";
 import RecentActivity from "./components/recent-activity";
+import { useTranslations } from "next-intl";
 
 const DashboardPage = () => {
   const t = useTranslations("AnalyticsDashboard");
   const tm = useTranslations("ProjectDashboard");
-
   return (
     <div className="container">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">

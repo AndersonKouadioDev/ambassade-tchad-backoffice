@@ -37,7 +37,7 @@ export function ViewUserModal({ isOpen, setIsOpen, user }: ViewUserModalProps) {
             <Transition.Child as={Fragment}>
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-xl">
                 <Dialog.Title className="text-lg font-medium text-gray-900">
-                  Détails de l'utilisateur
+                  Détails de l&apos;utilisateur
                 </Dialog.Title>
                 <div className="mt-4 space-y-2">
                   <p><strong>Nom:</strong> {user?.name}</p>

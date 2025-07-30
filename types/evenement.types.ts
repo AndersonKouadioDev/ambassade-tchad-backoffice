@@ -6,7 +6,7 @@ export interface IEvenement {
   description: string;
   eventDate: Date;
   location?: string;
-  imageUrl?: string;
+  imageUrl?: Array<string>;
   published: boolean;
   authorId: string;
   author?: {
@@ -64,4 +64,12 @@ export interface IEvenementStats {
   upcomingEvents: number;
   publishedEvents: number;
   unpublishedEvents: number;
+  // Nouvelles propriétés pour les statistiques avancées
+  totalEvenements?: number;
+  totalPublies?: number;
+  totalBrouillons?: number;
+  totalParticipants?: number;
+  evolutionPublies?: Array<{ date: string; value: number }>;
+  evolutionBrouillons?: Array<{ date: string; value: number }>;
+  evolutionParticipants?: Array<{ date: string; value: number }>;
 } 

@@ -32,11 +32,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { 
-  ChevronDown, 
-  Search, 
-  Filter, 
-  Download, 
+import {
+  ChevronDown,
+  Search,
+  Filter,
+  Download,
   RefreshCw,
   Eye,
   Edit,
@@ -53,14 +53,22 @@ import {
   Users,
   Building,
   Mail,
-  Phone
+  Phone,
 } from "lucide-react";
 
 import { ViewDemandModal } from "../modals/view-demand-modal";
 import { EditDemandModal } from "../modals/edit-demand-modal";
 import { DeleteDemandeModal } from "../demande-modal/delete-demand";
-import type { ServiceType, RequestStatus, Demande } from "@/types/demande.types";
-import { useDemandesList, useUpdateDemandeStatus, useDeleteDemande } from "@/hooks/queries/demande-queries";
+import type {
+  ServiceType,
+  RequestStatus,
+  Demande,
+} from "@/types/demande.types";
+import {
+  useDemandesList,
+  useUpdateDemandeStatus,
+  useDeleteDemande,
+} from "@/hooks/queries/demande-queries";
 import { useTokenRefresh } from "@/hooks/use-token-refresh";
 import { toast } from "sonner";
 import Loader from "@/components/loader";
@@ -71,76 +79,76 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 // Mapping des statuts avec icônes et couleurs
 const getStatusInfo = (status: RequestStatus) => {
   const statusMap = {
-    NEW: { 
-      icon: AlertCircle, 
-      color: "bg-blue-500", 
-      textColor: "text-blue-600", 
+    NEW: {
+      icon: AlertCircle,
+      color: "bg-blue-500",
+      textColor: "text-blue-600",
       bgColor: "bg-blue-50 dark:bg-blue-900/20",
-      borderColor: "border-blue-200 dark:border-blue-800"
+      borderColor: "border-blue-200 dark:border-blue-800",
     },
-    IN_REVIEW_DOCS: { 
-      icon: Clock, 
-      color: "bg-yellow-500", 
-      textColor: "text-yellow-600", 
+    IN_REVIEW_DOCS: {
+      icon: Clock,
+      color: "bg-yellow-500",
+      textColor: "text-yellow-600",
       bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-      borderColor: "border-yellow-200 dark:border-yellow-800"
+      borderColor: "border-yellow-200 dark:border-yellow-800",
     },
-    PENDING_ADDITIONAL_INFO: { 
-      icon: AlertCircle, 
-      color: "bg-orange-500", 
-      textColor: "text-orange-600", 
+    PENDING_ADDITIONAL_INFO: {
+      icon: AlertCircle,
+      color: "bg-orange-500",
+      textColor: "text-orange-600",
       bgColor: "bg-orange-50 dark:bg-orange-900/20",
-      borderColor: "border-orange-200 dark:border-orange-800"
+      borderColor: "border-orange-200 dark:border-orange-800",
     },
-    APPROVED_BY_AGENT: { 
-      icon: CheckCircle, 
-      color: "bg-green-500", 
-      textColor: "text-green-600", 
+    APPROVED_BY_AGENT: {
+      icon: CheckCircle,
+      color: "bg-green-500",
+      textColor: "text-green-600",
       bgColor: "bg-green-50 dark:bg-green-900/20",
-      borderColor: "border-green-200 dark:border-green-800"
+      borderColor: "border-green-200 dark:border-green-800",
     },
-    APPROVED_BY_CHEF: { 
-      icon: CheckCircle, 
-      color: "bg-green-600", 
-      textColor: "text-green-600", 
+    APPROVED_BY_CHEF: {
+      icon: CheckCircle,
+      color: "bg-green-600",
+      textColor: "text-green-600",
       bgColor: "bg-green-50 dark:bg-green-900/20",
-      borderColor: "border-green-200 dark:border-green-800"
+      borderColor: "border-green-200 dark:border-green-800",
     },
-    APPROVED_BY_CONSUL: { 
-      icon: CheckCircle, 
-      color: "bg-green-700", 
-      textColor: "text-green-600", 
+    APPROVED_BY_CONSUL: {
+      icon: CheckCircle,
+      color: "bg-green-700",
+      textColor: "text-green-600",
       bgColor: "bg-green-50 dark:bg-green-900/20",
-      borderColor: "border-green-200 dark:border-green-800"
+      borderColor: "border-green-200 dark:border-green-800",
     },
-    REJECTED: { 
-      icon: XCircle, 
-      color: "bg-red-500", 
-      textColor: "text-red-600", 
+    REJECTED: {
+      icon: XCircle,
+      color: "bg-red-500",
+      textColor: "text-red-600",
       bgColor: "bg-red-50 dark:bg-red-900/20",
-      borderColor: "border-red-200 dark:border-red-800"
+      borderColor: "border-red-200 dark:border-red-800",
     },
-    READY_FOR_PICKUP: { 
-      icon: CheckCircle, 
-      color: "bg-purple-500", 
-      textColor: "text-purple-600", 
+    READY_FOR_PICKUP: {
+      icon: CheckCircle,
+      color: "bg-purple-500",
+      textColor: "text-purple-600",
       bgColor: "bg-purple-50 dark:bg-purple-900/20",
-      borderColor: "border-purple-200 dark:border-purple-800"
+      borderColor: "border-purple-200 dark:border-purple-800",
     },
-    DELIVERED: { 
-      icon: CheckCircle, 
-      color: "bg-emerald-500", 
-      textColor: "text-emerald-600", 
+    DELIVERED: {
+      icon: CheckCircle,
+      color: "bg-emerald-500",
+      textColor: "text-emerald-600",
       bgColor: "bg-emerald-50 dark:bg-emerald-900/20",
-      borderColor: "border-emerald-200 dark:border-emerald-800"
+      borderColor: "border-emerald-200 dark:border-emerald-800",
     },
-    ARCHIVED: { 
-      icon: Building, 
-      color: "bg-gray-500", 
-      textColor: "text-gray-600", 
+    ARCHIVED: {
+      icon: Building,
+      color: "bg-gray-500",
+      textColor: "text-gray-600",
       bgColor: "bg-gray-50 dark:bg-gray-900/20",
-      borderColor: "border-gray-200 dark:border-gray-800"
-    }
+      borderColor: "border-gray-200 dark:border-gray-800",
+    },
   };
   return statusMap[status] || statusMap.NEW;
 };
@@ -155,17 +163,20 @@ const getServiceInfo = (service: ServiceType) => {
     MARRIAGE_CAPACITY_ACT: { icon: User, name: "Acte de Capacité de Mariage" },
     DEATH_ACT_APPLICATION: { icon: User, name: "Acte de Décès" },
     POWER_OF_ATTORNEY: { icon: FileText, name: "Procuration" },
-    NATIONALITY_CERTIFICATE: { icon: FileText, name: "Certificat de Nationalité" }
+    NATIONALITY_CERTIFICATE: {
+      icon: FileText,
+      name: "Certificat de Nationalité",
+    },
   };
   return serviceMap[service] || { icon: FileText, name: service };
 };
 
 const ModernDemandeTable = () => {
   const t = useTranslations("gestionDemande");
-  
+
   // Gestion automatique du refresh token
   useTokenRefresh();
-  
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -177,17 +188,17 @@ const ModernDemandeTable = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   // TanStack Query hooks
-  const { 
-    data: demandesData, 
-    isLoading, 
-    error, 
-    refetch 
+  const {
+    data: demandesData,
+    isLoading,
+    error,
+    refetch,
   } = useDemandesList({
     page,
     limit,
     status: statusFilter,
-    serviceType: serviceFilter || undefined,
-    search: searchTerm || undefined
+    serviceType: serviceFilter as ServiceType,
+    search: searchTerm,
   });
 
   const updateStatusMutation = useUpdateDemandeStatus();
@@ -228,8 +239,10 @@ const ModernDemandeTable = () => {
       cell: ({ row }) => {
         const demande = row.original;
         const user = demande.user;
-        const initials = `${user.firstName?.charAt(0) || ''}${user.lastName?.charAt(0) || ''}`;
-        
+        const initials = `${user.firstName?.charAt(0) || ""}${
+          user.lastName?.charAt(0) || ""
+        }`;
+
         return (
           <div className="flex items-center space-x-3">
             <Avatar className="w-10 h-10 border-2 border-embassy-blue-200 dark:border-embassy-blue-700">
@@ -263,7 +276,7 @@ const ModernDemandeTable = () => {
         const demande = row.original;
         const serviceInfo = getServiceInfo(demande.serviceType);
         const ServiceIcon = serviceInfo.icon;
-        
+
         return (
           <div className="flex items-center space-x-2">
             <div className="p-2 rounded-lg bg-embassy-yellow-100 dark:bg-embassy-yellow-900/30">
@@ -288,9 +301,11 @@ const ModernDemandeTable = () => {
         const demande = row.original;
         const statusInfo = getStatusInfo(demande.status);
         const StatusIcon = statusInfo.icon;
-        
+
         return (
-          <div className={`inline-flex items-center space-x-2 px-3 py-2 rounded-full border ${statusInfo.bgColor} ${statusInfo.borderColor}`}>
+          <div
+            className={`inline-flex items-center space-x-2 px-3 py-2 rounded-full border ${statusInfo.bgColor} ${statusInfo.borderColor}`}
+          >
             <StatusIcon className={`w-4 h-4 ${statusInfo.textColor}`} />
             <span className={`text-sm font-medium ${statusInfo.textColor}`}>
               {getStatusLabel(demande.status)}
@@ -304,7 +319,7 @@ const ModernDemandeTable = () => {
       header: "Dates",
       cell: ({ row }) => {
         const demande = row.original;
-        
+
         return (
           <div className="space-y-1">
             <div className="flex items-center text-xs text-gray-600 dark:text-gray-400">
@@ -330,7 +345,7 @@ const ModernDemandeTable = () => {
       header: "Actions",
       cell: ({ row }) => {
         const demande = row.original;
-        
+
         return (
           <div className="flex items-center space-x-1">
             <Button
@@ -393,24 +408,24 @@ const ModernDemandeTable = () => {
 
   const handleSubmitEdit = async (updatedData: Partial<Demande>) => {
     if (!currentDemande) return;
-    
+
     try {
       await updateStatusMutation.mutateAsync({
         id: currentDemande.id,
-        status: updatedData.status || currentDemande.status
+        status: updatedData.status || currentDemande.status,
       });
       toast.success("Demande mise à jour avec succès");
       setEditOpen(false);
       refetch();
     } catch (error) {
       toast.error("Erreur lors de la mise à jour");
-      console.error('Erreur lors de la modification:', error);
+      console.error("Erreur lors de la modification:", error);
     }
   };
 
   const handleDelete = async () => {
     if (!currentDemande) return;
-    
+
     try {
       await deleteMutation.mutateAsync(currentDemande.id);
       toast.success("Demande supprimée avec succès");
@@ -418,7 +433,7 @@ const ModernDemandeTable = () => {
       refetch();
     } catch (error) {
       toast.error("Erreur lors de la suppression");
-      console.error('Erreur lors de la suppression:', error);
+      console.error("Erreur lors de la suppression:", error);
     }
   };
 
@@ -432,7 +447,7 @@ const ModernDemandeTable = () => {
   };
 
   const handleStatusFilterChange = (status: string) => {
-    setStatusFilter(status === "" ? undefined : status as RequestStatus);
+    setStatusFilter(status === "" ? undefined : (status as RequestStatus));
     setPage(1);
   };
 
@@ -476,7 +491,9 @@ const ModernDemandeTable = () => {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
-        <p className="text-red-600 dark:text-red-400">Erreur lors du chargement des données</p>
+        <p className="text-red-600 dark:text-red-400">
+          Erreur lors du chargement des données
+        </p>
         <Button onClick={() => refetch()} variant="outline">
           <RefreshCw className="mr-2 h-4 w-4" />
           Réessayer
@@ -498,7 +515,7 @@ const ModernDemandeTable = () => {
               {demandesData?.total || 0} demandes au total
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
@@ -509,7 +526,7 @@ const ModernDemandeTable = () => {
               <RefreshCw className="h-4 w-4 mr-2" />
               Actualiser
             </Button>
-            
+
             <Button
               variant="outline"
               size="sm"
@@ -538,25 +555,33 @@ const ModernDemandeTable = () => {
               />
             </div>
           </div>
-          
+
           {/* Filtres */}
           <div className="flex gap-2">
             {/* Filtre par statut */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="bg-embassy-yellow-50 dark:bg-embassy-yellow-900/20 border-embassy-yellow-300 dark:border-embassy-yellow-600 text-embassy-yellow-700 dark:text-embassy-yellow-400 hover:bg-embassy-yellow-100 dark:hover:bg-embassy-yellow-900/30">
+                <Button
+                  variant="outline"
+                  className="bg-embassy-yellow-50 dark:bg-embassy-yellow-900/20 border-embassy-yellow-300 dark:border-embassy-yellow-600 text-embassy-yellow-700 dark:text-embassy-yellow-400 hover:bg-embassy-yellow-100 dark:hover:bg-embassy-yellow-900/30"
+                >
                   <Filter className="mr-2 h-4 w-4" />
                   Statut
                   {statusFilter && (
-                    <Badge variant="secondary" className="ml-2 bg-embassy-yellow-200 dark:bg-embassy-yellow-800 text-embassy-yellow-800 dark:text-embassy-yellow-200">
+                    <Badge className="ml-2 bg-embassy-yellow-200 dark:bg-embassy-yellow-800 text-embassy-yellow-800 dark:text-embassy-yellow-200">
                       1
                     </Badge>
                   )}
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-embassy-yellow-50 dark:bg-embassy-yellow-900/20 border-embassy-yellow-200 dark:border-embassy-yellow-700">
-                <DropdownMenuLabel className="text-embassy-yellow-800 dark:text-embassy-yellow-200">Filtrer par statut</DropdownMenuLabel>
+              <DropdownMenuContent
+                align="end"
+                className="w-48 bg-embassy-yellow-50 dark:bg-embassy-yellow-900/20 border-embassy-yellow-200 dark:border-embassy-yellow-700"
+              >
+                <DropdownMenuLabel className="text-embassy-yellow-800 dark:text-embassy-yellow-200">
+                  Filtrer par statut
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-embassy-yellow-200 dark:bg-embassy-yellow-700" />
                 <DropdownMenuCheckboxItem
                   checked={!statusFilter}
@@ -565,11 +590,22 @@ const ModernDemandeTable = () => {
                 >
                   Tous les statuts
                 </DropdownMenuCheckboxItem>
-                {Object.values(['NEW', 'IN_REVIEW_DOCS', 'APPROVED_BY_AGENT', 'REJECTED', 'DELIVERED', 'ARCHIVED'] as RequestStatus[]).map((status) => (
+                {Object.values([
+                  "NEW",
+                  "IN_REVIEW_DOCS",
+                  "APPROVED_BY_AGENT",
+                  "REJECTED",
+                  "DELIVERED",
+                  "ARCHIVED",
+                ] as RequestStatus[]).map((status) => (
                   <DropdownMenuCheckboxItem
                     key={status}
                     checked={statusFilter === status}
-                    onCheckedChange={() => handleStatusFilterChange(statusFilter === status ? "" : status)}
+                    onCheckedChange={() =>
+                      handleStatusFilterChange(
+                        statusFilter === status ? "" : status
+                      )
+                    }
                     className="text-embassy-yellow-700 dark:text-embassy-yellow-300"
                   >
                     {getStatusLabel(status)}
@@ -581,19 +617,27 @@ const ModernDemandeTable = () => {
             {/* Filtre par service */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="bg-embassy-yellow-50 dark:bg-embassy-yellow-900/20 border-embassy-yellow-300 dark:border-embassy-yellow-600 text-embassy-yellow-700 dark:text-embassy-yellow-400 hover:bg-embassy-yellow-100 dark:hover:bg-embassy-yellow-900/30">
+                <Button
+                  variant="outline"
+                  className="bg-embassy-yellow-50 dark:bg-embassy-yellow-900/20 border-embassy-yellow-300 dark:border-embassy-yellow-600 text-embassy-yellow-700 dark:text-embassy-yellow-400 hover:bg-embassy-yellow-100 dark:hover:bg-embassy-yellow-900/30"
+                >
                   <Settings className="mr-2 h-4 w-4" />
                   Service
                   {serviceFilter && (
-                    <Badge variant="secondary" className="ml-2 bg-embassy-yellow-200 dark:bg-embassy-yellow-800 text-embassy-yellow-800 dark:text-embassy-yellow-200">
+                    <Badge className="ml-2 bg-embassy-yellow-200 dark:bg-embassy-yellow-800 text-embassy-yellow-800 dark:text-embassy-yellow-200">
                       1
                     </Badge>
                   )}
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-embassy-yellow-50 dark:bg-embassy-yellow-900/20 border-embassy-yellow-200 dark:border-embassy-yellow-700">
-                <DropdownMenuLabel className="text-embassy-yellow-800 dark:text-embassy-yellow-200">Filtrer par service</DropdownMenuLabel>
+              <DropdownMenuContent
+                align="end"
+                className="w-48 bg-embassy-yellow-50 dark:bg-embassy-yellow-900/20 border-embassy-yellow-200 dark:border-embassy-yellow-700"
+              >
+                <DropdownMenuLabel className="text-embassy-yellow-800 dark:text-embassy-yellow-200">
+                  Filtrer par service
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-embassy-yellow-200 dark:bg-embassy-yellow-700" />
                 <DropdownMenuCheckboxItem
                   checked={serviceFilter === ""}
@@ -602,11 +646,20 @@ const ModernDemandeTable = () => {
                 >
                   Tous les services
                 </DropdownMenuCheckboxItem>
-                {Object.values(['VISA', 'BIRTH_ACT_APPLICATION', 'CONSULAR_CARD', 'LAISSEZ_PASSER'] as ServiceType[]).map((service) => (
+                {Object.values([
+                  "VISA",
+                  "BIRTH_ACT_APPLICATION",
+                  "CONSULAR_CARD",
+                  "LAISSEZ_PASSER",
+                ] as ServiceType[]).map((service) => (
                   <DropdownMenuCheckboxItem
                     key={service}
                     checked={serviceFilter === service}
-                    onCheckedChange={() => handleServiceFilterChange(serviceFilter === service ? "" : service)}
+                    onCheckedChange={() =>
+                      handleServiceFilterChange(
+                        serviceFilter === service ? "" : service
+                      )
+                    }
                     className="text-embassy-yellow-700 dark:text-embassy-yellow-300"
                   >
                     {getServiceInfo(service).name}
@@ -621,12 +674,9 @@ const ModernDemandeTable = () => {
         {(statusFilter || serviceFilter || searchTerm) && (
           <div className="flex gap-2 flex-wrap mt-4">
             {statusFilter && (
-              <Badge 
-                variant="secondary" 
-                className="bg-embassy-blue-100 dark:bg-embassy-blue-900/30 text-embassy-blue-800 dark:text-embassy-blue-200 border-embassy-blue-300 dark:border-embassy-blue-600"
-              >
+              <Badge className="bg-embassy-blue-100 dark:bg-embassy-blue-900/30 text-embassy-blue-800 dark:text-embassy-blue-200 border-embassy-blue-300 dark:border-embassy-blue-600">
                 Statut: {getStatusLabel(statusFilter)}
-                <button 
+                <button
                   onClick={() => handleStatusFilterChange("")}
                   className="ml-2 hover:bg-embassy-blue-200 dark:hover:bg-embassy-blue-800 rounded-full p-0.5"
                 >
@@ -635,12 +685,9 @@ const ModernDemandeTable = () => {
               </Badge>
             )}
             {serviceFilter && (
-              <Badge 
-                variant="secondary" 
-                className="bg-embassy-yellow-100 dark:bg-embassy-yellow-900/30 text-embassy-yellow-800 dark:text-embassy-yellow-200 border-embassy-yellow-300 dark:border-embassy-yellow-600"
-              >
+              <Badge className="bg-embassy-yellow-100 dark:bg-embassy-yellow-900/30 text-embassy-yellow-800 dark:text-embassy-yellow-200 border-embassy-yellow-300 dark:border-embassy-yellow-600">
                 Service: {getServiceInfo(serviceFilter as ServiceType).name}
-                <button 
+                <button
                   onClick={() => handleServiceFilterChange("")}
                   className="ml-2 hover:bg-embassy-yellow-200 dark:hover:bg-embassy-yellow-800 rounded-full p-0.5"
                 >
@@ -649,12 +696,9 @@ const ModernDemandeTable = () => {
               </Badge>
             )}
             {searchTerm && (
-              <Badge 
-                variant="secondary" 
-                className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 border-green-300 dark:border-green-600"
-              >
+              <Badge className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 border-green-300 dark:border-green-600">
                 Recherche: {searchTerm}
-                <button 
+                <button
                   onClick={() => handleSearchChange("")}
                   className="ml-2 hover:bg-green-200 dark:hover:bg-green-800 rounded-full p-0.5"
                 >
@@ -671,10 +715,16 @@ const ModernDemandeTable = () => {
         <Table>
           <TableHeader className="bg-gradient-to-r from-embassy-blue-50 via-embassy-blue-100/50 to-embassy-yellow-50 dark:from-embassy-blue-900/30 dark:via-embassy-blue-800/20 dark:to-embassy-yellow-900/30">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="border-embassy-blue-200 dark:border-embassy-blue-700">
+              <TableRow
+                key={headerGroup.id}
+                className="border-embassy-blue-200 dark:border-embassy-blue-700"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="text-embassy-blue-800 dark:text-embassy-blue-200 font-semibold">
+                    <TableHead
+                      key={header.id}
+                      className="text-embassy-blue-800 dark:text-embassy-blue-200 font-semibold"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -696,7 +746,10 @@ const ModernDemandeTable = () => {
                   className="hover:bg-embassy-blue-50/50 dark:hover:bg-embassy-blue-900/20 border-gray-200 dark:border-gray-700 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-gray-900 dark:text-gray-100">
+                    <TableCell
+                      key={cell.id}
+                      className="text-gray-900 dark:text-gray-100"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -727,12 +780,14 @@ const ModernDemandeTable = () => {
               {table.getFilteredSelectedRowModel().rows.length} sur{" "}
               {demandesData?.total || 0} sélectionnés
             </span>
-            <Badge variant="outline" className="border-embassy-blue-300 dark:border-embassy-blue-600 text-embassy-blue-700 dark:text-embassy-blue-400">
+            <Badge className="border-embassy-blue-300 dark:border-embassy-blue-600 text-embassy-blue-700 dark:text-embassy-blue-400">
               Page {page} sur {Math.ceil((demandesData?.total || 0) / limit)}
             </Badge>
             {demandesData?.total && (
               <span className="text-xs">
-                Affichage {((page - 1) * limit) + 1} à {Math.min(page * limit, demandesData.total)} sur {demandesData.total} résultats
+                Affichage {(page - 1) * limit + 1} à{" "}
+                {Math.min(page * limit, demandesData.total)} sur{" "}
+                {demandesData.total} résultats
               </span>
             )}
           </div>
@@ -749,7 +804,7 @@ const ModernDemandeTable = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setPage(prev => Math.max(1, prev - 1))}
+              onClick={() => setPage((prev) => Math.max(1, prev - 1))}
               disabled={page === 1 || isLoading}
               className="border-embassy-blue-300 dark:border-embassy-blue-600 text-embassy-blue-700 dark:text-embassy-blue-400 hover:bg-embassy-blue-50 dark:hover:bg-embassy-blue-900/30 disabled:opacity-50"
             >
@@ -758,7 +813,7 @@ const ModernDemandeTable = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setPage(prev => prev + 1)}
+              onClick={() => setPage((prev) => prev + 1)}
               disabled={!demandesData?.hasNextPage || isLoading}
               className="border-embassy-blue-300 dark:border-embassy-blue-600 text-embassy-blue-700 dark:text-embassy-blue-400 hover:bg-embassy-blue-50 dark:hover:bg-embassy-blue-900/30 disabled:opacity-50"
             >
@@ -767,7 +822,9 @@ const ModernDemandeTable = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setPage(Math.ceil((demandesData?.total || 0) / limit))}
+              onClick={() =>
+                setPage(Math.ceil((demandesData?.total || 0) / limit))
+              }
               disabled={!demandesData?.hasNextPage || isLoading}
               className="border-embassy-blue-300 dark:border-embassy-blue-600 text-embassy-blue-700 dark:text-embassy-blue-400 hover:bg-embassy-blue-50 dark:hover:bg-embassy-blue-900/30 disabled:opacity-50"
             >

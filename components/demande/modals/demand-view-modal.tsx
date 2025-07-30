@@ -153,7 +153,7 @@ export const DemandViewModal: React.FC<DemandViewModalProps> = ({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Date d'expiration:</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Date d&apos;expiration:</span>
                   <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     {formatDate(visaDetails.passportExpirationDate)}
                   </span>

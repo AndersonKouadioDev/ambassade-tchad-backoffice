@@ -128,7 +128,7 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
         <CardHeader className="bg-gradient-to-r from-blue-50 to-yellow-50">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-              <Icon name="flag" className="w-8 h-8 text-white" />
+              <Icon icon="flag" className="w-8 h-8 text-white" />
             </div>
             <div>
               <CardTitle className="text-2xl text-blue-900">
@@ -148,7 +148,7 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Icon name="settings" className="w-5 h-5 text-blue-600" />
+                <Icon icon="settings" className="w-5 h-5 text-blue-600" />
                 <span>Type de Service</span>
               </CardTitle>
             </CardHeader>
@@ -175,7 +175,7 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
                         {serviceOptions.map((option) => (
                           <SelectItem key={option.value} value={option.value}>
                             <div className="flex items-center space-x-2">
-                              <Icon name={option.icon} className="w-4 h-4" />
+                              <Icon icon={option.icon} className="w-4 h-4" />
                               <span>{option.label}</span>
                             </div>
                           </SelectItem>
@@ -193,7 +193,7 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Icon name="user" className="w-5 h-5 text-blue-600" />
+                <Icon icon="user" className="w-5 h-5 text-blue-600" />
                 <span>Informations Personnelles</span>
               </CardTitle>
             </CardHeader>
@@ -276,7 +276,7 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Icon name="phone" className="w-5 h-5 text-blue-600" />
+                <Icon icon="phone" className="w-5 h-5 text-blue-600" />
                 <span>Informations de Contact</span>
               </CardTitle>
             </CardHeader>
@@ -365,7 +365,7 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Icon name="briefcase" className="w-5 h-5 text-blue-600" />
+                <Icon icon="briefcase" className="w-5 h-5 text-blue-600" />
                 <span>Informations Professionnelles</span>
               </CardTitle>
             </CardHeader>
@@ -406,8 +406,8 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Icon name="shield" className="w-5 h-5 text-blue-600" />
-                <span>Contact d'Urgence</span>
+                <Icon  icon="shield" className="w-5 h-5 text-blue-600" />
+                <span>Contact d&apos;Urgence</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -431,7 +431,7 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
                   name="emergencyPhone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Téléphone d'urgence</FormLabel>
+                      <FormLabel>Téléphone d&apos;urgence</FormLabel>
                       <FormControl>
                         <Input placeholder="+33 1 23 45 67 89" {...field} />
                       </FormControl>
@@ -456,7 +456,7 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Icon name="paperclip" className="w-5 h-5 text-blue-600" />
+                <Icon icon="paperclip" className="w-5 h-5 text-blue-600" />
                 <span>Documents Requis</span>
               </CardTitle>
             </CardHeader>
@@ -485,12 +485,12 @@ export function DemandeForm({ onSuccess, onCancel, initialData }: DemandeFormPro
                 >
                   {createDemande.isPending ? (
                     <>
-                      <Icon name="loader-2" className="w-4 h-4 mr-2 animate-spin" />
+                      <Icon icon="loader-2" className="w-4 h-4 mr-2 animate-spin" />
                       Création en cours...
                     </>
                   ) : (
                     <>
-                      <Icon name="send" className="w-4 h-4 mr-2" />
+                      <Icon icon="send" className="w-4 h-4 mr-2" />
                       Soumettre la demande
                     </>
                   )}

@@ -95,7 +95,7 @@ export default function SuiviPage() {
             Suivi de Demande
           </h1>
           <p className="text-xl text-blue-600">
-            Suivez l'état de votre demande avec votre ticket
+            Suivez l&apos;état de votre demande avec votre ticket
           </p>
         </div>
 
@@ -249,14 +249,14 @@ export default function SuiviPage() {
             <Card className="border-blue-200 shadow-lg">
               <CardContent className="p-6">
                 <div className="text-center">
-                  <h4 className="font-semibold text-gray-900 mb-4">Besoin d'aide ?</h4>
+                  <h4 className="font-semibold text-gray-900 mb-4">Besoin d&apos;aide ?</h4>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50">
                       <FileText className="w-4 h-4 mr-2" />
                       Télécharger le récépissé
                     </Button>
                     <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50">
-                      Contacter l'ambassade
+                      Contacter l&apos;ambassade
                     </Button>
                   </div>
                   <p className="text-sm text-gray-600 mt-4">
@@ -281,7 +281,7 @@ export default function SuiviPage() {
               <div className="space-y-3 text-sm text-yellow-700">
                 <p>1. <strong>Récupérez votre ticket:</strong> Après avoir soumis votre demande, vous avez reçu un numéro de ticket unique.</p>
                 <p>2. <strong>Entrez le ticket:</strong> Saisissez ce numéro dans le champ ci-dessus (format: TCH-YYYY-XXXXXX).</p>
-                <p>3. <strong>Consultez le statut:</strong> Vous verrez l'état actuel de votre demande et son historique.</p>
+                <p>3. <strong>Consultez le statut:</strong> Vous verrez l&apos;état actuel de votre demande et son historique.</p>
                 <p>4. <strong>Restez informé:</strong> Vous recevrez également des notifications par email à chaque étape.</p>
               </div>
             </CardContent>

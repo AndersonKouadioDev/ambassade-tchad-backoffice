@@ -1,8 +1,8 @@
 import { Link } from '@/i18n/routing';
-import Lock from "@/components/partials/auth/lock";
-import Copyright from "@/components/partials/auth/copyright";
+import Lock from "@/components/auth/lock";
+import Copyright from "@/components/auth/copyright";
 import Image from "next/image";
-import Logo from "@/components/partials/auth/logo";
+import Logo from "@/components/auth/logo";
 const LockScreen = () => {
   return (
     <div className="flex w-full items-center overflow-hidden min-h-dvh h-dvh basis-full">

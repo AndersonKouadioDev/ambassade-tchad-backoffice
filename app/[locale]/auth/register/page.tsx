@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/routing";
-import RegisterForm from "@/components/partials/auth/register-form";
+import RegisterForm from "@/components/auth/register-form";
 import Image from "next/image";
 import Logo from "@/components/logo";
 

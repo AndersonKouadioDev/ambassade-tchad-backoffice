@@ -1,4 +1,3 @@
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,20 +7,17 @@ import {
   DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuSub,
-  DropdownMenuSubContent, 
+  DropdownMenuSubContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Icon } from "@/components/ui/icon"
+import { Icon } from "@/components/ui/icon";
 import { auth } from "@/lib/auth";
 import Image from "next/image";
-import { Link } from '@/i18n/routing';
-import { LogoutButton } from "./logout-button"; 
+import { Link } from "@/i18n/routing";
+import { LogoutButton } from "./logout-button";
 
 const ProfileInfo = async () => {
   const session = await auth();
-
-
-
   return (
     <div className="md:block hidden">
       <DropdownMenu>
@@ -42,7 +38,10 @@ const ProfileInfo = async () => {
             </span>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56 p-0 bg-white/95 backdrop-blur-sm border border-embassy-blue-200 shadow-xl dark:bg-slate-800/95 dark:border-embassy-blue-400/30" align="end">
+        <DropdownMenuContent
+          className="w-56 p-0 bg-white/95 backdrop-blur-sm border border-embassy-blue-200 shadow-xl dark:bg-slate-800/95 dark:border-embassy-blue-400/30"
+          align="end"
+        >
           <DropdownMenuLabel className="flex gap-3 items-center mb-1 p-4 border-b border-embassy-blue-100 dark:border-embassy-blue-700/30">
             <Image
               src={session?.user?.image || "/images/all-img/user3.png"}
@@ -68,13 +67,13 @@ const ProfileInfo = async () => {
               {
                 name: "Profil",
                 icon: "heroicons:user",
-                href: "/user-profile"
-              }, 
+                href: "/user-profile",
+              },
               {
                 name: "Paramètres",
                 icon: "heroicons:paper-airplane",
-                href: "/dashboard"
-              }, 
+                href: "/dashboard",
+              },
             ].map((item, index) => (
               <Link
                 href={item.href}
@@ -82,7 +81,10 @@ const ProfileInfo = async () => {
                 className="cursor-pointer"
               >
                 <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-embassy-blue-700 capitalize px-3 py-2 cursor-pointer hover:bg-embassy-blue-50 rounded-lg mx-2 transition-colors duration-200 dark:text-embassy-blue-300 dark:hover:bg-embassy-blue-800/50">
-                  <Icon icon={item.icon} className="w-4 h-4 text-embassy-blue-600 dark:text-embassy-blue-400" />
+                  <Icon
+                    icon={item.icon}
+                    className="w-4 h-4 text-embassy-blue-600 dark:text-embassy-blue-400"
+                  />
                   {item.name}
                 </DropdownMenuItem>
               </Link>
@@ -90,9 +92,7 @@ const ProfileInfo = async () => {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-          
             <DropdownMenuSub>
-            
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   {[
@@ -101,7 +101,7 @@ const ProfileInfo = async () => {
                     },
                     {
                       name: "message",
-                    }
+                    },
                   ].map((item, index) => (
                     <Link
                       href="/dashboard"
@@ -116,8 +116,6 @@ const ProfileInfo = async () => {
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
-         
-          
           </DropdownMenuGroup>
           <DropdownMenuSeparator className="mb-0 bg-embassy-blue-100 dark:bg-embassy-blue-700/30" />
           <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-embassy-red-600 capitalize my-2 px-3 cursor-pointer hover:bg-embassy-red-50 rounded-lg mx-2 transition-colors duration-200 dark:text-embassy-red-400 dark:hover:bg-embassy-red-900/30">

@@ -91,18 +91,19 @@ export const ContentModal: React.FC<ContentModalProps> = ({
     }
   }, [errors]);
 
-  const handleFileChange = React.useCallback((key: string, file: File | null) => {
-    if (file) {
+  const handleFileChange = React.useCallback((key: string, files: FileList | null) => {
+    if (files && files.length > 0) {
+      const fileArray = Array.from(files);
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
         setPreviewImage(result);
-        setFormData(prev => ({ ...prev, [key]: file }));
+        setFormData(prev => ({ ...prev, [key]: fileArray }));
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(fileArray[0]); // Utiliser le premier fichier pour la prévisualisation
     } else {
       setPreviewImage(null);
-      setFormData(prev => ({ ...prev, [key]: null }));
+      setFormData(prev => ({ ...prev, [key]: [] }));
     }
   }, []);
 
@@ -228,7 +229,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                     type="file"
                     className="hidden"
                     accept={field.accept || "image/*"}
-                    onChange={(e) => handleFileChange(field.key, e.target.files?.[0] || null)}
+                    onChange={(e) => handleFileChange(field.key, e.target.files || null)}
+                    multiple
                   />
                 </label>
               </div>
