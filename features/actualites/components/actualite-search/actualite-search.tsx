@@ -1,0 +1,259 @@
+"use client";
+
+import React, { useState } from "react";
+import { Search, Filter, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { IActualiteRechercheParams } from "../../types/actualites.type";
+
+interface ActualiteSearchProps {
+  onSearch: (params: IActualiteRechercheParams) => void;
+  isLoading?: boolean;
+}
+
+export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
+  onSearch,
+  isLoading = false,
+}) => {
+  const [searchParams, setSearchParams] = useState<IActualiteRechercheParams>({
+    status: "all",
+    title: "",
+    content: "",
+    published: undefined,
+    authorId: "",
+    page: 1,
+    limit: 10,
+  });
+
+  const [showFilters, setShowFilters] = useState(false);
+
+  const handleSearch = () => {
+    onSearch(searchParams);
+  };
+
+  const handleReset = () => {
+    const resetParams: IActualiteRechercheParams = {
+      status: "all",
+      title: "",
+      content: "",
+      published: undefined,
+      authorId: "",
+      page: 1,
+      limit: 10,
+    };
+    setSearchParams(resetParams);
+    onSearch(resetParams);
+  };
+
+  const handleInputChange = (field: keyof IActualiteRechercheParams, value: any) => {
+    setSearchParams(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const hasActiveFilters = () => {
+    return (
+      searchParams.title ||
+      searchParams.content ||
+      searchParams.published !== undefined ||
+      searchParams.authorId ||
+      searchParams.status !== "all"
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Barre de recherche principale */}
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="Rechercher par titre ou contenu..."
+            value={searchParams.title || ""}
+            onChange={(e) => handleInputChange("title", e.target.value)}
+            className="pl-10"
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
+          />
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => setShowFilters(!showFilters)}
+          className="flex items-center gap-2"
+        >
+          <Filter className="w-4 h-4" />
+          Filtres
+          {hasActiveFilters() && (
+            <Badge variant="secondary" className="ml-1">
+              {Object.values(searchParams).filter(v => v && v !== "all").length}
+            </Badge>
+          )}
+        </Button>
+        <Button onClick={handleSearch} disabled={isLoading}>
+          {isLoading ? "Recherche..." : "Rechercher"}
+        </Button>
+      </div>
+
+      {/* Filtres avancés */}
+      {showFilters && (
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-medium">Filtres avancés</h3>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleReset}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-4 h-4 mr-1" />
+              Réinitialiser
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Statut de publication */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Statut</label>
+              <Select
+                value={searchParams.status || "all"}
+                onValueChange={(value) => handleInputChange("status", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Tous les statuts" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tous les statuts</SelectItem>
+                  <SelectItem value="published">Publié</SelectItem>
+                  <SelectItem value="unpublished">Brouillon</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Contenu */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Contenu</label>
+              <Input
+                placeholder="Rechercher dans le contenu..."
+                value={searchParams.content || ""}
+                onChange={(e) => handleInputChange("content", e.target.value)}
+              />
+            </div>
+
+            {/* Auteur */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Auteur</label>
+              <Input
+                placeholder="ID de l'auteur..."
+                value={searchParams.authorId || ""}
+                onChange={(e) => handleInputChange("authorId", e.target.value)}
+              />
+            </div>
+
+            {/* Limite par page */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Par page</label>
+              <Select
+                value={searchParams.limit?.toString() || "10"}
+                onValueChange={(value) => handleInputChange("limit", parseInt(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Boutons d'action */}
+          <div className="flex gap-2 pt-2">
+            <Button onClick={handleSearch} disabled={isLoading} className="flex-1">
+              {isLoading ? "Recherche..." : "Appliquer les filtres"}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleReset}
+              disabled={isLoading}
+            >
+              Réinitialiser
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Indicateurs de filtres actifs */}
+      {hasActiveFilters() && (
+        <div className="flex flex-wrap gap-2">
+          {searchParams.title && (
+            <Badge variant="secondary" className="flex items-center gap-1">
+              Titre: {searchParams.title}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto p-0 ml-1"
+                onClick={() => handleInputChange("title", "")}
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            </Badge>
+          )}
+          {searchParams.content && (
+            <Badge variant="secondary" className="flex items-center gap-1">
+              Contenu: {searchParams.content}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto p-0 ml-1"
+                onClick={() => handleInputChange("content", "")}
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            </Badge>
+          )}
+          {searchParams.status && searchParams.status !== "all" && (
+            <Badge variant="secondary" className="flex items-center gap-1">
+              Statut: {searchParams.status}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto p-0 ml-1"
+                onClick={() => handleInputChange("status", "all")}
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            </Badge>
+          )}
+          {searchParams.authorId && (
+            <Badge variant="secondary" className="flex items-center gap-1">
+              Auteur: {searchParams.authorId}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto p-0 ml-1"
+                onClick={() => handleInputChange("authorId", "")}
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            </Badge>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}; 

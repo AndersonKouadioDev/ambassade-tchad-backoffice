@@ -1,10 +1,23 @@
-import { StatusBlock } from "@/components/blocks/status-block";
-import ActualiteCardsContainer from "@/components/contenu/actualite-cards-container";
-import { BookOpen, FileText, Eye, Archive, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
+import {
+  ActualiteList,
+  ActualiteStats,
+} from "@/features/actualites/components";
+import { prefetchActualitesList } from "@/features/actualites/queries/actualite-list.query";
+import { prefetchActualiteStats } from "@/features/actualites/queries/actualite-stats.query";
+import { BookOpen } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
-export default function ActualiteListPage() {
-  const t = useTranslations("contenu.gestionActualite");
+export default async function ActualiteListPage() {
+  const t = await getTranslations("contenu.gestionActualite");
+
+  // Prechargement des données
+  await Promise.all([
+    prefetchActualitesList({
+      page: 1,
+    }),
+    prefetchActualiteStats(),
+  ]);
+
   return (
     <div className="space-y-8">
       {/* En-tête avec titre et description */}
@@ -16,47 +29,19 @@ export default function ActualiteListPage() {
           <div>
             <h1 className="text-3xl font-bold">{t("title")}</h1>
             <p className="text-embassy-blue-100 dark:text-embassy-blue-200 mt-2">
-              Gérez et organisez vos actualités avec une interface moderne et intuitive
+              Gérez et organisez vos actualités avec une interface moderne et
+              intuitive
             </p>
           </div>
         </div>
       </div>
 
       {/* Statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatusBlock
-          title={t("total_brouillon")}
-          total="8"
-          iconWrapperClass="bg-orange-100 dark:bg-orange-900/30"
-          chartColor="#FB923C"
-          icon={<FileText className="w-5 h-5 text-orange-600" />}
-        />
-        <StatusBlock
-          title={t("total_publie")}
-          total="15"
-          iconWrapperClass="bg-emerald-100 dark:bg-emerald-900/30"
-          chartColor="#10B981"
-          icon={<Eye className="w-5 h-5 text-emerald-600" />}
-        />
-        <StatusBlock
-          title={t("total_actualite")}
-          total="28"
-          icon={<BookOpen className="w-5 h-5 text-embassy-blue-600" />}
-          iconWrapperClass="bg-embassy-blue-100 dark:bg-embassy-blue-900/30"
-          chartColor="#2563EB"
-        />
-        <StatusBlock
-          title="Vues Total"
-          total="3,456"
-          icon={<Users className="w-5 h-5 text-embassy-yellow-600" />}
-          iconWrapperClass="bg-embassy-yellow-100 dark:bg-embassy-yellow-900/30"
-          chartColor="#FBBF24"
-        />
-      </div>
+      <ActualiteStats />
 
       {/* Composant principal des actualités */}
       <div className="bg-white dark:bg-default-100 rounded-xl shadow-sm border border-default-200/50 p-6">
-        <ActualiteCardsContainer />
+        <ActualiteList />
       </div>
     </div>
   );

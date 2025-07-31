@@ -1,78 +1,82 @@
-import { IActualite, IActualiteStats, PaginatedResponse } from "@/types";
-import {api } from "@/lib/api";
-import { IActualiteRechercheParams } from "../types/actualites.type";
+import { PaginatedResponse } from "@/types";
+import { api } from "@/lib/api";
+import { IActualiteRechercheParams, IActualite, IActualiteStats } from "../types/actualites.type";
 import { SearchParams } from "ak-api-http";
 export interface IActualiteAPI {
-  getAll: (params: IActualiteRechercheParams) => Promise<PaginatedResponse<IActualite>>;
-  getById: (id: string) => Promise<IActualite>;
-  getStats: () => Promise<IActualiteStats>;
-  create: (data: IActualite, formData?: FormData) => Promise<IActualite>;
-  update: (id: string, data: IActualite) => Promise<IActualite>;
-  delete: (id: string) => Promise<void>;
+    getAll: (params: IActualiteRechercheParams) => Promise<PaginatedResponse<IActualite>>;
+    getById: (id: string) => Promise<IActualite>;
+    getStats: () => Promise<IActualiteStats>;
+    create: (data: FormData) => Promise<IActualite>;
+    update: (id: string, formData: FormData) => Promise<IActualite>;
+    delete: (id: string) => Promise<void>;
 }
 
 export const actualiteAPI: IActualiteAPI = {
     getAll(params: IActualiteRechercheParams): Promise<PaginatedResponse<IActualite>> {
         return api.request<PaginatedResponse<IActualite>>({
-            endpoint: `/actualites`,
+            endpoint: `/news`,
             method: "GET",
-            searchParams:params as SearchParams,
-
+            searchParams: {
+                ...params as unknown as SearchParams,
+                include: "author" // Inclure les données de l'auteur
+            },
         });
     },
 
     getById(id: string): Promise<IActualite> {
         return api.request<IActualite>({
-            endpoint: `/actualites/${id}`,
+            endpoint: `/news/${id}`,
             method: "GET",
+            searchParams: {
+                include: "author" // Inclure les données de l'auteur
+            },
         });
     },
 
     getStats(): Promise<IActualiteStats> {
         return api.request<IActualiteStats>({
-            endpoint: `/actualites/stats`,
+            endpoint: `/news/stats`,
             method: "GET",
         });
     },
 
-    create(data: IActualite, formData?: FormData): Promise<IActualite> {
-        console.log('actualiteAPI.create - Données reçues:', data);
+    create(formData: FormData): Promise<IActualite> {
         console.log('actualiteAPI.create - FormData reçu:', formData);
-        
-        // Si on a FormData, l'utiliser, sinon utiliser les données JSON
-        const requestData = formData || data;
-        
+
         return api.request<IActualite>({
-            endpoint: `/actualites`,
+            endpoint: `/news`,
             method: "POST",
-            data: requestData,
-        }).then(response => {
-            console.log('actualiteAPI.create - Réponse API:', response);
-            return response;
-        }).catch(error => {
-            console.error('actualiteAPI.create - Erreur API:', error);
-            console.error('evenementAPI.create - Détails erreur:', {
-                message: error.message,
-                status: error.status,
-                data: error.data,
-            });
-            throw error;
+            config: {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            },
+            data: formData,
         });
+
     },
 
-    update(id: string, data: IActualite): Promise<IActualite> {
+    update(id: string, formData: FormData): Promise<IActualite> {
+        console.log('actualiteAPI.update - Données reçues:', formData);
+        console.log('actualiteAPI.update - FormData reçu:', formData);
+
         return api.request<IActualite>({
-            endpoint: `/actualites/${id}`,
+            endpoint: `/news/${id}`,
             method: "PUT",
-            data,
-        });
+            config: {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            },
+            data: formData,
+        })
     },
 
     delete(id: string): Promise<void> {
         return api.request<void>({
-            endpoint: `/actualites/${id}`,
+            endpoint: `/news/${id}`,
             method: "DELETE",
         });
     },
- 
+
 };

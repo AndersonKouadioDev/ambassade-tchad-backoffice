@@ -27,8 +27,3 @@ export interface ApiResponse<T> {
 }
 
 export interface ApiPaginatedResponse<T> extends ApiResponse<PaginatedResponse<T>> { }
-
-// Export specific types
-export * from './actualite.types';
-export * from './evenement.types';
-export * from './galerie.types';

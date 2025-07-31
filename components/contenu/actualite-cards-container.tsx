@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
-import { IActualite } from "@/types/actualite.types";
+import { IActualite } from "@/features/actualites/types/actualites.type";
 import { ActualiteCards } from "./actualite-cards";
 import { ContentModal, ContentModalField } from "@/components/ui/content-modal";
 import { ViewModal } from "@/components/ui/view-modal";
@@ -175,8 +175,7 @@ const ActualiteCardsContainer: React.FC = () => {
       const updatedActualite: IActualite = {
         ...currentActualite,
         ...formData,
-        dateModification: new Date().toISOString().split('T')[0],
-        tags: formData.tags ? formData.tags.split(',').map((tag: string) => tag.trim()) : currentActualite.tags || []
+        dateModification: new Date().toISOString().split('T')[0]
       };
       
       setData(prev => prev.map(item => 
@@ -195,8 +194,7 @@ const ActualiteCardsContainer: React.FC = () => {
   // Préparer les données pour l'édition
   const getEditData = (actualite: IActualite) => {
     return {
-      ...actualite,
-      tags: actualite.tags?.join(', ') || ''
+      ...actualite
     };
   };
 

@@ -1,6 +1,6 @@
 import getQueryClient from "@/lib/get-query-client";
-import { actualiteAPI } from "../api/actualites.api";
 import { useQuery } from "@tanstack/react-query";
+import { getActualiteStatsAction } from "../actions/actualites.action";
 
 const queryClient = getQueryClient();
 
@@ -11,7 +11,7 @@ export const actualiteStatsQueryOption = () => {
     return {        
         queryKey: actualiteQueryKey,
         queryFn: async () => {
-            const data = await actualiteAPI.getStats();
+            const data = await getActualiteStatsAction();
             return data;
         },
         keepPreviousData: true,
@@ -23,7 +23,7 @@ export const useActualiteStats = () => {
     return useQuery(actualiteStatsQueryOption());
 };
 
-// Hook pour précharger les stats des actualites
+// Foncion pour précharger les stats des actualites
 export const prefetchActualiteStats = () => {
     return queryClient.prefetchQuery(actualiteStatsQueryOption());
 }

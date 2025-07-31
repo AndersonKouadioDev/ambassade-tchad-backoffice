@@ -1,9 +1,8 @@
-import { api } from "@/lib/api";
-import { IEvenement } from "@/types/evenement.types";
+"use server";
 import { processAndValidateFormData } from "ak-zod-form-kit";
-import { IActualite } from "../types/actualites.type";
 import { ActualiteDTO, actualiteSchema } from "../schemas/actualites.schema";
 import { actualiteAPI } from "../api/actualites.api";
+import { IActualiteRechercheParams } from "../types/actualites.type";
 
 /**
  * Fonction pour créer un nouvel événement
@@ -11,39 +10,29 @@ import { actualiteAPI } from "../api/actualites.api";
  * @returns Un objet indiquant le succès de l'opération et un message
  */
 export async function createActualite(
-    formdata: ActualiteDTO,
-    formData?: FormData
+    formdata: FormData
 ): Promise<{ success: boolean; message: string }> {
     console.log('createActualite - Données reçues:', formdata);
-    console.log('createActualite - FormData reçu:', formData);
-    
-    // Vérification des données du formulaire
-    const result = processAndValidateFormData(actualiteSchema, formdata, {
-        outputFormat: "object",
-    });
-
-    console.log('createActualite - Résultat validation:', result);
-
-    if (!result.success) {
-        console.error('createActualite - Erreurs de validation:', result.errorsInString);
-        return {
-            success: false,
-            message: result.errorsInString || "Des erreurs de validation sont survenues.",
-        };
-    }
 
     try {
-        console.log('createActualite - Appel API avec données:', result.data);
-        console.log('createActualite - Appel API avec FormData:', formData);
-        
+        console.log('createActualite - Appel API avec données:', formdata);
+
         // Création de l'actualité
-        const createdActualite = await actualiteAPI.create(result.data as ActualiteDTO, formData);
-        
+        const createdActualite = await actualiteAPI.create(formdata);
+
         console.log('createActualite - Actualite créé:', createdActualite);
-        
+
+        if (!createdActualite || !createdActualite.id) {
+            console.error('createActualite - Réponse API invalide:', createdActualite);
+            return {
+                success: false,
+                message: "La création a échoué - réponse API invalide.",
+            };
+        }
+
         return {
             success: true,
-            message: "Actualite créé avec succès.",
+            message: "Actualité créée avec succès.",
         };
     } catch (apiError: any) {
         console.error('createActualite - Erreur API:', apiError);
@@ -52,10 +41,10 @@ export async function createActualite(
             status: apiError.status,
             data: apiError.data,
         });
-        
+
         return {
             success: false,
-            message: apiError.message || "Erreur lors de la création de l'événement.",
+            message: apiError.message || "Erreur lors de la création de l'actualité.",
         };
     }
 }
@@ -64,32 +53,32 @@ export async function createActualite(
 // Mise à jour d'un actualite existant
 export async function updateActualite(
     id: string,
-    formdata: ActualiteDTO
+    formData: FormData
 ): Promise<{ success: boolean; message: string }> {
-    // Vérification des données du formulaire
-    const result = processAndValidateFormData(actualiteSchema, formdata, {
-        outputFormat: "object",
-    });
-
-    if (!result.success) {
-        return {
-            success: false,
-            message: result.errorsInString || "Des erreurs de validation sont survenues.",
-        };
-    }
+    console.log('=== UPDATE ACTUALITE ACTION ===');
+    console.log('ID:', id); console.log('updateActualite - FormData reçu:', formData);
 
     // mise à jour de l'actualite
     try {
-        const updated = await actualiteAPI.update(id, result.data as ActualiteDTO);
+        console.log('updateActualite - Appel API avec FormData:', formData);
+
+        const updated = await actualiteAPI.update(id, formData);
         console.log("Actualite mis à jour :", updated);
+
         return {
             success: true,
-            message: "Événement mis à jour avec succès.",
+            message: "Actualité mise à jour avec succès.",
         };
     } catch (apiError: any) {
+        console.error('updateActualite - Erreur API:', apiError);
+        console.error('updateActualite - Détails erreur:', {
+            message: apiError.message,
+            status: apiError.status,
+            data: apiError.data,
+        });
         return {
             success: false,
-            message: apiError.message || "Erreur lors de la mise à jour de l'événement.",
+            message: apiError.message || "Erreur lors de la mise à jour de l'actualité.",
         };
     }
 }
@@ -120,3 +109,21 @@ export async function deleteActualite(
     }
 }
 
+// Les gets sont appelés dans les queries
+
+export async function getActualiteDetailAction(id: string) {
+    if (!id || id.trim() === "") {
+        throw new Error("ID de l'actualité requis.");
+    }
+    return actualiteAPI.getById(id);
+}
+
+export async function getActualiteTousAction(params: IActualiteRechercheParams) {
+
+    return actualiteAPI.getAll(params);
+}
+
+export async function getActualiteStatsAction() {
+
+    return actualiteAPI.getStats();
+}
