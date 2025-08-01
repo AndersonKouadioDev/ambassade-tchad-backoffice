@@ -2,9 +2,9 @@ import React from "react";
 import { BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { ButtonGoLink } from "@/components/blocks/button-goLink";
-import { ActualiteForm } from "@/features/actualites/components/actualite-form/actualite-form";
+import { EvenementForm } from "@/features/evenement/components/evenement-form/evenement-form";
 
-export default function CreateActualitePage() {
+export default function CreateEvenementPage() {
   const t = getTranslations("contenu.gestionActualite");
 
   return (
@@ -17,9 +17,9 @@ export default function CreateActualitePage() {
             <BookOpen className="w-8 h-8" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">Créer une nouvelle actualité</h1>
+            <h1 className="text-3xl font-bold">Créer un nouvel évènement</h1>
             <p className="text-embassy-blue-100 dark:text-embassy-blue-200 mt-2">
-              Rédigez et publiez une nouvelle actualité
+              Rédigez et publiez un nouvel évènement
             </p>
           </div>
         </div>
@@ -27,7 +27,7 @@ export default function CreateActualitePage() {
 
       {/* Formulaire */}
       <div className="bg-white dark:bg-default-100 rounded-xl shadow-sm border border-default-200/50 p-6">
-        <ActualiteForm />
+        <EvenementForm />
       </div>
     </div>
   );

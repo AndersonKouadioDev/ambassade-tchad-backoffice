@@ -13,12 +13,12 @@ import {
 } from "lucide-react";
 import { StatusBlock } from "@/components/blocks/status-block";
 import { useTranslations } from "next-intl";
-import { useActualiteStats } from "../../queries/actualite-stats.query";
+import { useEvenementStats } from "../../queries/evenement-stats.query";
 
-export function ActualiteStats() {
+export function EvenementStats() {
   const t = useTranslations("contenu.gestionActualite");
 
-  const { data: stats, isLoading } = useActualiteStats();
+  const { data: stats, isLoading } = useEvenementStats();
 
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat("fr-FR").format(num);

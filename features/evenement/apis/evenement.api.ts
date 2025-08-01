@@ -1,15 +1,14 @@
-import { IEvenement, IEvenementStats, PaginatedResponse } from "@/types";
-import {api } from "@/lib/api";
-import { EvenementDTO } from "../schemas/evenement.schema";
-import { IEvenementRechercheParams } from "../types/evenement.type";
+import { PaginatedResponse } from "@/types";
+import { api } from "@/lib/api";
 import { SearchParams } from "ak-api-http";
+import { IEvenement, IEvenementRechercheParams, IEvenementStats } from "../types/evenement.type";
 export interface IEvenementAPI {
-  getAll: (params: IEvenementRechercheParams) => Promise<PaginatedResponse<IEvenement>>;
-  getById: (id: string) => Promise<IEvenement>;
-  getStats: () => Promise<IEvenementStats>;
-  create: (data: EvenementDTO, formData?: FormData) => Promise<IEvenement>;
-  update: (id: string, data: EvenementDTO) => Promise<IEvenement>;
-  delete: (id: string) => Promise<void>;
+    getAll: (params: IEvenementRechercheParams) => Promise<PaginatedResponse<IEvenement>>;
+    getById: (id: string) => Promise<IEvenement>;
+    getStats: () => Promise<IEvenementStats>;
+    create: (data: FormData) => Promise<IEvenement>;
+    update: (id: string, formData: FormData) => Promise<IEvenement>;
+    delete: (id: string) => Promise<void>;
 }
 
 export const evenementAPI: IEvenementAPI = {
@@ -17,7 +16,10 @@ export const evenementAPI: IEvenementAPI = {
         return api.request<PaginatedResponse<IEvenement>>({
             endpoint: `/events`,
             method: "GET",
-            searchParams:params as SearchParams,
+            searchParams: {
+                ...params as unknown as SearchParams,
+                include: "author" // Inclure les données de l'auteur
+            },
         });
     },
 
@@ -25,6 +27,9 @@ export const evenementAPI: IEvenementAPI = {
         return api.request<IEvenement>({
             endpoint: `/events/${id}`,
             method: "GET",
+            searchParams: {
+                include: "author" // Inclure les données de l'auteur
+            },
         });
     },
 
@@ -35,37 +40,36 @@ export const evenementAPI: IEvenementAPI = {
         });
     },
 
-    create(data: EvenementDTO, formData?: FormData): Promise<IEvenement> {
-        console.log('evenementAPI.create - Données reçues:', data);
-        console.log('evenementAPI.create - FormData reçu:', formData);
-        
-        // Si on a FormData, l'utiliser, sinon utiliser les données JSON
-        const requestData = formData || data;
-        
+    create(formData: FormData): Promise<IEvenement> {
+        console.log('actualiteAPI.create - FormData reçu:', formData);
+
         return api.request<IEvenement>({
             endpoint: `/events`,
             method: "POST",
-            data: requestData,
-        }).then(response => {
-            console.log('evenementAPI.create - Réponse API:', response);
-            return response;
-        }).catch(error => {
-            console.error('evenementAPI.create - Erreur API:', error);
-            console.error('evenementAPI.create - Détails erreur:', {
-                message: error.message,
-                status: error.status,
-                data: error.data,
-            });
-            throw error;
+            config: {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            },
+            data: formData,
         });
+
     },
 
-    update(id: string, data: EvenementDTO): Promise<IEvenement> {
+    update(id: string, formData: FormData): Promise<IEvenement> {
+        console.log('actualiteAPI.update - Données reçues:', formData);
+        console.log('actualiteAPI.update - FormData reçu:', formData);
+
         return api.request<IEvenement>({
             endpoint: `/events/${id}`,
             method: "PUT",
-            data,
-        });
+            config: {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            },
+            data: formData,
+        })
     },
 
     delete(id: string): Promise<void> {
@@ -74,5 +78,5 @@ export const evenementAPI: IEvenementAPI = {
             method: "DELETE",
         });
     },
- 
+
 };

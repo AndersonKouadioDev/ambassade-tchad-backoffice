@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
-import { IEvenementRechercheParams } from "../types/evenement.type";import { evenementAPI } from "../apis/evenement.api";
+import { IEvenementRechercheParams } from "../types/evenement.type";
+import {getEvenementTousAction } from "../actions/evenement.action";
 
 
 
@@ -12,17 +13,16 @@ const evenementQueryKey = ['evenement'] as const;
 // Option de requête
 export const evenementListQueryOption = (evenementSearchParams: IEvenementRechercheParams) => {
     return {
-        queryKey: [...evenementQueryKey, 'list', evenementSearchParams],    
-        queryFn: async () => {
-            console.log('🔍 evenementListQueryOption - params envoyés à l\'API:', evenementSearchParams);
-            console.log('🔍 evenementListQueryOption - published type:', typeof evenementSearchParams.published, 'value:', evenementSearchParams.published);
-            const data = await evenementAPI.getAll(evenementSearchParams);
-            return data;
-        }
-        ,
-        keepPreviousData: true,
-        staleTime: 5 * 60 * 1000,
-    };
+           queryKey: [...evenementQueryKey, 'list', evenementSearchParams],
+           queryFn: async () => {
+               const data = await getEvenementTousAction(evenementSearchParams);
+               return data;
+           }
+           ,
+           keepPreviousData: true,
+           staleTime: 5 * 60 * 1000,
+           enable: true,
+       };
 }
 
 // Hook pour récupérer les événements
@@ -46,5 +46,12 @@ export const invalidateEvenementsList = (evenementSearchParams: IEvenementRecher
 export const invalidateAllEvenements = () => {
     return queryClient.invalidateQueries({  
         queryKey: evenementQueryKey,
+    });
+}
+
+// Fonction pour invalider un événement spécifique
+export const invalidateEvenement = (id: string) => {
+    return queryClient.invalidateQueries({  
+        queryKey: [...evenementQueryKey, 'detail', id],
     });
 }   

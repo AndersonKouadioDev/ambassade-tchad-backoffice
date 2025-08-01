@@ -1,6 +1,6 @@
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
-import { videoAPI } from "../actions/video.action";
+import { getVideoStatsAction } from "../actions/video.action";
 
 const queryClient = getQueryClient();
 
@@ -8,10 +8,10 @@ export const videoQueryKey = ['video', 'stats'] as const;
 
 // Option de requête
 export const videoStatsQueryOption = () => {
-    return {        
+    return {
         queryKey: videoQueryKey,
         queryFn: async () => {
-            const data = await videoAPI.getStats();
+            const data = await getVideoStatsAction();
             return data;
         },
         keepPreviousData: true,
@@ -29,7 +29,7 @@ export const prefetchVideoStats = () => {
 }
 
 // Fonction pour invalider le cache
-    export const invalidateVideoStats = () => {
+export const invalidateVideoStats = () => {
     return queryClient.invalidateQueries({
         queryKey: videoQueryKey,
     });

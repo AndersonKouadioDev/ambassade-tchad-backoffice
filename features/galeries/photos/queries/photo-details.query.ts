@@ -1,6 +1,7 @@
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
 import { photoAPI } from "../apis/photo.api";
+import { getPhotoDetailAction } from "../actions/photo.action";
 const queryClient = getQueryClient();
 
 // la clé de cache
@@ -10,8 +11,7 @@ export const photoQueryOption = (id: string) => {
     return {
         queryKey: photoQueryKey(id),
         queryFn: async () => {    
-            if (!id) throw new Error("L'identifiant de la photo est requis");
-            const data = await photoAPI.getById(id);
+            const data = await getPhotoDetailAction(id);
             return data;
         },
         enabled: !!id,

@@ -1,9 +1,5 @@
 import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
 
-export enum EvenementStatus {
-  PUBLISHED = "PUBLISHED",
-  DRAFT = "DRAFT",
-}
 
 export interface IEvenement {
     id: string;
@@ -26,15 +22,19 @@ export interface IEvenementRechercheParams {
     eventDate?: Date;
     published?: boolean;
     authorId?: string;
-    status?: EvenementStatus;
     page?: number;
     limit?: number;
 }
 
 export interface IEvenementStats {
-    allEvents: number;
-    allEventsSeries: { date: string; value: number }[];
-    publishedEvents: number;
-    unpublishedEvents: number;
-    eventsByAuthor: { authorId: string; count: number }[];
+    total: number;
+    published: number;
+    unpublished: number;
+    byAuthor: {
+        authorId: string;
+        _count: {
+            id: number;
+        };
+    }[];
+ 
 }

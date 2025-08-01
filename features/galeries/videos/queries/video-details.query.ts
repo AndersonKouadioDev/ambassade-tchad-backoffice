@@ -1,6 +1,6 @@
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
-import { photoAPI } from "../apis/video.api";
+import { getVideoDetailAction } from "../actions/video.action";
 const queryClient = getQueryClient();
 
 // la clé de cache
@@ -11,7 +11,7 @@ export const photoQueryOption = (id: string) => {
         queryKey: photoQueryKey(id),
         queryFn: async () => {    
             if (!id) throw new Error("L'identifiant de la photo est requis");
-            const data = await photoAPI.getById(id);
+            const data = await getVideoDetailAction(id);
             return data;
         },
         enabled: !!id,

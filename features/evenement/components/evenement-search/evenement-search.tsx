@@ -12,10 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IActualiteRechercheParams } from "../../types/actualites.type";
+import { IEvenementRechercheParams } from "../../types/evenement.type";
 
 interface ActualiteSearchProps {
-  onSearch: (params: IActualiteRechercheParams) => void;
+  onSearch: (params: IEvenementRechercheParams) => void;
   isLoading?: boolean;
 }
 
@@ -23,10 +23,9 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
   onSearch,
   isLoading = false,
 }) => {
-  const [searchParams, setSearchParams] = useState<IActualiteRechercheParams>({
-    status: "all",
+  const [searchParams, setSearchParams] = useState<IEvenementRechercheParams>({
     title: "",
-    content: "",
+    description: "",
     published: undefined,
     authorId: "",
     page: 1,
@@ -40,10 +39,9 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
   };
 
   const handleReset = () => {
-    const resetParams: IActualiteRechercheParams = {
-      status: "all",
+    const resetParams: IEvenementRechercheParams = {
       title: "",
-      content: "",
+      description: "",
       published: undefined,
       authorId: "",
       page: 1,
@@ -53,7 +51,7 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
     onSearch(resetParams);
   };
 
-  const handleInputChange = (field: keyof IActualiteRechercheParams, value: any) => {
+  const handleInputChange = (field: keyof IEvenementRechercheParams, value: any) => {
     setSearchParams(prev => ({
       ...prev,
       [field]: value,
@@ -63,10 +61,9 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
   const hasActiveFilters = () => {
     return (
       searchParams.title ||
-      searchParams.content ||
+      searchParams.description ||
       searchParams.published !== undefined ||
-      searchParams.authorId ||
-      searchParams.status !== "all"
+      searchParams.authorId
     );
   };
 
@@ -96,7 +93,7 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
           <Filter className="w-4 h-4" />
           Filtres
           {hasActiveFilters() && (
-            <Badge variant="secondary" className="ml-1">
+            <Badge className="ml-1 bg-blue-500 text-white">
               {Object.values(searchParams).filter(v => v && v !== "all").length}
             </Badge>
           )}
@@ -127,16 +124,16 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
             <div className="space-y-2">
               <label className="text-sm font-medium">Statut</label>
               <Select
-                value={searchParams.status || "all"}
-                onValueChange={(value) => handleInputChange("status", value)}
+                value={searchParams.published !== undefined ? searchParams.published.toString() : "all"}
+                onValueChange={(value) => handleInputChange("published", value === "all" ? undefined : value === "true")}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Tous les statuts" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tous les statuts</SelectItem>
-                  <SelectItem value="published">Publié</SelectItem>
-                  <SelectItem value="unpublished">Brouillon</SelectItem>
+                  <SelectItem value="all">Tous</SelectItem>
+                  <SelectItem value="true">Publié</SelectItem>
+                  <SelectItem value="false">Brouillon</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -146,8 +143,8 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
               <label className="text-sm font-medium">Contenu</label>
               <Input
                 placeholder="Rechercher dans le contenu..."
-                value={searchParams.content || ""}
-                onChange={(e) => handleInputChange("content", e.target.value)}
+                value={searchParams.description || ""}
+                onChange={(e) => handleInputChange("description", e.target.value)}
               />
             </div>
 
@@ -201,7 +198,7 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
       {hasActiveFilters() && (
         <div className="flex flex-wrap gap-2">
           {searchParams.title && (
-            <Badge variant="secondary" className="flex items-center gap-1">
+            <Badge className="flex items-center gap-1 bg-blue-100 text-blue-800">
               Titre: {searchParams.title}
               <Button
                 variant="ghost"
@@ -213,34 +210,34 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
               </Button>
             </Badge>
           )}
-          {searchParams.content && (
-            <Badge variant="secondary" className="flex items-center gap-1">
-              Contenu: {searchParams.content}
+          {searchParams.description && (
+            <Badge className="flex items-center gap-1 bg-blue-100 text-blue-800">
+              Contenu: {searchParams.description}
               <Button
                 variant="ghost"
                 size="sm"
                 className="h-auto p-0 ml-1"
-                onClick={() => handleInputChange("content", "")}
+                onClick={() => handleInputChange("description", "")}
               >
                 <X className="w-3 h-3" />
               </Button>
             </Badge>
           )}
-          {searchParams.status && searchParams.status !== "all" && (
-            <Badge variant="secondary" className="flex items-center gap-1">
-              Statut: {searchParams.status}
+          {searchParams.published !== undefined && (
+            <Badge className="flex items-center gap-1 bg-blue-100 text-blue-800">
+              Publication: {searchParams.published ? "Publié" : "Brouillon"}
               <Button
                 variant="ghost"
                 size="sm"
                 className="h-auto p-0 ml-1"
-                onClick={() => handleInputChange("status", "all")}
+                onClick={() => handleInputChange("published", undefined)}
               >
                 <X className="w-3 h-3" />
               </Button>
             </Badge>
           )}
           {searchParams.authorId && (
-            <Badge variant="secondary" className="flex items-center gap-1">
+            <Badge className="flex items-center gap-1 bg-blue-100 text-blue-800">
               Auteur: {searchParams.authorId}
               <Button
                 variant="ghost"
@@ -252,8 +249,21 @@ export const ActualiteSearch: React.FC<ActualiteSearchProps> = ({
               </Button>
             </Badge>
           )}
+          {searchParams.limit && searchParams.limit !== 10 && (
+            <Badge className="flex items-center gap-1 bg-blue-100 text-blue-800">
+              Par page: {searchParams.limit}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto p-0 ml-1"
+                onClick={() => handleInputChange("limit", 10)}
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            </Badge>
+          )}
         </div>
       )}
     </div>
   );
-}; 
+};

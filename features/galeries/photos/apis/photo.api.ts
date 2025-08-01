@@ -1,15 +1,14 @@
 import { PaginatedResponse } from "@/types";
-import {api } from "@/lib/api";
+import { api } from "@/lib/api";
 import { SearchParams } from "ak-api-http";
 import { IPhoto, IPhotoRechercheParams, IPhotoStats } from "../types/photo.type";
-import { PhotoDTO } from "../schemas/photo.schema";
 export interface IPhotoAPI {
-  getAll: (params: IPhotoRechercheParams) => Promise<PaginatedResponse<IPhoto>>;
-  getById: (id: string) => Promise<IPhoto>;
-  getStats: () => Promise<IPhotoStats>;
-  create: (data: PhotoDTO, formData?: FormData) => Promise<IPhoto>;
-  update: (id: string, data: PhotoDTO) => Promise<IPhoto>;
-  delete: (id: string) => Promise<void>;
+    getAll: (params: IPhotoRechercheParams) => Promise<PaginatedResponse<IPhoto>>;
+    getById: (id: string) => Promise<IPhoto>;
+    getStats: () => Promise<IPhotoStats>;
+    create: (data: FormData) => Promise<IPhoto>;
+    update: (id: string, formData: FormData) => Promise<IPhoto>;
+    delete: (id: string) => Promise<void>;
 }
 
 export const photoAPI: IPhotoAPI = {
@@ -17,7 +16,9 @@ export const photoAPI: IPhotoAPI = {
         return api.request<PaginatedResponse<IPhoto>>({
             endpoint: `/photos`,
             method: "GET",
-            searchParams:params as SearchParams,
+            searchParams: {
+                ...params as unknown as SearchParams,
+            },
         });
     },
 
@@ -25,6 +26,8 @@ export const photoAPI: IPhotoAPI = {
         return api.request<IPhoto>({
             endpoint: `/photos/${id}`,
             method: "GET",
+            searchParams: {
+            },
         });
     },
 
@@ -35,37 +38,36 @@ export const photoAPI: IPhotoAPI = {
         });
     },
 
-    create(data: PhotoDTO, formData?: FormData): Promise<IPhoto> {
-        console.log('photoAPI.create - Données reçues:', data);
+        create(formData: FormData): Promise<IPhoto> {
         console.log('photoAPI.create - FormData reçu:', formData);
-        
-        // Si on a FormData, l'utiliser, sinon utiliser les données JSON
-        const requestData = formData || data;
-        
+
         return api.request<IPhoto>({
             endpoint: `/photos`,
             method: "POST",
-            data: requestData,
-        }).then(response => {
-                    console.log('photoAPI.create - Réponse API:', response);
-            return response;
-        }).catch(error => {
-            console.error('photoAPI.create - Erreur API:', error);
-            console.error('photoAPI.create - Détails erreur:', {
-                message: error.message,
-                status: error.status,
-                data: error.data,
-            });
-            throw error;
+            config: {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            },
+            data: formData,
         });
+
     },
 
-    update(id: string, data: PhotoDTO): Promise<IPhoto> {
+    update(id: string, formData: FormData): Promise<IPhoto> {
+        console.log('photoAPI.update - Données reçues:', formData);
+        console.log('photoAPI.update - FormData reçu:', formData);
+
         return api.request<IPhoto>({
             endpoint: `/photos/${id}`,
             method: "PUT",
-            data,
-        });
+            config: {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            },
+            data: formData,
+        })
     },
 
     delete(id: string): Promise<void> {
@@ -74,5 +76,5 @@ export const photoAPI: IPhotoAPI = {
             method: "DELETE",
         });
     },
- 
+
 };

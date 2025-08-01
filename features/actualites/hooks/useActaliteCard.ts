@@ -43,10 +43,7 @@ export const useActualiteCard = () => {
     // Si published est 'all' ou undefined, ne pas l'inclure du tout
     
     // Gérer status (string enum)
-    if (filters.status && filters.status !== 'all') {
-      params.status = filters.status as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
-    }
-    
+   
     console.log('useActualiteCard - currentSearchParams:', params);
     console.log('useActualiteCard - filters.published type:', typeof filters.published, 'value:', filters.published);
     console.log('useActualiteCard - filters.status type:', typeof filters.status, 'value:', filters.status);
@@ -83,7 +80,7 @@ export const useActualiteCard = () => {
 
   const handleCreate = async (formData: ActualiteDTO, formDataToSend?: FormData) => {
     try {
-      const result = await createActualite(formData, formDataToSend);
+      const result = await createActualite(formData as any);
       
       if (result.success) {
         toast.success(result.message);
@@ -101,7 +98,7 @@ export const useActualiteCard = () => {
 
   const handleUpdate = async (id: string, formData: ActualiteDTO) => {
     try {
-      const result = await updateActualite(id, formData);
+      const result = await updateActualite(id, formData as any);
       
       if (result.success) {
         toast.success(result.message);

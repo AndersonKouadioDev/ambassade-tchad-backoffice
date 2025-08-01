@@ -4,17 +4,19 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, Search } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { useActualiteCard } from "../hooks/useActaliteCard";
-import { IActualite } from "../types/actualites.type";
-import { ActualiteFilters } from "./actualite-list/actualite-filters";
-import { ActualiteCard } from "./actualite-list/actualite-card";
-import { ActualitePagination } from "./actualite-list/actualite-pagination";
-import { ActualiteImageGalleryModal } from "./actualite-modal/evenement-image-gallery-modal";
-import { ActualiteViewModal } from "./actualite-modal/evenement-view-modal";
+import { useEvenementListTable } from "../hooks/useEvenementListTable";
+import { IEvenement } from "../types/evenement.type";
+import { EvenementImageGalleryModal } from "./evenement-modal/evenement-image-gallery-modal";
+import { EvenementViewModal } from "./evenement-modal/evenement-view-modal";
+import { EvenementCard } from "./evenement-list/evenement-card";
+import { ActualiteFilters } from "@/features/actualites/components/actualite-list/actualite-filters";
+import { EvenementFilters } from "./evenement-list/evenement-filters";
+import { EvenementPagination } from "./evenement-pagination/evenement-pagination";
 
 
 
-export const ActualiteList: React.FC = () => {
+
+export const EvenementList: React.FC = () => {
   const router = useRouter();
   const {
     data,
@@ -24,35 +26,34 @@ export const ActualiteList: React.FC = () => {
     pagination,
     handleTextFilterChange,
     handlePublishedFilterChange,
-    handleStatusFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
     handleCreate,
     handleUpdate,
     handleDelete,
-  } = useActualiteCard();
+  } = useEvenementListTable();
 
-  const [selectedActualite, setSelectedActualite] = useState<IActualite | null>(null);
+  const [selectedEvenement, setSelectedEvenement] = useState<IEvenement | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isImageGalleryOpen, setIsImageGalleryOpen] = useState(false);
 
-  const handleView = (actualite: IActualite) => {
-    setSelectedActualite(actualite);
+  const handleView = (evenement: IEvenement) => {
+    setSelectedEvenement(evenement);
     setIsViewModalOpen(true);
   };
 
-  const handleEdit = (actualite: IActualite) => {
+  const handleEdit = (evenement: IEvenement) => {
     // Navigation vers la page d'édition
-    router.push(`/contenu/actualite/edit/${actualite.id}`);
+    router.push(`/contenu/evenement/edit/${evenement.id}`);
   };
 
-  const handleDeleteActualite = async (actualite: IActualite) => {
-    await handleDelete(actualite.id);
+  const handleDeleteEvenement = async (evenement: IEvenement) => {
+    await handleDelete(evenement.id);
   };
 
-  const handleCreateActualite = () => {
+  const handleCreateEvenement = () => {
     // Navigation vers la page de création
-    router.push(`/contenu/actualite/create`);
+    router.push(`/contenu/evenement/create`);
   };
 
   const handleOpenImageGallery = () => {
@@ -67,7 +68,7 @@ export const ActualiteList: React.FC = () => {
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">Erreur lors du chargement</h3>
           <p className="text-muted-foreground">
-            Une erreur s'est produite lors du chargement des actualités.
+            Une erreur s'est produite lors du chargement des evenements.
           </p>
         </div>
       </div>
@@ -76,12 +77,11 @@ export const ActualiteList: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <ActualiteFilters
+      <EvenementFilters
         filters={filters}
         onTextFilterChange={handleTextFilterChange}
         onPublishedFilterChange={handlePublishedFilterChange}
-        onStatusFilterChange={handleStatusFilterChange}
-        onCreate={handleCreateActualite}
+        onCreate={handleCreateEvenement}
       />
 
       {isLoading ? (
@@ -120,19 +120,19 @@ export const ActualiteList: React.FC = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {data.map((actualite: IActualite) => (
-              <ActualiteCard
-                key={actualite.id}
-                actualite={actualite}
+            {data.map((evenement: IEvenement) => (
+              <EvenementCard
+                key={evenement.id}
+                evenement={evenement}
                 onView={handleView}
                 onEdit={handleEdit}
-                onDelete={handleDeleteActualite}
+                onDelete={handleDeleteEvenement}
               />
             ))}
           </div>
 
           {pagination.totalPages > 1 && (
-            <ActualitePagination
+            <EvenementPagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}
               totalItems={pagination.totalItems}
@@ -144,19 +144,19 @@ export const ActualiteList: React.FC = () => {
         </>
       )}
 
-      <ActualiteViewModal
-        actualite={selectedActualite}
+      <EvenementViewModal
+        evenement={selectedEvenement}
         isOpen={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}
         onOpenImageGallery={handleOpenImageGallery}
       />
 
-      {selectedActualite && selectedActualite.imageUrls && selectedActualite.imageUrls.length > 0 && (
-        <ActualiteImageGalleryModal
+      {selectedEvenement && selectedEvenement.imageUrl && selectedEvenement.imageUrl.length > 0 && (
+        <EvenementImageGalleryModal
           isOpen={isImageGalleryOpen}
           onClose={() => setIsImageGalleryOpen(false)}
-          images={selectedActualite.imageUrls}
-          title={selectedActualite.title}
+          images={selectedEvenement.imageUrl}
+          title={selectedEvenement.title}
         />
       )}
     </div>

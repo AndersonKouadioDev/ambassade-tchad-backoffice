@@ -1,7 +1,6 @@
-import {
-  ActualiteList,
-  ActualiteStats,
-} from "@/features/actualites/components";
+
+import { ActualiteList } from "@/features/actualites/components/actualite-list";
+import { ActualiteStats } from "@/features/actualites/components/actualite-stats/actualite-stats";
 import { prefetchActualitesList } from "@/features/actualites/queries/actualite-list.query";
 import { prefetchActualiteStats } from "@/features/actualites/queries/actualite-stats.query";
 import { BookOpen } from "lucide-react";

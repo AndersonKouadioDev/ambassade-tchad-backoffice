@@ -1,27 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTranslations } from "next-intl";
 import {
-  Eye,
-  
-  Calendar,
-  MapPin,
-  Image as ImageIcon,
-  User,
-  Clock,
+  SquarePen,
+  Trash2,
   AlertTriangle,
   X,
-  Trash2,
-  SquarePen
+  Calendar,
+  User,
+  Clock,
+  Image as ImageIcon,
+  Eye,
+  MapPin,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { IEvenement } from "@/types/evenement.types";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
+
+import { Button } from "@heroui/react";
+import { IEvenement } from "../../types/evenement.type";
+import { formatImageUrl } from "@/features/actualites/utils/image-utils";
 
 interface EvenementCardProps {
   evenement: IEvenement;
@@ -36,29 +41,15 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const t = useTranslations("contenu.gestionEvenement");
   const [imageError, setImageError] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   const getInitials = (firstName?: string, lastName?: string) => {
     if (!firstName && !lastName) return "NA";
-    return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase();
+    return `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase();
   };
 
-  const formatEventDate = (date: Date | string) => {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    if (!dateObj || isNaN(dateObj.getTime())) {
-      return 'Date invalide';
-    }
-    return dateObj.toLocaleDateString('fr-FR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleDeleteClick = () => {
     setShowDeleteAlert(true);
   };
 
@@ -80,7 +71,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
         onClick={() => onView(evenement)}
       >
         {/* Header avec gradient et boutons */}
-        <CardHeader className="pb-3 px-4 pt-4  text-black bg-blue-50">
+        <CardHeader className="pb-3 px-4 pt-4 text-black bg-blue-50">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-lg text-black leading-tight truncate">
@@ -103,21 +94,20 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0 border-2 border-yellow-500 text-yellow-600 hover:bg-yellow-500/20 hover:text-yellow-700"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEdit(evenement);
-                }}
+                color="secondary"
+                onPress={() => onEdit(evenement)}
                 title="Modifier"
+                isIconOnly
               >
                 <SquarePen className="w-4 h-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0 border-2 border-red-500 text-red-600 hover:bg-red-500/20 hover:text-red-700"
-                onClick={handleDeleteClick}
+                color="danger"
+                onPress={(e) => handleDeleteClick()}
                 title="Supprimer"
+                isIconOnly
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -127,10 +117,12 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
 
         {/* Image principale (première image seulement) */}
         <CardContent className="p-0">
-          {evenement.imageUrl && evenement.imageUrl.length > 0 ? (
+          {evenement.imageUrl &&
+          evenement.imageUrl.length > 0 &&
+          !imageError ? (
             <div className="relative h-56 w-full overflow-hidden">
               <Image
-                src={evenement.imageUrl[0]}
+                src={formatImageUrl(evenement.imageUrl[0])}
                 alt={evenement.title}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -141,12 +133,12 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute top-3 right-3 bg-black/80 hover:bg-black/95 text-white border-0 h-8 w-8 p-0 shadow-lg"
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  className="absolute top-3 right-3"
+                  onPress={(e) => {
                     onView(evenement);
                   }}
                   title="Voir toutes les images"
+                  isIconOnly
                 >
                   <Eye className="w-4 h-4" />
                 </Button>
@@ -168,26 +160,62 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
           <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
             {evenement.description}
           </p>
-
-          {/* Informations clés */}
-          <div className="space-y-3">
-            {/* Date de l'événement */}
+          {/* date de l'evenement */}
+          {evenement.eventDate && (
             <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                {formatEventDate(evenement.eventDate)}
+                Date de l'événement:{" "}
+                {evenement.eventDate instanceof Date
+                  ? evenement.eventDate.toLocaleDateString("fr-FR")
+                  : evenement.eventDate
+                  ? new Date(evenement.eventDate).toLocaleDateString("fr-FR")
+                  : "Date inconnue"}
+              </span>
+            </div>
+          )}
+
+          {/* Lieu de l'événement */}
+          {evenement.location && (
+            <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800/20 rounded-lg">
+              <MapPin className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Lieu: {evenement.location}
+              </span>
+            </div>
+          )}
+          {/* Informations clés */}
+          <div className="space-y-3">
+            {/* Date de création */}
+            <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                Créé le{" "}
+                {evenement.createdAt instanceof Date
+                  ? evenement.createdAt.toLocaleDateString("fr-FR")
+                  : evenement.createdAt
+                  ? new Date(evenement.createdAt).toLocaleDateString("fr-FR")
+                  : "Date inconnue"}
               </span>
             </div>
 
-            {/* Lieu */}
-            {evenement.location && (
-              <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <MapPin className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
-                <span className="text-sm font-medium text-green-700 dark:text-green-300 truncate">
-                  {evenement.location}
-                </span>
-              </div>
-            )}
+            {/* Auteur */}
+            <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800/20 rounded-lg">
+              <User className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Auteur:{" "}
+                {evenement.author?.firstName && evenement.author?.lastName
+                  ? `${evenement.author.firstName} ${evenement.author.lastName}`
+                  : evenement.author?.firstName
+                  ? evenement.author.firstName
+                  : evenement.author?.lastName
+                  ? evenement.author.lastName
+                  : evenement.author?.email
+                  ? evenement.author.email
+                  : `Auteur (${evenement.authorId.slice(0, 8)}...)`}
+              </span>
+            </div>
+            
           </div>
         </CardContent>
 
@@ -195,21 +223,56 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
         <CardFooter className="pt-3 px-4 pb-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
           <div className="flex items-center gap-3 w-full">
             <Avatar className="w-8 h-8 ring-2 ring-white dark:ring-gray-700">
-              <AvatarImage src={undefined} alt={evenement.author?.firstName || evenement.authorId} />
+              <AvatarImage
+                src={undefined}
+                alt={evenement.author?.firstName || evenement.authorId}
+              />
               <AvatarFallback className="text-xs bg-embassy-blue-100 text-embassy-blue-600 font-medium">
-                {getInitials(evenement.author?.firstName, evenement.author?.lastName)}
+                {getInitials(
+                  evenement.author?.firstName,
+                  evenement.author?.lastName
+                )}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-300">
                 <User className="w-3 h-3" />
                 <span className="font-medium">
-                  {evenement.author?.firstName} {evenement.author?.lastName}
+                  {evenement.author?.firstName && evenement.author?.lastName
+                    ? `${evenement.author.firstName} ${evenement.author.lastName}`
+                    : evenement.author?.firstName
+                    ? evenement.author.firstName
+                    : evenement.author?.lastName
+                    ? evenement.author.lastName
+                    : evenement.author?.email
+                    ? evenement.author.email
+                    : `Auteur (${evenement.authorId.slice(0, 8)}...)`}
                 </span>
               </div>
               <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                 <Clock className="w-3 h-3" />
-                <span>Créé le {evenement.createdAt instanceof Date ? evenement.createdAt.toLocaleDateString("fr-FR") : new Date(evenement.createdAt).toLocaleDateString("fr-FR")}</span>
+                <span>
+                  {evenement.createdAt instanceof Date
+                    ? evenement.createdAt.toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    : evenement.createdAt
+                    ? new Date(evenement.createdAt).toLocaleDateString(
+                        "fr-FR",
+                        {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )
+                    : "Date inconnue"}
+                </span>
               </div>
             </div>
           </div>
@@ -249,7 +312,8 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
             <div className="p-6">
               <div className="mb-6">
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Êtes-vous sûr de vouloir supprimer l'événement <strong>"{evenement.title}"</strong> ?
+                  Êtes-vous sûr de vouloir supprimer l'evenement{" "}
+                  <strong>"{evenement.title}"</strong> ?
                 </p>
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
                   <div className="flex items-start gap-3">
@@ -259,7 +323,9 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                         Attention
                       </p>
                       <p className="text-red-700 dark:text-red-300">
-                        Cette action supprimera définitivement l'événement et toutes ses données associées. Cette opération ne peut pas être annulée.
+                        Cette action supprimera définitivement l'evenement et
+                        toutes ses données associées. Cette opération ne peut
+                        pas être annulée.
                       </p>
                     </div>
                   </div>
@@ -269,7 +335,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
               {/* Boutons d'action */}
               <div className="flex gap-3">
                 <Button
-                  variant="outline"
+                  variant="bordered"
                   className="flex-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                   onClick={handleCancelDelete}
                 >
@@ -289,4 +355,4 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
       )}
     </>
   );
-}; 
+};

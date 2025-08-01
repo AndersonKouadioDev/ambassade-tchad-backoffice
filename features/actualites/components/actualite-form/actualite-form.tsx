@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X, Image as ImageIcon, Plus, Trash2, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +21,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { processAndValidateFormData } from "ak-zod-form-kit";
 import { invalidateActualitesList } from "../../queries/actualite-list.query";
+import { Button } from "@heroui/react";
 
 //
 
@@ -136,7 +136,7 @@ export const ActualiteForm: React.FC<ActualiteFormProps> = ({ actualite }) => {
       if (res.success) {
         toast.success(res.message);
         router.push("/contenu/actualite");
-        await invalidateActualitesList()
+        await invalidateActualitesList();
       } else {
         toast.error(res.message);
       }
@@ -223,8 +223,6 @@ export const ActualiteForm: React.FC<ActualiteFormProps> = ({ actualite }) => {
                   <span>Formats supportés :</span>
                   <Badge className="text-xs">JPG</Badge>
                   <Badge className="text-xs">PNG</Badge>
-                  <Badge className="text-xs">GIF</Badge>
-                  <Badge className="text-xs">WEBP</Badge>
                 </div>
               </div>
             </div>
@@ -238,7 +236,7 @@ export const ActualiteForm: React.FC<ActualiteFormProps> = ({ actualite }) => {
                   </h4>
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
                     onClick={() => setImageFiles([])}
                     className="text-red-600 hover:text-red-700"
@@ -264,9 +262,9 @@ export const ActualiteForm: React.FC<ActualiteFormProps> = ({ actualite }) => {
                           <div className="flex gap-2">
                             <Button
                               type="button"
-                              variant="outline"
+                              color="secondary"
                               size="sm"
-                              className="w-8 h-8 p-0 bg-white/80 hover:bg-white"
+                              className="w-8 h-8 p-0 "
                               onClick={(e) => {
                                 e.stopPropagation();
                                 window.open(imageFile.preview, "_blank");
@@ -276,9 +274,9 @@ export const ActualiteForm: React.FC<ActualiteFormProps> = ({ actualite }) => {
                             </Button>
                             <Button
                               type="button"
-                              variant="outline"
+                              color="danger"
                               size="sm"
-                              className="w-8 h-8 p-0 bg-red-500/80 hover:bg-red-600 text-white border-red-500"
+                              className="w-4 h-8 p-0"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleImageRemove(imageFile.id);
@@ -316,7 +314,7 @@ export const ActualiteForm: React.FC<ActualiteFormProps> = ({ actualite }) => {
 
           {/* Boutons d'action */}
           <div className="flex gap-3 justify-end">
-            <Button type="button" variant="outline" onClick={handleCancel}>
+            <Button type="button" variant="ghost" onClick={handleCancel}>
               Annuler
             </Button>
             <Button type="submit" disabled={isLoading}>
@@ -334,67 +332,74 @@ export const ActualiteForm: React.FC<ActualiteFormProps> = ({ actualite }) => {
 };
 
 export function createFormData(formData: Record<string, unknown>): FormData {
-    const sendFormData = new FormData();
+  const sendFormData = new FormData();
 
-    function appendFormData(key: string, value: unknown) {
-        // Cas null ou undefined
-        if (value === null || value === undefined) {
-            sendFormData.append(key, '');
-            return;
-        }
-
-        // Cas File
-        if (value instanceof File) {
-            sendFormData.append(key, value, value.name);
-            return;
-        }
-
-        // Cas Blob
-        if (value instanceof Blob) {
-            sendFormData.append(key, value);
-            return;
-        }
-
-        // Cas Date
-        if (value instanceof Date) {
-            sendFormData.append(key, value.toISOString());
-            return;
-        }
-
-        // Cas tableau
-        if (Array.isArray(value)) {
-            value.forEach((item, index) => {
-                // Pour les tableaux imbriqués ou objets dans les tableaux
-                if (Array.isArray(item) || isObject(item)) {
-                    appendFormData(`${key}[${index}]`, item);
-                } else {
-                    appendFormData(`${key}`, item);
-                }
-            });
-            return;
-        }
-
-        // Cas objet (excluant les types spéciaux déjà traités)
-        if (isObject(value)) {
-            Object.entries(value).forEach(([propertyKey, propertyValue]) => {
-                appendFormData(`${key}[${propertyKey}]`, propertyValue);
-            });
-            return;
-        }
-
-        // Cas des types primitifs (string, number, boolean)
-        sendFormData.append(key, String(value));
+  function appendFormData(key: string, value: unknown) {
+    // Cas null ou undefined
+    if (value === null || value === undefined) {
+      sendFormData.append(key, "");
+      return;
     }
 
-    // Fonction utilitaire pour vérifier si une valeur est un objet
-    function isObject(value: unknown): value is Record<string, unknown> {
-        return typeof value === 'object' && value !== null && !(value instanceof File) && !(value instanceof Blob) && !(value instanceof Date) && !Array.isArray(value);
+    // Cas File
+    if (value instanceof File) {
+      sendFormData.append(key, value, value.name);
+      return;
     }
 
-    // Traitement de chaque entrée du formData initial
-    Object.entries(formData).forEach(([key, value]) => {
-        appendFormData(key, value);
-    });
+    // Cas Blob
+    if (value instanceof Blob) {
+      sendFormData.append(key, value);
+      return;
+    }
 
-    return sendFormData;
+    // Cas Date
+    if (value instanceof Date) {
+      sendFormData.append(key, value.toISOString());
+      return;
+    }
+
+    // Cas tableau
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        // Pour les tableaux imbriqués ou objets dans les tableaux
+        if (Array.isArray(item) || isObject(item)) {
+          appendFormData(`${key}[${index}]`, item);
+        } else {
+          appendFormData(`${key}`, item);
+        }
+      });
+      return;
+    }
+
+    // Cas objet (excluant les types spéciaux déjà traités)
+    if (isObject(value)) {
+      Object.entries(value).forEach(([propertyKey, propertyValue]) => {
+        appendFormData(`${key}[${propertyKey}]`, propertyValue);
+      });
+      return;
+    }
+
+    // Cas des types primitifs (string, number, boolean)
+    sendFormData.append(key, String(value));
+  }
+
+  // Fonction utilitaire pour vérifier si une valeur est un objet
+  function isObject(value: unknown): value is Record<string, unknown> {
+    return (
+      typeof value === "object" &&
+      value !== null &&
+      !(value instanceof File) &&
+      !(value instanceof Blob) &&
+      !(value instanceof Date) &&
+      !Array.isArray(value)
+    );
+  }
+
+  // Traitement de chaque entrée du formData initial
+  Object.entries(formData).forEach(([key, value]) => {
+    appendFormData(key, value);
+  });
+
+  return sendFormData;
 }

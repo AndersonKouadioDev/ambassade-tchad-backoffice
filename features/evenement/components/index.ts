@@ -1,12 +1,13 @@
-// Liste des événements
-export { EvenementList } from "./evenement-list/evenement-list";
-export { EvenementCard } from "./evenement-list/evenement-card";
-export { EvenementFilters } from "./evenement-list/evenement-filters";
-export { EvenementEmptyState } from "./evenement-list/evenement-empty-state";
+// Actualite List Components
+import { EvenementStats } from "./evenement-stats/evenement-stats";
+import { EvenementNotFound } from "./evenement-not-found";  
+import { ActualiteSearch } from "./evenement-search/evenement-search";
 
-// Formulaire d'événement
-export { EvenementForm } from "./evenement-form/evenement-form";
-
-// Modals
-export { EvenementViewModal } from "./evenement-modal/evenement-view-modal";
-export { EvenementEditModal } from "./evenement-modal/evenement-edit-modal"; 
+export {    
+    EvenementStats,
+    EvenementNotFound,
+    ActualiteSearch
+};  
+// evenement/components/index.ts
+export * from "./evenement-pagination/evenement-pagination";
+export * from "./evenement-search/evenement-search";    

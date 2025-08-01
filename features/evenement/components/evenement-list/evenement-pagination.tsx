@@ -5,16 +5,16 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface EvenementPaginationProps {
+interface ActualitePaginationProps {
   currentPage: number;
   totalPages: number;
   totalItems: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
-  onItemsPerPageChange?: (itemsPerPage: number) => void;
+  onItemsPerPageChange: (limit: number) => void;
 }
 
-export const EvenementPagination: React.FC<EvenementPaginationProps> = ({
+export const ActualitePagination: React.FC<ActualitePaginationProps> = ({
   currentPage,
   totalPages,
   totalItems,
@@ -64,7 +64,7 @@ export const EvenementPagination: React.FC<EvenementPaginationProps> = ({
         <span>
           Affichage de <span className="font-medium text-gray-900 dark:text-white">{startItem}</span> à{" "}
           <span className="font-medium text-gray-900 dark:text-white">{endItem}</span> sur{" "}
-          <span className="font-medium text-gray-900 dark:text-white">{totalItems}</span> événements
+          <span className="font-medium text-gray-900 dark:text-white">{totalItems}</span> actualités
         </span>
       </div>
 
@@ -131,22 +131,20 @@ export const EvenementPagination: React.FC<EvenementPaginationProps> = ({
         </Button>
       </div>
 
-      {/* Sélecteur d'éléments par page (optionnel) */}
-      {onItemsPerPageChange && (
-        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-          <span>Éléments par page :</span>
-          <select
-            value={itemsPerPage}
-            onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value={6}>6</option>
-            <option value={12}>12</option>
-            <option value={24}>24</option>
-            <option value={48}>48</option>
-          </select>
-        </div>
-      )}
+      {/* Sélecteur d'éléments par page */}
+      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+        <span>Éléments par page :</span>
+        <select
+          value={itemsPerPage}
+          onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
+          className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          <option value={6}>6</option>
+          <option value={12}>12</option>
+          <option value={24}>24</option>
+          <option value={48}>48</option>
+        </select>
+      </div>
     </div>
   );
 }; 

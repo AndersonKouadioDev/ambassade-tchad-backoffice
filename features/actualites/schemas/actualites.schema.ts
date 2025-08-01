@@ -6,7 +6,8 @@ export const actualiteSchema = z.object({
     published: z.boolean(),
     images: z
         .array(
-            z.instanceof(File)
+            z
+                .instanceof(File)
                 .refine((file) => file.type.startsWith('image/'), {
                     message: "Seuls les fichiers image sont autorisés",
                 })

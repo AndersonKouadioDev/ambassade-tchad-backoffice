@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
 import { IPhotoRechercheParams } from "../types/photo.type";
-import { photoAPI } from "../actions/photo.action";
+import { getPhotoTousAction } from "../actions/photo.action";
 
 
 
@@ -15,7 +15,7 @@ export const photoListQueryOption = (photoSearchParams: IPhotoRechercheParams) =
     return {
         queryKey: [...photoQueryKey, 'list', photoSearchParams],    
         queryFn: async () => {
-            const data = await photoAPI.getAll(photoSearchParams);
+            const data = await getPhotoTousAction(photoSearchParams);
             return data;
         }
         ,

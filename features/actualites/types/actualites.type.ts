@@ -2,7 +2,7 @@ import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
 
 
 
-export interface IActualite {   
+export interface IActualite {
     id: string;
     title: string;
     content: string;
@@ -25,8 +25,13 @@ export interface IActualiteRechercheParams {
 }
 
 export interface IActualiteStats {
-    allActualites: number;
-    allActualitesSeries: { date: string; value: number }[];
-    publishedActualites: number;
-    unpublishedActualites: number;
+    total: number;
+    published: number;
+    unpublished: number;
+    byAuthor: {
+        authorId: string;
+        _count: {
+            id: number;
+        };
+    }[];
 }
