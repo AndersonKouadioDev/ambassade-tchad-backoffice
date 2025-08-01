@@ -23,13 +23,16 @@ export function TableOptions({
   handleEnumFilterChange,
   modalHandlers,
   filters,
+  type,
 }: Pick<
   ReturnType<typeof useUtilisateurListTable>,
   | "handleTextFilterChange"
   | "handleEnumFilterChange"
   | "modalHandlers"
   | "filters"
->) {
+> & {
+  type: "personnel" | "demandeur";
+}) {
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between py-4 px-5">
@@ -64,22 +67,24 @@ export function TableOptions({
               ))}
             </SelectContent>
           </Select>
-          <Select
-            onValueChange={(value) => handleEnumFilterChange("role", value)}
-            value={filters.role || "_all_"}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Filtrer par rôle" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="_all_">Tous les rôles</SelectItem>
-              {getEnumValues(UtilisateurRole).map((roleValue) => (
-                <SelectItem key={roleValue} value={roleValue}>
-                  {getUtilisateurRole(roleValue)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {type === "personnel" && (
+            <Select
+              onValueChange={(value) => handleEnumFilterChange("role", value)}
+              value={filters.role || "_all_"}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Filtrer par rôle" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="_all_">Tous les rôles</SelectItem>
+                {getEnumValues(UtilisateurRole).map((roleValue) => (
+                  <SelectItem key={roleValue} value={roleValue}>
+                    {getUtilisateurRole(roleValue)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </div>
         <div className="flex justify-end md:justify-start">
           <Button

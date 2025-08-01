@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TablePagination from "./table-pagination";
-import { columns } from "./column";
+import { getColumns } from "./column";
 import { useUtilisateurListTable } from "../../hooks/useUtilisateurListTable";
 import { TableOptions } from "./table-options";
 import { Loader2 } from "lucide-react";
@@ -20,7 +20,8 @@ import { UtilisateurAddModal } from "../utilisateur-modal/utilisateur-add-modal"
 import { UtilisateurDeleteModal } from "../utilisateur-modal/utilisateur-delete-modal";
 import { UtilisateurLockUnlockModal } from "../utilisateur-modal/utilisateur-lock-unlock-modal";
 
-export function UserList() {
+export function UserList({ type }: { type: "personnel" | "demandeur" }) {
+  const columns = getColumns({ type });
   const {
     table,
     isLoading,
@@ -33,7 +34,7 @@ export function UserList() {
     modalHandlers,
     currentUser,
     filters,
-  } = useUtilisateurListTable({ columns });
+  } = useUtilisateurListTable({ columns, type });
 
   return (
     <div className="w-full">
@@ -42,6 +43,7 @@ export function UserList() {
         handleEnumFilterChange={handleEnumFilterChange}
         modalHandlers={modalHandlers}
         filters={filters}
+        type={type}
       />
 
       {/* Indicateur de chargement global */}

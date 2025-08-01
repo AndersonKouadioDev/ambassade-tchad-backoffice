@@ -25,7 +25,7 @@ export default async function UserListPage() {
         </div>
 
         <div className="col-span-12">
-          <UserList />
+          <UserList type="demandeur" />
         </div>
       </div>
     </div>

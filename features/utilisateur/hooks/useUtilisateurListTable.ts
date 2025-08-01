@@ -15,9 +15,10 @@ import { IUtilisateur, IUtilisateursParams, UtilisateurType } from "../types/uti
 
 export interface IUtilisateurListTableProps {
     columns: ColumnDef<IUtilisateur>[];
+    type: "personnel" | "demandeur";
 }
 
-export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps) {
+export function useUtilisateurListTable({ columns, type }: IUtilisateurListTableProps) {
     // États pour le tri et la visibilité des colonnes et la sélection des lignes
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -35,11 +36,11 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
             lastName: filters.lastName || undefined,
             email: filters.email || undefined,
             phoneNumber: filters.phoneNumber || undefined,
-            type: UtilisateurType.PERSONNEL,
+            type: type === "personnel" ? UtilisateurType.PERSONNEL : UtilisateurType.DEMANDEUR,
             status: filters.status,
             role: filters.role || undefined,
         };
-    }, [filters]);
+    }, [filters, type]);
 
     // Récupération des données avec options React Query optimisées
     const { data, isLoading, isError, error, isFetching } = useUtilisateursListQuery(currentSearchParams);

@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, Lock, LockOpen, SquarePen, Trash2 } from "lucide-react";
+import { Lock, LockOpen, SquarePen, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -23,11 +23,6 @@ import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
 export type DataProps = IUtilisateur;
 
 export const columns: ColumnDef<DataProps>[] = [
-  // {
-  //   accessorKey: "id",
-  //   header: "ID",
-  //   cell: ({ row }) => <span>{row.getValue("id")}</span>,
-  // },
   {
     accessorKey: "firstName", // Changed to firstName as per IUtilisateur
     header: "Nom Complet",
@@ -46,18 +41,6 @@ export const columns: ColumnDef<DataProps>[] = [
       );
     },
   },
-  // We'll remove 'service' and 'post' as they are not in IUtilisateur.
-  // If you need them, they should be added to your IUtilisateur interface and backend.
-  // {
-  //   accessorKey: "service",
-  //   header: "Service",
-  //   cell: ({ row }) => <span>{row.getValue("service")}</span>,
-  // },
-  // {
-  //   accessorKey: "post",
-  //   header: "Poste",
-  //   cell: ({ row }) => <span>{row.getValue("post")}</span>,
-  // },
   {
     accessorKey: "email", // Add email as a column
     header: "Email",
@@ -228,3 +211,127 @@ export const columns: ColumnDef<DataProps>[] = [
     },
   },
 ];
+export const columnsdemandeur: ColumnDef<DataProps>[] = [
+  {
+    accessorKey: "firstName", // Changed to firstName as per IUtilisateur
+    header: "Nom Complet",
+    cell: ({ row }) => {
+      const user = row.original; // row.original is now of type IUtilisateur
+      return (
+        <div className="flex gap-3 items-center font-medium text-card-foreground/80">
+          <Avatar className="w-8 h-8">
+            <AvatarFallback>
+              {user.firstName ? user.firstName.charAt(0) : ""}
+              {user.lastName ? user.lastName.charAt(0) : ""}
+            </AvatarFallback>
+          </Avatar>
+          <span className="text-sm text-default-600">{`${user.firstName} ${user.lastName}`}</span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "email", // Add email as a column
+    header: "Email",
+    cell: ({ row }) => <span>{row.getValue("email")}</span>,
+  },
+  {
+    accessorKey: "phoneNumber", // Add phoneNumber as a column
+    header: "Téléphone",
+    cell: ({ row }) => <span>{row.getValue("phoneNumber")}</span>,
+  },
+  {
+    accessorKey: "status", // Add status as a column
+    header: "Statut",
+    cell: ({ row }) => {
+      const status = row.getValue<UtilisateurStatus>("status"); // Status is a number enum
+      const statusName =
+        status === UtilisateurStatus.ACTIVE
+          ? "actif"
+          : status === UtilisateurStatus.INACTIVE
+          ? "verrouillé"
+          : status === UtilisateurStatus.DELETED
+          ? "banni"
+          : "inconnu"; // Directly mapping for simplicity, adjust if more statuses
+
+      const statusColors: Record<string, string> = {
+        actif: "bg-green-100 text-green-600",
+        verrouillé: "bg-yellow-100 text-yellow-600",
+        banni: "bg-red-100 text-red-600",
+        default: "bg-muted text-muted-foreground",
+      };
+
+      const statusStyles = statusColors[statusName] || statusColors.default;
+
+      return (
+        <Badge
+          className={cn(
+            "rounded-full px-4 py-1 text-xs capitalize",
+            statusStyles
+          )}
+        >
+          {statusName}
+        </Badge>
+      );
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    enableHiding: false,
+    cell: ({ row, table }) => {
+      const user = row.original as DataProps;
+      const meta = table.options.meta as {
+        onDelete: (user: DataProps) => void;
+        onLockUnlock: (user: DataProps) => void;
+      };
+
+      return (
+        <div className="flex gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => meta.onDelete(user)}
+                  className="w-7 h-7"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Supprimer</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => meta.onLockUnlock(user)}
+                  className="w-7 h-7"
+                >
+                  {user.status === UtilisateurStatus.ACTIVE ? (
+                    <Lock className="w-4 h-4" />
+                  ) : (
+                    <LockOpen className="w-4 h-4" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {user.status === UtilisateurStatus.ACTIVE
+                  ? "Verrouiller"
+                  : "Activer"}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      );
+    },
+  },
+];
+
+export const getColumns = ({ type }: { type: "personnel" | "demandeur" }) => {
+  return type === "personnel" ? columns : columnsdemandeur;
+};

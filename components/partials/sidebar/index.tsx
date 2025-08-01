@@ -1,21 +1,13 @@
-
-import React from 'react'
-import SidebarContent from './sidebar-content'
-import Logo from '@/components/logo'
-import { Menu } from './menu'
-
+import React from "react";
+import SidebarContent from "./sidebar-content";
+import { Menu } from "./menu";
 
 const DashCodeSidebar = () => {
-    return (
-        <SidebarContent>
+  return (
+    <SidebarContent>
+      <Menu />
+    </SidebarContent>
+  );
+};
 
-
-
-            <Menu />
-
-
-        </SidebarContent>
-    )
-}
-
-export default DashCodeSidebar
+export default DashCodeSidebar;

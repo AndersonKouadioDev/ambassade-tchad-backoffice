@@ -41,7 +41,7 @@ export function UtilisateurLockUnlockModal({
     utilisateur?.status === "INACTIVE" ||
     utilisateur?.status === "DELETED" ||
     false;
-  const actionText = isLocked ? "Déverrouiller" : "Verrouiller";
+  const actionText = isLocked ? "Activer" : "Verrouiller";
   const actionMessage = isLocked
     ? "Cet utilisateur pourra se connecter à nouveau"
     : "Cet utilisateur ne pourra plus se connecter";
@@ -59,7 +59,7 @@ export function UtilisateurLockUnlockModal({
 
         toast.success(
           isLocked
-            ? "Utilisateur déverrouillé avec succès"
+            ? "Utilisateur activé avec succès"
             : "Utilisateur verrouillé avec succès"
         );
 
@@ -135,7 +135,7 @@ export function UtilisateurLockUnlockModal({
                   >
                     {isPending
                       ? isLocked
-                        ? "Déverrouillage..."
+                        ? "Activation..."
                         : "Verrouillage..."
                       : actionText}
                   </Button>
