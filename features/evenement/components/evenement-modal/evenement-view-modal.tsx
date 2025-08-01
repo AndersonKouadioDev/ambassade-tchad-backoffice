@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Eye, Image as ImageIcon } from "lucide-react";
 import { IEvenement } from "../../types/evenement.type";
-import { date } from "zod";
 
 interface EvenementViewModal {
   evenement: IEvenement | null;
