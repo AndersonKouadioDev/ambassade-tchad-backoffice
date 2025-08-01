@@ -9,7 +9,6 @@ import { IEvenement } from "../types/evenement.type";
 import { EvenementImageGalleryModal } from "./evenement-modal/evenement-image-gallery-modal";
 import { EvenementViewModal } from "./evenement-modal/evenement-view-modal";
 import { EvenementCard } from "./evenement-list/evenement-card";
-import { ActualiteFilters } from "@/features/actualites/components/actualite-list/actualite-filters";
 import { EvenementFilters } from "./evenement-list/evenement-filters";
 import { EvenementPagination } from "./evenement-pagination/evenement-pagination";
 

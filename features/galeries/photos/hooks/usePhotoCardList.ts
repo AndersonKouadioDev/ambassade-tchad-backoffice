@@ -20,18 +20,15 @@ export const usePhotoCardList = () => {
       page: Number(filters.page) || 1,
       limit: Number(filters.limit) || 12,
     };
-
-    // Ajouter seulement les paramètres qui ont des valeurs valides
-    if (filters.title && filters.title.trim()) {
+  
+    if (filters.title?.trim()) {
       params.title = filters.title.trim();
     }
-
-    if (filters.description && filters.description.trim()) {
+  
+    if (filters.description?.trim()) {
       params.description = filters.description.trim();
     }
-
-    // Si published est 'all' ou undefined, ne pas l'inclure du tout
-
+  
     return params;
   }, [filters]);
 
@@ -39,7 +36,7 @@ export const usePhotoCardList = () => {
 
   console.log('usePhotoCardList - React Query result:', { data, isLoading, error });
 
-  const handleTextFilterChange = (filterName: 'title' | 'description', value: string) => {
+  const handleTextFilterChange =(filterName: 'title' | 'description', value: string) => {
     setFilters((prev: any) => ({
       ...prev,
       [filterName]: value,

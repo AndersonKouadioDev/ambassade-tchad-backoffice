@@ -4,53 +4,52 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, Search } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { useActualiteCard } from "../hooks/useActaliteCard";
-import { IActualite } from "../types/actualites.type";
-import { ActualiteFilters } from "./actualite-list/actualite-filters";
-import { ActualiteCard } from "./actualite-list/actualite-card";
-import { ActualitePagination } from "./actualite-list/actualite-pagination";
-import { ActualiteImageGalleryModal } from "./actualite-modal/evenement-image-gallery-modal";
-import { ActualiteViewModal } from "./actualite-modal/evenement-view-modal";
+// Remplacer cette ligne
+// Par celle-ci
+import { usePhotoCardList } from "../hooks/usePhotoCardList";
+import { IPhoto } from "../types/photo.type";
+import { PhotoFilters } from "./photo-list/photo-filters";
+import { PhotoCard } from "./photo-list/photo-card";
+import { PhotoPagination } from "./photo-pagination/photo-pagination";
+import { PhotoViewModal } from "./photo-modal/photo-view-modal";
+import { PhotoImageGalleryModal } from "./photo-modal/photo-image-gallery-modal";
+import error from "next/error";
 
-export const ActualiteList: React.FC = () => {
+export const PhotoList: React.FC = () => {
   const router = useRouter();
   const {
     data,
     isLoading,
-    error,
     filters,
     pagination,
     handleTextFilterChange,
-    handlePublishedFilterChange,
-    handleStatusFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
-    handleCreate,
-    handleUpdate,
     handleDelete,
-  } = useActualiteCard();
+  } = usePhotoCardList(); // Utiliser le hook des photos à la place
 
-  const [selectedActualite, setSelectedActualite] = useState<IActualite | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<IPhoto | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isImageGalleryOpen, setIsImageGalleryOpen] = useState(false);
 
-  const handleView = (actualite: IActualite) => {
-    setSelectedActualite(actualite);
+  const handleView = (photo: IPhoto) => {
+    setSelectedPhoto(photo);
     setIsViewModalOpen(true);
   };
 
-  const handleEdit = (actualite: IActualite) => {
+  const handleEdit = (photo: IPhoto) => {
     // Navigation vers la page d'édition
-    router.push(`/contenu/actualite/edit/${actualite.id}`);
+    router.push(`/contenu/photo/edit/${photo.id}`);
   };
 
-  const handleDeleteActualite = async (actualite: IActualite) => {
-    await handleDelete(actualite.id);
+  const handleDeletePhoto= async (photo: IPhoto) => {
+    await handleDelete(photo.id);
   };
 
-  const handleCreateActualite = () => {
+  // En
+  const handleCreatePhoto = () => {
     // Navigation vers la page de création
-    router.push(`/contenu/actualite/create`);
+    router.push(`/contenu/photo/create`);
   };
 
   const handleOpenImageGallery = () => {
@@ -65,7 +64,7 @@ export const ActualiteList: React.FC = () => {
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">Erreur lors du chargement</h3>
           <p className="text-muted-foreground">
-            Une erreur s'est produite lors du chargement des actualités.
+            Une erreur s&apos;est produite lors du chargement des evenements.
           </p>
         </div>
       </div>
@@ -74,12 +73,10 @@ export const ActualiteList: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <ActualiteFilters
+      <PhotoFilters
         filters={filters}
         onTextFilterChange={handleTextFilterChange}
-        onPublishedFilterChange={handlePublishedFilterChange}
-        onStatusFilterChange={handleStatusFilterChange}
-        onCreate={handleCreateActualite}
+        onCreate={handleCreatePhoto} // Utiliser la nouvelle fonction
       />
 
       {isLoading ? (
@@ -118,19 +115,19 @@ export const ActualiteList: React.FC = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {data.map((actualite: IActualite) => (
-              <ActualiteCard
-                key={actualite.id}
-                actualite={actualite}
+            {data.map((photo: IPhoto) => (
+              <PhotoCard
+                key={photo.id}
+                photo={photo}
                 onView={handleView}
                 onEdit={handleEdit}
-                onDelete={handleDeleteActualite}
+                onDelete={handleDeletePhoto}
               />
             ))}
           </div>
 
           {pagination.totalPages > 1 && (
-            <ActualitePagination
+            <PhotoPagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}
               totalItems={pagination.totalItems}
@@ -142,21 +139,21 @@ export const ActualiteList: React.FC = () => {
         </>
       )}
 
-      <ActualiteViewModal
-        actualite={selectedActualite}
+      <PhotoViewModal
+        photo={selectedPhoto}
         isOpen={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}
         onOpenImageGallery={handleOpenImageGallery}
       />
 
-      {selectedActualite && selectedActualite.imageUrls && selectedActualite.imageUrls.length > 0 && (
-        <ActualiteImageGalleryModal
+      {selectedPhoto && selectedPhoto.imageUrl && selectedPhoto.imageUrl.length > 0 && (
+        <PhotoImageGalleryModal
           isOpen={isImageGalleryOpen}
           onClose={() => setIsImageGalleryOpen(false)}
-          images={selectedActualite.imageUrls}
-          title={selectedActualite.title}
+          images={selectedPhoto.imageUrl}
+          title={selectedPhoto.title}
         />
       )}
     </div>
   );
-}; 
+};

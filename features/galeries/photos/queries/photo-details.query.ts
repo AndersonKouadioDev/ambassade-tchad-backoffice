@@ -1,6 +1,5 @@
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
-import { photoAPI } from "../apis/photo.api";
 import { getPhotoDetailAction } from "../actions/photo.action";
 const queryClient = getQueryClient();
 
