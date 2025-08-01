@@ -72,10 +72,16 @@ const StatisticPage = () => {
                   </div>
                   <div className="flex-1">
                     <h4 className="text-xl font-medium mb-2">
-                      <span className="block font-light text-default-800">Good evening,</span>
-                      <span className="block text-default-900">Mr. Jone Doe</span>
+                      <span className="block font-light text-default-800">
+                        Good evening,
+                      </span>
+                      <span className="block text-default-900">
+                        Mr. Jone Doe
+                      </span>
                     </h4>
-                    <p className="text-sm text-default-600">Welcome to Dashcode</p>
+                    <p className="text-sm text-default-600">
+                      Welcome to Dashcode
+                    </p>
                   </div>
                 </div>
                 {/*  status blocks */}
@@ -91,7 +97,16 @@ const StatisticPage = () => {
                   total="$3,564"
                   chartColor="#80fac1"
                   className="bg-secondary/10 shadow-none rounded"
-                  series={[40, 70, 45, 100, 75, 40, 80, 90]}
+                  series={[
+                    { date: "", value: 40 },
+                    { date: "", value: 70 },
+                    { date: "", value: 45 },
+                    { date: "", value: 100 },
+                    { date: "", value: 75 },
+                    { date: "", value: 40 },
+                    { date: "", value: 80 },
+                    { date: "", value: 90 },
+                  ]}
                   chartType="bar"
                   opacity={1}
                 />
@@ -101,7 +116,16 @@ const StatisticPage = () => {
                   chartColor="#ffbf99"
                   className="bg-secondary/10 shadow-none rounded"
                   chartType="bar"
-                  series={[40, 70, 45, 100, 75, 40, 80, 90]}
+                  series={[
+                    { date: "", value: 40 },
+                    { date: "", value: 70 },
+                    { date: "", value: 45 },
+                    { date: "", value: 100 },
+                    { date: "", value: 75 },
+                    { date: "", value: 40 },
+                    { date: "", value: 80 },
+                    { date: "", value: 90 },
+                  ]}
                   opacity={1}
                 />
               </div>
@@ -120,8 +144,13 @@ const StatisticPage = () => {
                 height={200}
                 priority
               />
-              <div className="mb-6 text-sm text-default-900 font-medium">Sales </div>
-              <div className=" text-2xl text-default-900 font-medium mb-6"> 354</div>
+              <div className="mb-6 text-sm text-default-900 font-medium">
+                Sales{" "}
+              </div>
+              <div className=" text-2xl text-default-900 font-medium mb-6">
+                {" "}
+                354
+              </div>
               <div className="flex gap-2">
                 <div className="flex-none text-xl">
                   <TrendingUp className="w-4 h-4 text-primary" />
@@ -146,8 +175,12 @@ const StatisticPage = () => {
                 height={200}
                 priority
               />
-              <div className="mb-6 text-sm text-default-900 font-medium">Revenue </div>
-              <div className=" text-2xl text-default-900 font-medium mb-6">$86,954</div>
+              <div className="mb-6 text-sm text-default-900 font-medium">
+                Revenue{" "}
+              </div>
+              <div className=" text-2xl text-default-900 font-medium mb-6">
+                $86,954
+              </div>
               <div className="flex gap-2">
                 <div className="flex-none text-xl">
                   <TrendingUp className="w-4 h-4 text-primary" />
@@ -172,8 +205,12 @@ const StatisticPage = () => {
                 height={200}
                 priority
               />
-              <div className="mb-6 text-sm text-default-900 font-medium">Conversion </div>
-              <div className=" text-2xl text-default-900 font-medium mb-6">15%</div>
+              <div className="mb-6 text-sm text-default-900 font-medium">
+                Conversion{" "}
+              </div>
+              <div className=" text-2xl text-default-900 font-medium mb-6">
+                15%
+              </div>
               <div className="flex gap-2">
                 <div className="flex-none text-xl">
                   <TrendingDown className="w-4 h-4 text-destructive" />
@@ -198,8 +235,12 @@ const StatisticPage = () => {
                 height={200}
                 priority
               />
-              <div className="mb-6 text-sm text-default-900 font-medium">Leads </div>
-              <div className=" text-2xl text-default-900 font-medium mb-6">654</div>
+              <div className="mb-6 text-sm text-default-900 font-medium">
+                Leads{" "}
+              </div>
+              <div className=" text-2xl text-default-900 font-medium mb-6">
+                654
+              </div>
               <div className="flex gap-2">
                 <div className="flex-none text-xl">
                   <TrendingDown className="w-4 h-4 text-primary" />
@@ -220,49 +261,58 @@ const StatisticPage = () => {
               <div className="mx-auto h-10 w-10  rounded-full flex items-center justify-center bg-white mb-4">
                 <BarChart className=" h-6 w-6 text-info" />
               </div>
-              <div className="block text-sm text-default-600 font-medium  mb-1.5"> Total Task</div>
-              <div className="text-2xl text-default-900  font-medium">  64</div>
+              <div className="block text-sm text-default-600 font-medium  mb-1.5">
+                {" "}
+                Total Task
+              </div>
+              <div className="text-2xl text-default-900  font-medium"> 64</div>
             </CardContent>
           </Card>
           <Card className="bg-warning/20">
             <CardContent className=" p-4  text-center">
-              <div
-                className="mx-auto h-10 w-10  rounded-full flex items-center justify-center bg-white mb-4"
-              >
-                <Icon className="w-6 h-6 text-warning" icon="heroicons:chart-pie" />
+              <div className="mx-auto h-10 w-10  rounded-full flex items-center justify-center bg-white mb-4">
+                <Icon
+                  className="w-6 h-6 text-warning"
+                  icon="heroicons:chart-pie"
+                />
               </div>
-              <div className="block text-sm text-default-600 font-medium  mb-1.5">Completed</div>
+              <div className="block text-sm text-default-600 font-medium  mb-1.5">
+                Completed
+              </div>
               <div className="text-2xl text-default-900  font-medium">45</div>
             </CardContent>
           </Card>
           <Card className="bg-primary/20">
             <CardContent className=" p-4  text-center">
-              <div
-                className="mx-auto h-10 w-10  rounded-full flex items-center justify-center bg-white mb-4"
-              >
+              <div className="mx-auto h-10 w-10  rounded-full flex items-center justify-center bg-white mb-4">
                 <Icon className="w-6 h-6 text-primary" icon="heroicons:clock" />
               </div>
-              <div className="block text-sm text-default-600 font-medium  mb-1.5">Hours</div>
+              <div className="block text-sm text-default-600 font-medium  mb-1.5">
+                Hours
+              </div>
               <div className="text-2xl text-default-900  font-medium">190</div>
             </CardContent>
           </Card>
           <Card className="bg-success/20">
             <CardContent className="p-4 text-center">
-              <div
-                className="mx-auto h-10 w-10  rounded-full flex items-center justify-center bg-white mb-4"
-              >
-                <Icon className="w-6 h-6 text-success" icon="heroicons:calculator" />
+              <div className="mx-auto h-10 w-10  rounded-full flex items-center justify-center bg-white mb-4">
+                <Icon
+                  className="w-6 h-6 text-success"
+                  icon="heroicons:calculator"
+                />
               </div>
-              <div className="block text-sm text-default-600 font-medium  mb-1.5">Spendings</div>
-              <div className="text-2xl text-default-900  font-medium">$3,564</div>
+              <div className="block text-sm text-default-600 font-medium  mb-1.5">
+                Spendings
+              </div>
+              <div className="text-2xl text-default-900  font-medium">
+                $3,564
+              </div>
             </CardContent>
           </Card>
         </div>
         {/* progress */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
-          <ProgressBlock
-            title="Progress"
-          />
+          <ProgressBlock title="Progress" />
           <ProgressBlock
             title="Progress"
             colors={["#F1595C", "#F9E1E5"]}
@@ -273,26 +323,12 @@ const StatisticPage = () => {
             colors={["#50C793", "#E5F3E5"]}
             labels={["Success", "Failure"]}
           />
-          <ProgressBlock
-            title="Progress"
-            colors={["#FA916B", "#fcc8b5"]}
-          />
+          <ProgressBlock title="Progress" colors={["#FA916B", "#fcc8b5"]} />
         </div>
         <div className="grid grid-cols-6 gap-4">
-          <OrdersBlock
-            title="Orders"
-            total="123k"
-          />
-          <OrdersBlock
-            title="Orders"
-            total="123k"
-            chartColor="#f1595c"
-          />
-          <OrdersBlock
-            title="Orders"
-            total="123k"
-            chartColor="#50c893"
-          />
+          <OrdersBlock title="Orders" total="123k" />
+          <OrdersBlock title="Orders" total="123k" chartColor="#f1595c" />
+          <OrdersBlock title="Orders" total="123k" chartColor="#50c893" />
           <OrdersBlock
             title="Profit"
             total="123k"
@@ -316,21 +352,9 @@ const StatisticPage = () => {
           />
         </div>
         <div className="grid grid-cols-3 gap-4">
-          <EarningBlock
-            title="Earnings"
-            total="$12,335.00"
-            percentage="+08%"
-          />
-          <EarningBlock
-            title="Earnings"
-            total="$12,335.00"
-            percentage="+08%"
-          />
-          <EarningBlock
-            title="Earnings"
-            total="$12,335.00"
-            percentage="+08%"
-          />
+          <EarningBlock title="Earnings" total="$12,335.00" percentage="+08%" />
+          <EarningBlock title="Earnings" total="$12,335.00" percentage="+08%" />
+          <EarningBlock title="Earnings" total="$12,335.00" percentage="+08%" />
         </div>
       </div>
     </div>

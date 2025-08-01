@@ -46,7 +46,16 @@ const BankingPage = () => {
               total="$3,564"
               chartColor="#80fac1"
               className="bg-default-50 shadow-none border-none"
-              series={[40, 70, 45, 100, 75, 40, 80, 90]}
+              series={[
+                { date: "", value: 40 },
+                { date: "", value: 70 },
+                { date: "", value: 45 },
+                { date: "", value: 100 },
+                { date: "", value: 75 },
+                { date: "", value: 40 },
+                { date: "", value: 80 },
+                { date: "", value: 90 },
+              ]}
               chartType="bar"
               opacity={1}
             />
@@ -56,7 +65,16 @@ const BankingPage = () => {
               chartColor="#ffbf99"
               className="bg-default-50 shadow-none border-none"
               chartType="bar"
-              series={[40, 70, 45, 100, 75, 40, 80, 90]}
+              series={[
+                { date: "", value: 40 },
+                { date: "", value: 70 },
+                { date: "", value: 45 },
+                { date: "", value: 100 },
+                { date: "", value: 75 },
+                { date: "", value: 40 },
+                { date: "", value: 80 },
+                { date: "", value: 90 },
+              ]}
               opacity={1}
             />
           </div>

@@ -5,14 +5,7 @@ import { useTranslations } from "next-intl";
 import { X, Upload, Image as ImageIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,13 +17,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import Image from "next/image";
 
 export interface ContentModalField {
   key: string;
-  type: 'text' | 'textarea' | 'select' | 'file' | 'date' | 'email';
+  type: "text" | "textarea" | "select" | "file" | "date" | "email";
   label: string;
   placeholder?: string;
   required?: boolean;
@@ -66,7 +58,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   initialData = {},
   isEditing = false,
   isLoading = false,
-  translationNamespace = "common"
+  translationNamespace = "common",
 }) => {
   const t = useTranslations(translationNamespace);
   const [formData, setFormData] = React.useState<ContentModalData>(initialData);
@@ -81,37 +73,46 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       setPreviewImage(initialData?.image || null);
       setErrors({});
     }
-  }, [isOpen]);
+  }, [isOpen, initialData]);
 
-  const handleInputChange = React.useCallback((key: string, value: any) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
-    // Clear error when user starts typing
-    if (errors[key]) {
-      setErrors(prev => ({ ...prev, [key]: '' }));
-    }
-  }, [errors]);
+  const handleInputChange = React.useCallback(
+    (key: string, value: any) => {
+      setFormData((prev) => ({ ...prev, [key]: value }));
+      // Clear error when user starts typing
+      if (errors[key]) {
+        setErrors((prev) => ({ ...prev, [key]: "" }));
+      }
+    },
+    [errors]
+  );
 
-  const handleFileChange = React.useCallback((key: string, files: FileList | null) => {
-    if (files && files.length > 0) {
-      const fileArray = Array.from(files);
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result as string;
-        setPreviewImage(result);
-        setFormData(prev => ({ ...prev, [key]: fileArray }));
-      };
-      reader.readAsDataURL(fileArray[0]); // Utiliser le premier fichier pour la prévisualisation
-    } else {
-      setPreviewImage(null);
-      setFormData(prev => ({ ...prev, [key]: [] }));
-    }
-  }, []);
+  const handleFileChange = React.useCallback(
+    (key: string, files: FileList | null) => {
+      if (files && files.length > 0) {
+        const fileArray = Array.from(files);
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          setPreviewImage(result);
+          setFormData((prev) => ({ ...prev, [key]: fileArray }));
+        };
+        reader.readAsDataURL(fileArray[0]); // Utiliser le premier fichier pour la prévisualisation
+      } else {
+        setPreviewImage(null);
+        setFormData((prev) => ({ ...prev, [key]: [] }));
+      }
+    },
+    []
+  );
 
   const validateForm = React.useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
-    
-    fields.forEach(field => {
-      if (field.required && (!formData[field.key] || formData[field.key] === '')) {
+
+    fields.forEach((field) => {
+      if (
+        field.required &&
+        (!formData[field.key] || formData[field.key] === "")
+      ) {
         newErrors[field.key] = `${field.label} est requis`;
       }
     });
@@ -120,30 +121,41 @@ export const ContentModal: React.FC<ContentModalProps> = ({
     return Object.keys(newErrors).length === 0;
   }, [fields, formData]);
 
-  const handleSubmit = React.useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-    
-    onSubmit(formData);
-  }, [validateForm, onSubmit, formData]);
+  const handleSubmit = React.useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+
+      if (!validateForm()) return;
+
+      onSubmit(formData);
+    },
+    [validateForm, onSubmit, formData]
+  );
 
   const renderField = (field: ContentModalField, shouldSpanFull = false) => {
     const hasError = !!errors[field.key];
     const baseClasses = shouldSpanFull ? "col-span-1 md:col-span-2" : "";
-    
+
     switch (field.type) {
-      case 'textarea':
+      case "textarea":
         return (
-          <div key={field.key} className={cn("space-y-2", "col-span-1 md:col-span-2")}>
-            <Label htmlFor={field.key} className="text-sm font-medium dark:text-white">
+          <div
+            key={field.key}
+            className={cn("space-y-2", "col-span-1 md:col-span-2")}
+          >
+            <Label
+              htmlFor={field.key}
+              className="text-sm font-medium dark:text-white"
+            >
               {field.label}
-              {field.required && <span className="text-destructive ml-1">*</span>}
+              {field.required && (
+                <span className="text-destructive ml-1">*</span>
+              )}
             </Label>
             <Textarea
               id={field.key}
               placeholder={field.placeholder}
-              value={formData[field.key] || ''}
+              value={formData[field.key] || ""}
               onChange={(e) => handleInputChange(field.key, e.target.value)}
               rows={field.rows || 4}
               className={cn(
@@ -160,29 +172,39 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           </div>
         );
 
-      case 'select':
+      case "select":
         return (
           <div key={field.key} className={cn("space-y-2", baseClasses)}>
-            <Label htmlFor={field.key} className="text-sm font-medium dark:text-white">
+            <Label
+              htmlFor={field.key}
+              className="text-sm font-medium dark:text-white"
+            >
               {field.label}
-              {field.required && <span className="text-destructive ml-1">*</span>}
+              {field.required && (
+                <span className="text-destructive ml-1">*</span>
+              )}
             </Label>
             <Select
-              value={formData[field.key] || ''}
+              value={formData[field.key] || ""}
               onValueChange={(value) => handleInputChange(field.key, value)}
             >
-              <SelectTrigger className={cn(
-                "dark:text-white dark:bg-gray-800 dark:border-gray-600",
-                "dark:focus:border-embassy-yellow-400 dark:focus:ring-embassy-yellow-400",
-                "[&>svg]:dark:stroke-white",
-                hasError && "border-destructive"
-              )}>
-                <SelectValue placeholder={field.placeholder} className="dark:placeholder:text-gray-300" />
+              <SelectTrigger
+                className={cn(
+                  "dark:text-white dark:bg-gray-800 dark:border-gray-600",
+                  "dark:focus:border-embassy-yellow-400 dark:focus:ring-embassy-yellow-400",
+                  "[&>svg]:dark:stroke-white",
+                  hasError && "border-destructive"
+                )}
+              >
+                <SelectValue
+                  placeholder={field.placeholder}
+                  className="dark:placeholder:text-gray-300"
+                />
               </SelectTrigger>
               <SelectContent className="dark:bg-gray-800 dark:border-gray-600">
                 {field.options?.map((option) => (
-                  <SelectItem 
-                    key={option.value} 
+                  <SelectItem
+                    key={option.value}
                     value={option.value}
                     className="dark:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
                   >
@@ -197,12 +219,20 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           </div>
         );
 
-      case 'file':
+      case "file":
         return (
-          <div key={field.key} className={cn("space-y-2", "col-span-1 md:col-span-2")}>
-            <Label htmlFor={field.key} className="text-sm font-medium dark:text-white">
+          <div
+            key={field.key}
+            className={cn("space-y-2", "col-span-1 md:col-span-2")}
+          >
+            <Label
+              htmlFor={field.key}
+              className="text-sm font-medium dark:text-white"
+            >
               {field.label}
-              {field.required && <span className="text-destructive ml-1">*</span>}
+              {field.required && (
+                <span className="text-destructive ml-1">*</span>
+              )}
             </Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Zone d'upload à gauche */}
@@ -219,22 +249,29 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Upload className="w-12 h-12 mb-4 text-muted-foreground" />
                     <p className="mb-2 text-sm text-muted-foreground text-center">
-                      <span className="font-semibold">Cliquez pour télécharger</span><br />
+                      <span className="font-semibold">
+                        Cliquez pour télécharger
+                      </span>
+                      <br />
                       ou glissez-déposez
                     </p>
-                    <p className="text-xs text-muted-foreground">PNG, JPG, WEBP (MAX. 5MB)</p>
+                    <p className="text-xs text-muted-foreground">
+                      PNG, JPG, WEBP (MAX. 5MB)
+                    </p>
                   </div>
                   <input
                     id={field.key}
                     type="file"
                     className="hidden"
                     accept={field.accept || "image/*"}
-                    onChange={(e) => handleFileChange(field.key, e.target.files || null)}
+                    onChange={(e) =>
+                      handleFileChange(field.key, e.target.files || null)
+                    }
                     multiple
                   />
                 </label>
               </div>
-              
+
               {/* Prévisualisation à droite */}
               <div className="flex items-center justify-center w-full h-48">
                 {previewImage ? (
@@ -259,7 +296,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                 ) : (
                   <div className="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-muted-foreground/25 rounded-lg">
                     <ImageIcon className="w-12 h-12 text-muted-foreground/50 mb-2" />
-                    <p className="text-sm text-muted-foreground">Aperçu de l&apos;image</p>
+                    <p className="text-sm text-muted-foreground">
+                      Aperçu de l&apos;image
+                    </p>
                   </div>
                 )}
               </div>
@@ -270,7 +309,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           </div>
         );
 
-      case 'date':
+      case "date":
         return (
           <div key={field.key} className={cn("space-y-2", baseClasses)}>
             <CustomDatePicker
@@ -293,16 +332,16 @@ export const ContentModal: React.FC<ContentModalProps> = ({
               presets={[
                 {
                   label: "Aujourd'hui",
-                  value: new Date()
+                  value: new Date(),
                 },
                 {
                   label: "Demain",
-                  value: new Date(Date.now() + 24 * 60 * 60 * 1000)
+                  value: new Date(Date.now() + 24 * 60 * 60 * 1000),
                 },
                 {
                   label: "Dans une semaine",
-                  value: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                }
+                  value: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                },
               ]}
             />
           </div>
@@ -311,15 +350,20 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       default:
         return (
           <div key={field.key} className={cn("space-y-2", baseClasses)}>
-            <Label htmlFor={field.key} className="text-sm font-medium dark:text-white">
+            <Label
+              htmlFor={field.key}
+              className="text-sm font-medium dark:text-white"
+            >
               {field.label}
-              {field.required && <span className="text-destructive ml-1">*</span>}
+              {field.required && (
+                <span className="text-destructive ml-1">*</span>
+              )}
             </Label>
             <Input
               id={field.key}
               type={field.type}
               placeholder={field.placeholder}
-              value={formData[field.key] || ''}
+              value={formData[field.key] || ""}
               onChange={(e) => handleInputChange(field.key, e.target.value)}
               className={cn(
                 "dark:text-white dark:bg-gray-800 dark:border-gray-600",
@@ -337,13 +381,14 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   };
 
   // Séparer les champs par type pour la disposition
-  const imageFields = fields.filter(field => field.type === 'file');
-  const textareaFields = fields.filter(field => field.type === 'textarea');
-  const dateFields = fields.filter(field => field.type === 'date');
-  const regularFields = fields.filter(field => 
-    field.type !== 'file' && 
-    field.type !== 'textarea' && 
-    field.type !== 'date'
+  const imageFields = fields.filter((field) => field.type === "file");
+  const textareaFields = fields.filter((field) => field.type === "textarea");
+  const dateFields = fields.filter((field) => field.type === "date");
+  const regularFields = fields.filter(
+    (field) =>
+      field.type !== "file" &&
+      field.type !== "textarea" &&
+      field.type !== "date"
   );
 
   return (
@@ -370,39 +415,40 @@ export const ContentModal: React.FC<ContentModalProps> = ({
         {/* Description sous le header */}
         {description && (
           <div className="px-6 pt-4">
-            <p className="text-muted-foreground text-center">
-              {description}
-            </p>
+            <p className="text-muted-foreground text-center">{description}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-8 flex-1 overflow-y-auto px-6 py-4">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-8 flex-1 overflow-y-auto px-6 py-4"
+        >
           <div className="space-y-8">
             {/* Images en haut - pleine largeur */}
             {imageFields.length > 0 && (
               <div className="space-y-6">
-                {imageFields.map(field => renderField(field))}
+                {imageFields.map((field) => renderField(field))}
               </div>
             )}
-            
+
             {/* Champs de date - 2 colonnes */}
             {dateFields.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {dateFields.map(field => renderField(field))}
+                {dateFields.map((field) => renderField(field))}
               </div>
             )}
-            
+
             {/* Champs réguliers en 2 colonnes */}
             {regularFields.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {regularFields.map(field => renderField(field))}
+                {regularFields.map((field) => renderField(field))}
               </div>
             )}
-            
+
             {/* Champs textarea - pleine largeur */}
             {textareaFields.length > 0 && (
               <div className="space-y-8">
-                {textareaFields.map(field => renderField(field))}
+                {textareaFields.map((field) => renderField(field))}
               </div>
             )}
           </div>
@@ -428,12 +474,14 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 {isEditing ? "Modification..." : "Création..."}
               </>
+            ) : isEditing ? (
+              "Modifier"
             ) : (
-              isEditing ? "Modifier" : "Créer"
+              "Créer"
             )}
           </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
-}; 
+};

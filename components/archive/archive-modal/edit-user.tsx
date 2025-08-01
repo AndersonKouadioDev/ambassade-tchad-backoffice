@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { Dialog, Transition } from "@headlessui/react"
-import { Fragment } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface EditUserModalProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   user: {
-    user: { name: string; image: string }; // 👈 Correction ici
+    user: { name: string; image: string };
     service: string;
     post: string;
     role: string;
@@ -19,7 +19,13 @@ interface EditUserModalProps {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export function EditUserModal({ isOpen, setIsOpen, user, onChange, onSubmit }: EditUserModalProps) {
+export function EditUserModal({
+  isOpen,
+  setIsOpen,
+  user,
+  onChange,
+  onSubmit,
+}: EditUserModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={setIsOpen}>
@@ -56,7 +62,13 @@ export function EditUserModal({ isOpen, setIsOpen, user, onChange, onSubmit }: E
                     onChange={(e) => onChange("role", e.target.value)}
                   />
                   <div className="flex justify-end gap-2">
-                    <Button type="button" variant="ghost" onClick={() => setIsOpen(false)}>Annuler</Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Annuler
+                    </Button>
                     <Button type="submit">Enregistrer</Button>
                   </div>
                 </form>
@@ -66,5 +78,5 @@ export function EditUserModal({ isOpen, setIsOpen, user, onChange, onSubmit }: E
         </div>
       </Dialog>
     </Transition>
-  )
+  );
 }
