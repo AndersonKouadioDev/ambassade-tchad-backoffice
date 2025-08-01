@@ -1,22 +1,11 @@
 "use server"
 import { utilisateurAPI } from "../apis/utilisateur.api";
-import { UtilisateurAddUpdateDTO, UtilisateurAddUpdateSchema } from "../schema/utilisateur-add-update.schema";
+import { UtilisateurAddDTO, UtilisateurAddSchema, UtilisateurRoleDTO, UtilisateurRoleSchema, UtilisateurUpdateDTO, UtilisateurUpdateSchema } from "../schema/utilisateur.schema";
 import { processAndValidateFormData } from "ak-zod-form-kit";
-import { UtilisateursParamsDTO, UtilisateursParamsSchema } from "../schema/utilisateur-params.schema";
+import { IUtilisateursParams } from "../types/utilisateur.type";
 
-export const obtenirTousUtilisateursAction = (params: UtilisateursParamsDTO) => {
-    const result = processAndValidateFormData(UtilisateursParamsSchema, params,
-        {
-            outputFormat: "object",
-            validationStrategy: "partial-strict",
-
-        })
-
-    if (!result.success) {
-        throw new Error(result.errorsInString || "Une erreur est survenue lors de la validation des données.");
-    }
-
-    return utilisateurAPI.obtenirTousUtilisateurs(result.data as UtilisateursParamsDTO);
+export const obtenirTousUtilisateursAction = (params: IUtilisateursParams) => {
+    return utilisateurAPI.obtenirTousUtilisateurs(params);
 }
 
 export const obtenirUnUtilisateurAction = (id: string) => {
@@ -24,106 +13,60 @@ export const obtenirUnUtilisateurAction = (id: string) => {
     return utilisateurAPI.obtenirUtilisateur(id);
 }
 
-export const obtenirStatsUtilisateursAction = () => {
-    return utilisateurAPI.obtenirStatsUtilisateurs();
+export const obtenirStatsUtilisateursAction = (type: "personnel" | "demandeur") => {
+    return utilisateurAPI.obtenirStatsUtilisateurs(type);
 }
 
-export const ajouterUtilisateurAction = async (data: UtilisateurAddUpdateDTO) => {
-    const result = processAndValidateFormData(UtilisateurAddUpdateSchema, data,
+export const ajouterUtilisateurAction = async (data: UtilisateurAddDTO) => {
+
+    const result = processAndValidateFormData(UtilisateurAddSchema, data,
         {
             outputFormat: "object"
 
         })
     if (!result.success) {
-        return {
-            success: false,
-            message: result.errorsInString || "Une erreur est survenue lors de la validation des données.",
-        }
+        throw new Error(result.errorsInString || "Une erreur est survenue lors de la validation des données.");
     }
-    try {
-        const response = await utilisateurAPI.ajouterUtilisateur(data);
-        return {
-            success: true,
-            message: "Utilisateur ajouté avec succès.",
-            data: response,
-        }
-    } catch (error: any) {
-        return {
-            success: false,
-            message: error.message || "Une erreur est survenue lors de l'ajout de l'utilisateur.",
-        }
-    }
+
+    return await utilisateurAPI.ajouterUtilisateur(data);
 }
 
-export const modifierUtilisateurAction = async (data: UtilisateurAddUpdateDTO) => {
-    const result = processAndValidateFormData(UtilisateurAddUpdateSchema, data,
+export const modifierProfilAction = async (data: UtilisateurUpdateDTO) => {
+    const result = processAndValidateFormData(UtilisateurUpdateSchema, data,
         {
             outputFormat: "object"
 
         })
 
     if (!result.success) {
-        return {
-            success: false,
-            message: result.errorsInString || "Une erreur est survenue lors de la validation des données.",
-        }
+        throw new Error(result.errorsInString || "Une erreur est survenue lors de la validation des données.");
     }
 
-    try {
-        await utilisateurAPI.modifierUtilisateur(data);
-        return {
-            success: true,
-            message: "Utilisateur modifié avec succès.",
-        }
-    } catch (error: any) {
-        return {
-            success: false,
-            message: error.message || "Une erreur est survenue lors de la modification de l'utilisateur.",
-        }
+    return await utilisateurAPI.modifierProfil(data);
+}
+
+export const modifierRoleAction = async (id: string, data: UtilisateurRoleDTO) => {
+    const result = processAndValidateFormData(UtilisateurRoleSchema, data,
+        {
+            outputFormat: "object"
+
+        })
+
+    if (!result.success) {
+        throw new Error(result.errorsInString || "Une erreur est survenue lors de la validation des données.");
     }
+
+    return await utilisateurAPI.modifierRole(id, data);
 }
 
 export const activerUtilisateurAction = async (id: string) => {
-    try {
-        await utilisateurAPI.activerUtilisateur(id);
-        return {
-            success: true,
-            message: "Utilisateur activé avec succès.",
-        }
-    } catch (error: any) {
-        return {
-            success: false,
-            message: error.message || "Une erreur est survenue lors de l'activation de l'utilisateur.",
-        }
-    }
+    return await utilisateurAPI.activerUtilisateur(id);
 }
 
 export const desactiverUtilisateurAction = async (id: string) => {
-    try {
-        await utilisateurAPI.desactiverUtilisateur(id);
-        return {
-            success: true,
-            message: "Utilisateur desactivé avec succès.",
-        }
-    } catch (error: any) {
-        return {
-            success: false,
-            message: error.message || "Une erreur est survenue lors de la desactivation de l'utilisateur.",
-        }
-    }
+    return await utilisateurAPI.desactiverUtilisateur(id);
 }
 
 export const supprimerUtilisateurAction = async (id: string) => {
-    try {
-        await utilisateurAPI.supprimerUtilisateur(id);
-        return {
-            success: true,
-            message: "Utilisateur supprimé avec succès.",
-        }
-    } catch (error: any) {
-        return {
-            success: false,
-            message: error.message || "Une erreur est survenue lors de la suppression de l'utilisateur.",
-        }
-    }
+    return await utilisateurAPI.supprimerUtilisateur(id);
 }

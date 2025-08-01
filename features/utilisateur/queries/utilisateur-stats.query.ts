@@ -3,18 +3,16 @@ import {
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
 import { obtenirStatsUtilisateursAction } from '../actions/utilisateur.action';
+import { utilisateurKeyQuery } from './index.query';
 
 const queryClient = getQueryClient();
 
-//1- Clé de cache 
-export const utilisateurQueryKey = () => ['utilisateur', 'stats'];
-
-//2- Option de requête
-export const utilisateurStatsQueryOption = () => {
+//1- Option de requête
+export const utilisateurStatsQueryOption = ({ type }: { type: "personnel" | "demandeur" }) => {
     return {
-        queryKey: utilisateurQueryKey(),
+        queryKey: utilisateurKeyQuery("stats", type),
         queryFn: async () => {
-            return await obtenirStatsUtilisateursAction();
+            return await obtenirStatsUtilisateursAction(type);
         },
 
         keepPreviousData: true,
@@ -22,19 +20,12 @@ export const utilisateurStatsQueryOption = () => {
     };
 };
 
-//3- Hook pour récupérer les stats utilisateurs
-export const useUtilisateurStatsQuery = () => {
-    return useQuery(utilisateurStatsQueryOption());
+//2- Hook pour récupérer les stats utilisateurs
+export const useUtilisateurStatsQuery = ({ type }: { type: "personnel" | "demandeur" }) => {
+    return useQuery(utilisateurStatsQueryOption({ type }));
 };
 
-//4- Fonction pour précharger les stats utilisateurs
-export const prefetchUtilisateurStatsQuery = () => {
-    return queryClient.prefetchQuery(utilisateurStatsQueryOption());
-}
-
-//5- Fonction pour invalider le cache
-export const invalidateUtilisateurStatsQuery = () => {
-    return queryClient.invalidateQueries({
-        queryKey: utilisateurQueryKey(),
-    });
+//3- Fonction pour précharger les stats utilisateurs
+export const prefetchUtilisateurStatsQuery = ({ type }: { type: "personnel" | "demandeur" }) => {
+    return queryClient.prefetchQuery(utilisateurStatsQueryOption({ type }));
 }

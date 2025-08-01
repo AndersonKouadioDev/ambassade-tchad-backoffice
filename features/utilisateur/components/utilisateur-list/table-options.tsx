@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import {
   UtilisateurRole,
   UtilisateurStatus,
-  UtilisateurType,
 } from "../../types/utilisateur.type";
 
 import {
@@ -14,8 +13,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUtilisateurListTable } from "../../hooks/useUtilisateurListTable";
+import { Button } from "@heroui/react";
+import { getEnumValues } from "@/utils/getEnumValues";
+import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
+import { getUtilisateurStatus } from "../../utils/getUtilisateurStatus";
 
-export default function TableOptions({
+export function TableOptions({
   handleTextFilterChange,
   handleEnumFilterChange,
   modalHandlers,
@@ -29,27 +32,13 @@ export default function TableOptions({
 >) {
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between py-4 px-5">
-        <div className="flex flex-wrap gap-3">
-          {/* <Input
-            placeholder="Filtrer par prénom..."
-            value={filters.firstName}
-            onChange={(e) =>
-              handleTextFilterChange("firstName", e.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Input
-            placeholder="Filtrer par nom..."
-            value={filters.lastName}
-            onChange={(e) => handleTextFilterChange("lastName", e.target.value)}
-            className="max-w-sm"
-          /> */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between py-4 px-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full">
           <Input
             placeholder="Filtrer par email..."
             value={filters.email}
             onChange={(e) => handleTextFilterChange("email", e.target.value)}
-            className="max-w-sm"
+            className="w-full"
           />
           <Input
             placeholder="Filtrer par téléphone..."
@@ -57,36 +46,20 @@ export default function TableOptions({
             onChange={(e) =>
               handleTextFilterChange("phoneNumber", e.target.value)
             }
-            className="max-w-sm"
+            className="w-full"
           />
-          <Select
-            onValueChange={(value) => handleEnumFilterChange("type", value)}
-            value={filters.type}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filtrer par type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="_all_">Tous les types</SelectItem>
-              {Object.values(UtilisateurType).map((typeValue) => (
-                <SelectItem key={typeValue} value={typeValue}>
-                  {typeValue.toLowerCase()}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
           <Select
             onValueChange={(value) => handleEnumFilterChange("status", value)}
             value={filters.status}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Filtrer par statut" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="_all_">Tous les statuts</SelectItem>
-              {Object.values(UtilisateurStatus).map((statusValue) => (
+              {getEnumValues(UtilisateurStatus).map((statusValue) => (
                 <SelectItem key={statusValue} value={statusValue}>
-                  {statusValue.toLowerCase()}
+                  {getUtilisateurStatus(statusValue)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -95,24 +68,26 @@ export default function TableOptions({
             onValueChange={(value) => handleEnumFilterChange("role", value)}
             value={filters.role || "_all_"}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Filtrer par rôle" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="_all_">Tous les rôles</SelectItem>
-              {Object.values(UtilisateurRole).map((roleValue) => (
+              {getEnumValues(UtilisateurRole).map((roleValue) => (
                 <SelectItem key={roleValue} value={roleValue}>
-                  {roleValue.replace(/_/g, " ").toLowerCase()}
+                  {getUtilisateurRole(roleValue)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <button
-            onClick={() => modalHandlers.setAddOpen(true)}
-            className="bg-primary text-white px-4 py-2 rounded-md text-sm"
+        </div>
+        <div className="flex justify-end md:justify-start">
+          <Button
+            onPress={() => modalHandlers.setAddOpen(true)}
+            color="primary"
           >
             Ajouter un utilisateur
-          </button>
+          </Button>
         </div>
       </div>
     </div>

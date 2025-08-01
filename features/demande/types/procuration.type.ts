@@ -19,8 +19,5 @@ export interface IProcurationDetails {
     reason?: string;
     createdAt: Date;
     updatedAt: Date;
-
-
-
     request?: IDemande;
 }

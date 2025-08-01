@@ -1,10 +1,9 @@
 @import "tailwindcss";
 @import "../../styles/video-player.css";
 @config "../../tailwind.config.ts";
- 
+
 @custom-variant dark (&:is(.dark *));
 
- 
 @theme {
   /* Couleurs de base (dérivées des variables CSS définies dans @layer base) */
   --color-border: hsl(var(--border));
@@ -388,22 +387,22 @@
     --primary-foreground: 0 0% 100%;
     --sidebar: 220 100% 30%;
     --header: 220 100% 30%;
-    
+
     /* Couleur secondaire - Rouge/Orange #fa4c31 */
     --secondary: 10 95% 58%;
     --secondary-foreground: 0 0% 100%;
-    
+
     /* Couleur accent - Jaune/Or #fecb00 */
     --accent: 48 100% 50%;
     --accent-foreground: 220 100% 30%;
-    
+
     /* Couleurs système adaptées */
     --warning: 48 100% 50%;
     --warning-foreground: 220 100% 30%;
     --info: 220 100% 30%;
     --info-foreground: 0 0% 100%;
     --ring: 220 100% 30%;
-    
+
     /* Navigation et menu */
     --menu-arrow: 220 100% 45%;
     --menu-arrow-active: 10 95% 58%;
@@ -803,7 +802,8 @@ html[dir="rtl"] .react-select .select__loading-indicator {
 
 .embassy-toast-success {
   @apply border-emerald-200 bg-emerald-50/95 text-emerald-800;
-  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .embassy-toast-error {

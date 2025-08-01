@@ -5,9 +5,13 @@ import { User, CheckCircle, PauseCircle, Ban } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useUtilisateurStatsQuery } from "@/features/utilisateur/queries/utilisateur-stats.query";
 
-export default function UtilisateursStatsGrid() {
+export function UtilisateursStatsGrid({
+  type,
+}: {
+  type: "personnel" | "demandeur";
+}) {
   const t = useTranslations("gestionUtilisateur");
-  const { data } = useUtilisateurStatsQuery();
+  const { data } = useUtilisateurStatsQuery({ type });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">

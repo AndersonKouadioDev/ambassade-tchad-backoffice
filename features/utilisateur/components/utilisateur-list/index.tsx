@@ -12,11 +12,15 @@ import {
 import TablePagination from "./table-pagination";
 import { columns } from "./column";
 import { useUtilisateurListTable } from "../../hooks/useUtilisateurListTable";
-import TableOptions from "./table-options";
+import { TableOptions } from "./table-options";
 import { Loader2 } from "lucide-react";
-import TableIndicatorFetching from "./table-indicator-fetching";
+import { TableIndicatorFetching } from "./table-indicator-fetching";
+import { UtilisateurUpdateModal } from "../utilisateur-modal/utilisateur-update-modal";
+import { UtilisateurAddModal } from "../utilisateur-modal/utilisateur-add-modal";
+import { UtilisateurDeleteModal } from "../utilisateur-modal/utilisateur-delete-modal";
+import { UtilisateurLockUnlockModal } from "../utilisateur-modal/utilisateur-lock-unlock-modal";
 
-export default function UserListTable() {
+export function UserList() {
   const {
     table,
     isLoading,
@@ -124,33 +128,30 @@ export default function UserListTable() {
       <TablePagination table={table} />
 
       {/* Modales - décommentez quand prêtes */}
-      {/* <AddUserModal
+      <UtilisateurAddModal
         isOpen={modalStates.addOpen}
         setIsOpen={modalHandlers.setAddOpen}
       />
 
       {currentUser && (
         <>
-          <ViewUserModal 
-            isOpen={modalStates.viewOpen} 
-            setIsOpen={modalHandlers.setViewOpen} 
-            user={currentUser} 
-          />
-          <EditUserModal
+          <UtilisateurUpdateModal
             isOpen={modalStates.editOpen}
             setIsOpen={modalHandlers.setEditOpen}
-            user={currentUser}
-            onChange={() => {}}
-            onSubmit={() => {}}
+            utilisateur={currentUser}
           />
-          <DeleteUserModal
+          <UtilisateurDeleteModal
             isOpen={modalStates.deleteOpen}
             setIsOpen={modalHandlers.setDeleteOpen}
-            user={currentUser}
-            onDelete={() => {}}
+            utilisateur={currentUser}
+          />
+          <UtilisateurLockUnlockModal
+            isOpen={modalStates.lockUnlockOpen}
+            setIsOpen={modalHandlers.setLockUnlockOpen}
+            utilisateur={currentUser}
           />
         </>
-      )} */}
+      )}
     </div>
   );
 }

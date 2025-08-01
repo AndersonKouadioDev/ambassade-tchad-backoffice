@@ -3,17 +3,15 @@ import {
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
 import { obtenirTousUtilisateursAction } from '../actions/utilisateur.action';
-import { UtilisateursParamsDTO } from '../schema/utilisateur-params.schema';
+import { IUtilisateursParams } from '../types/utilisateur.type';
+import { utilisateurKeyQuery } from './index.query';
 
 const queryClient = getQueryClient();
 
-//1- Clé de cache
-export const utilisateurQueryKey = (utilisateursParamsDTO: UtilisateursParamsDTO) => ['utilisateur', 'list', utilisateursParamsDTO] as const;
-
-//2- Option de requête optimisée
-export const utilisateursListQueryOption = (utilisateursParamsDTO: UtilisateursParamsDTO) => {
+//1- Option de requête optimisée
+export const utilisateursListQueryOption = (utilisateursParamsDTO: IUtilisateursParams) => {
     return {
-        queryKey: utilisateurQueryKey(utilisateursParamsDTO),
+        queryKey: utilisateurKeyQuery("list", utilisateursParamsDTO),
         queryFn: async () => {
             return obtenirTousUtilisateursAction(utilisateursParamsDTO);
         },
@@ -25,25 +23,16 @@ export const utilisateursListQueryOption = (utilisateursParamsDTO: UtilisateursP
     };
 };
 
-//3- Hook pour récupérer les utilisateurs
+//2- Hook pour récupérer les utilisateurs
 export const useUtilisateursListQuery = (
-    utilisateursParamsDTO: UtilisateursParamsDTO
+    utilisateursParamsDTO: IUtilisateursParams
 ) => {
     return useQuery(utilisateursListQueryOption(utilisateursParamsDTO));
 };
 
-//4- Fonction pour précharger les utilisateurs
+//3- Fonction pour précharger les utilisateurs
 export const prefetchUtilisateursListQuery = (
-    utilisateursParamsDTO: UtilisateursParamsDTO
+    utilisateursParamsDTO: IUtilisateursParams
 ) => {
     return queryClient.prefetchQuery(utilisateursListQueryOption(utilisateursParamsDTO));
-}
-
-//5- Fonction pour invalider le cache
-export const invalidateUtilisateursListQuery = (utilisateursParamsDTO?: Partial<UtilisateursParamsDTO>) => {
-    return queryClient.invalidateQueries({
-        queryKey: utilisateursParamsDTO ?
-            utilisateurQueryKey(utilisateursParamsDTO as UtilisateursParamsDTO) :
-            ['utilisateur', 'list'], // Invalide toutes les requêtes de liste
-    });
 }

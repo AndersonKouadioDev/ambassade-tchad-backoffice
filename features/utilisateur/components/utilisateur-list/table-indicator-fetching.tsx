@@ -1,7 +1,7 @@
 "use client";
 import { Loader2 } from "lucide-react";
 
-export default function TableIndicatorFetching({
+export function TableIndicatorFetching({
   isFetching,
 }: {
   isFetching: boolean;

@@ -11,8 +11,8 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
   return (
     <div className="flex items-center justify-end py-4 px-10">
       <div className="flex-1 text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
+        {table.getFilteredSelectedRowModel().rows.length} sur{" "}
+        {table.getFilteredRowModel().rows.length} lignes(s) selectionnées.
       </div>
    
        <div className="flex items-center gap-2 flex-none">

@@ -23,6 +23,7 @@ export enum UtilisateurType {
 export enum UtilisateurStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
+  DELETED = "DELETED",
 }
 
 export interface IUtilisateur {
@@ -50,7 +51,17 @@ export interface IUtilisateur {
   notificationSetting?: IParametreNotification;
   notifications?: INotification[];
 }
-
+export interface IUtilisateursParams {
+  type?: UtilisateurType;
+  status?: UtilisateurStatus;
+  role?: UtilisateurRole;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phoneNumber?: string;
+  page?: number;
+  limit?: number;
+}
 export interface IUtilisateurStatsResponse {
   allUsers: number;
   allUsersSeries: { date: string; value: number }[]

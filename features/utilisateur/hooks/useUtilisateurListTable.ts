@@ -10,9 +10,8 @@ import {
 import { useQueryStates } from 'nuqs';
 import { utilisateurFiltersClient } from '../filters/utilisateur.filters';
 import { useUtilisateursListQuery } from "../queries/utilisateur-list.query";
-import { DataProps } from '../components/user-list-table/column';
-import { UtilisateursParamsDTO } from "../schema/utilisateur-params.schema";
-import { IUtilisateur } from "../types/utilisateur.type";
+import { DataProps } from '../components/utilisateur-list/column';
+import { IUtilisateur, IUtilisateursParams, UtilisateurType } from "../types/utilisateur.type";
 
 export interface IUtilisateurListTableProps {
     columns: ColumnDef<IUtilisateur>[];
@@ -24,14 +23,11 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
 
-    // Gestion des paramètres d'URL via Nuqs avec throttling
-    const [filters, setFilters] = useQueryStates(utilisateurFiltersClient, {
-        clearOnDefault: true,
-        throttleMs: 500, // 500ms de délai pour les filtres textuels
-    });
+    // Gestion des paramètres d'URL via Nuqs
+    const [filters, setFilters] = useQueryStates(utilisateurFiltersClient.filter, utilisateurFiltersClient.option);
 
     // Construction des paramètres de recherche
-    const currentSearchParams: UtilisateursParamsDTO = useMemo(() => {
+    const currentSearchParams: IUtilisateursParams = useMemo(() => {
         return {
             page: filters.page,
             limit: filters.limit,
@@ -39,7 +35,7 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
             lastName: filters.lastName || undefined,
             email: filters.email || undefined,
             phoneNumber: filters.phoneNumber || undefined,
-            type: filters.type,
+            type: UtilisateurType.PERSONNEL,
             status: filters.status,
             role: filters.role || undefined,
         };
@@ -53,14 +49,14 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
 
     // États et gestionnaires pour les modales
     const [addOpen, setAddOpen] = useState(false);
-    const [viewOpen, setViewOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
+    const [lockUnlockOpen, setLockUnlockOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState<DataProps | null>(null);
 
-    const handleViewUser = useCallback((user: DataProps) => {
+    const handleLockUnlockUser = useCallback((user: DataProps) => {
         setCurrentUser(user);
-        setViewOpen(true);
+        setLockUnlockOpen(true);
     }, []);
 
     const handleEditUser = useCallback((user: DataProps) => {
@@ -93,7 +89,7 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
      * Pas de throttling nécessaire pour ces filtres (changements moins fréquents)
      */
     const handleEnumFilterChange = useCallback((
-        filterName: 'type' | 'status' | 'role',
+        filterName: 'status' | 'role',
         value: string
     ) => {
         setFilters(prev => ({
@@ -132,9 +128,9 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
             }));
         },
         meta: {
-            onView: handleViewUser,
             onEdit: handleEditUser,
             onDelete: handleDeleteUser,
+            onLockUnlock: handleLockUnlockUser,
         },
     });
 
@@ -148,13 +144,13 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
         handleEnumFilterChange,
         modalStates: {
             addOpen,
-            viewOpen,
+            lockUnlockOpen,
             editOpen,
             deleteOpen,
         },
         modalHandlers: {
             setAddOpen,
-            setViewOpen,
+            setLockUnlockOpen,
             setEditOpen,
             setDeleteOpen,
         },
