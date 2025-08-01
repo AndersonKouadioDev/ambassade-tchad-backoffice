@@ -2,7 +2,11 @@ import { IDemande, IHistoriqueStatutDemande } from "@/features/demande/types/dem
 import { IDocument } from "@/features/documents/types/documents.type";
 import { IPaiement } from "@/features/paiement/types/paiement.type";
 import { IEvenement } from "@/features/evenement/types/evenement.type";
-import { IActualite } from "@/features/actualites/types/actualites.type";
+import { IActualite } from "@/features/actualite/types/actualite.type";
+import { IDepense } from "@/features/depense/types/depense.type";
+import { IService } from "@/features/service/types/service.type";
+import { IParametre, } from "@/features/parametre/types/parametre.type";
+import { INotification, IParametreNotification } from "@/features/notification/types/notification.type";
 
 export enum UtilisateurRole {
   AGENT = "AGENT",
@@ -19,6 +23,7 @@ export enum UtilisateurType {
 export enum UtilisateurStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
+  DELETED = "DELETED",
 }
 
 export interface IUtilisateur {
@@ -33,18 +38,20 @@ export interface IUtilisateur {
   isPasswordChangeRequired: boolean;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
   requests?: IDemande[];
   uploadedDocuments?: IDocument[];
   statusChanges?: IHistoriqueStatutDemande[];
   recordedPayments?: IPaiement[];
   news?: IActualite[];
   events?: IEvenement[];
-  // expenses?: Expense[];
-  // services?: Service[];
-  // settings?: Setting[];
+  expenses?: IDepense[];
+  services?: IService[];
+  settings?: IParametre[];
+  notificationSetting?: IParametreNotification;
+  notifications?: INotification[];
 }
-
-export interface IUtilisateursRechercheParams {
+export interface IUtilisateursParams {
   type?: UtilisateurType;
   status?: UtilisateurStatus;
   role?: UtilisateurRole;
@@ -55,8 +62,7 @@ export interface IUtilisateursRechercheParams {
   page?: number;
   limit?: number;
 }
-
-export interface IUtilisateurStats {
+export interface IUtilisateurStatsResponse {
   allUsers: number;
   allUsersSeries: { date: string; value: number }[]
   activeUsers: number;
@@ -66,3 +72,14 @@ export interface IUtilisateurStats {
   bannedUsers: number;
   bannedUsersSeries: { date: string; value: number }[]
 }
+
+export interface IUtilisateurAddUpdateResponse extends Pick<IUtilisateur,
+  'id' | 'email' | 'firstName' | 'lastName' | 'phoneNumber' | 'role' | 'type'
+  | 'status' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'isPasswordChangeRequired'> {
+  generatedPassword: string
+}
+
+export interface IUtilisateurActiveDesactiveDeleteResponse {
+  success: true,
+  message: 'Utilisateur activé avec succès.',
+};

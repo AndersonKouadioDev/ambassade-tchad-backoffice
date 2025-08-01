@@ -11,7 +11,12 @@ export const api = new Api({
   maxRetries: 3, // Nombre de tentatives de re tentative
   retryDelay: 1000, // Delais entre les tentatives
   enableAuth: true, // Authentification activée
-  getSession: getTokenInfo,// Récupération du token
+  getSession: async () => {
+    const jwt = await getTokenInfo()
+    return {
+      accessToken: jwt?.accessToken ?? "",
+    }
+  },// Récupération du token
   signOut: logout, // Déconnexion automatique si la requête échoue avec un code 401
   debug: process.env.NODE_ENV === "development", // Debug activé en mode développement
 });

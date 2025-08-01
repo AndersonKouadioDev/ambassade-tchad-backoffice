@@ -1,4 +1,18 @@
-import { SituationMatrimoniale, Genre } from "@/features/demandeur/types/demandeur.type";
+import { IDemande } from "./demande.type";
+
+export enum Genre {
+    MALE = 'MALE',
+    FEMALE = 'FEMALE',
+    OTHER = 'OTHER'
+}
+
+export enum SituationMatrimoniale {
+    SINGLE = 'SINGLE',
+    MARRIED = 'MARRIED',
+    DIVORCED = 'DIVORCED',
+    WIDOWED = 'WIDOWED',
+    OTHER = 'OTHER'
+}
 
 export enum PassportType {
     ORDINARY = 'ORDINARY',
@@ -37,4 +51,7 @@ export interface IVisaDetails {
     visaExpirationDate?: Date;
     createdAt: Date;
     updatedAt: Date;
+
+    request?: IDemande;
+
 }

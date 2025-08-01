@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/routing";
-import LoginForm from "@/features/auth/components/login-form";
+import LoginForm from "@/features/auth/components/auth-form/login-form";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { InfoIcon, MailIcon } from "lucide-react";

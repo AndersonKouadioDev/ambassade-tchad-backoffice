@@ -13,8 +13,8 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "@/components/navigation";
 import { useTranslations } from "next-intl";
-import { LoginDTO, loginSchema } from "../schemas/auth.schema";
-import { login } from "../actions/auth.action";
+import { LoginDTO, loginSchema } from "../../schemas/auth.schema";
+import { login } from "../../actions/auth.action";
 
 const LoginForm = () => {
   const t = useTranslations("LoginForm");

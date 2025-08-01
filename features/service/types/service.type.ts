@@ -1,4 +1,4 @@
-import { IUser } from "@/features/users/types/user.type";
+import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
 
 export enum ServiceType {
     VISA = 'VISA',
@@ -22,5 +22,5 @@ export interface IService {
     createdAt: Date;
     updatedAt: Date;
 
-    updatedBy?: IUser;
+    updatedBy?: IUtilisateur;
 }

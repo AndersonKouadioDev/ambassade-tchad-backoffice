@@ -1,5 +1,5 @@
 import { Link } from '@/i18n/routing';
-import LoginForm from "@/features/auth/components/login-form";
+import LoginForm from "@/features/auth/components/auth-form/login-form";
 import Social from "@/components/auth/social";
 import Image from "next/image";
 import Copyright from "@/components/auth/copyright";

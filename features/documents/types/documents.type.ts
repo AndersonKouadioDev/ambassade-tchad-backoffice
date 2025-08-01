@@ -8,10 +8,9 @@ export interface IDocument {
     filePath: string;
     fileSizeKB: number;
     requestId: string;
+    request?: IDemande;
     uploaderId: string;
+    uploader?: IUtilisateur;
     createdAt: Date;
     updatedAt: Date;
-
-    request?: IDemande;
-    uploader?: IUtilisateur;
 }

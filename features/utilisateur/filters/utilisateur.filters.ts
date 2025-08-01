@@ -11,14 +11,19 @@ import { getEnumValues } from '@/utils/getEnumValues';
  * et sa valeur par défaut.
  */
 export const utilisateurFiltersClient = {
-
-    type: parseAsStringEnum<UtilisateurType>(getEnumValues(UtilisateurType)).withDefault(UtilisateurType.PERSONNEL),
-    status: parseAsStringEnum<UtilisateurStatus>(getEnumValues(UtilisateurStatus)).withDefault(UtilisateurStatus.ACTIVE),
-    role: parseAsStringEnum<UtilisateurRole>(getEnumValues(UtilisateurRole)),
-    firstName: parseAsString.withDefault(''),
-    lastName: parseAsString.withDefault(''),
-    email: parseAsString.withDefault(''),
-    phoneNumber: parseAsString.withDefault(''),
-    page: parseAsInteger.withDefault(1),
-    limit: parseAsInteger.withDefault(10),
+    filter: {
+        type: parseAsStringEnum<UtilisateurType>(getEnumValues(UtilisateurType)).withDefault(UtilisateurType.PERSONNEL),
+        status: parseAsStringEnum<UtilisateurStatus>(getEnumValues(UtilisateurStatus)).withDefault(UtilisateurStatus.ACTIVE),
+        role: parseAsStringEnum<UtilisateurRole>(getEnumValues(UtilisateurRole)),
+        firstName: parseAsString.withDefault(''),
+        lastName: parseAsString.withDefault(''),
+        email: parseAsString.withDefault(''),
+        phoneNumber: parseAsString.withDefault(''),
+        page: parseAsInteger.withDefault(1),
+        limit: parseAsInteger.withDefault(10),
+    },
+    option: {
+        clearOnDefault: true,
+        throttleMs: 500, // 500ms de délai pour les filtres textuels
+    }
 };

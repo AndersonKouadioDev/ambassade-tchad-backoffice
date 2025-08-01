@@ -11,7 +11,7 @@ export interface IEvenement {
     description: string;
     eventDate: Date;
     location?: string;
-    imageUrl?: Array<string>;
+    imageUrl: string[];
     published: boolean;
     authorId: string;
     createdAt?: Date;

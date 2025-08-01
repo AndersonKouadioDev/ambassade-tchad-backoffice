@@ -1,25 +1,23 @@
 import {
     useInfiniteQuery,
 } from '@tanstack/react-query';
-import { utilisateurAPI } from '../apis/utilisateur.api';
-import { IUtilisateur, IUtilisateursRechercheParams } from '../types/utilisateur.type';
+import { IUtilisateur } from '../types/utilisateur.type';
 import { PaginatedResponse } from '@/types';
 import getQueryClient from '@/lib/get-query-client';
+import { obtenirTousUtilisateursAction } from '../actions/utilisateur.action';
+import { IUtilisateursParams } from '../types/utilisateur.type';
+import { utilisateurKeyQuery } from './index.query';
 
 const queryClient = getQueryClient();
 
-// Clé de cache 
-export const utilisateurQueryKey = ['utilisateur'] as const;
-
-// Option de requête
-export const utilisateursInfinityQueryOption = (utilisateursSearchParams: IUtilisateursRechercheParams) => {
+//1- Option de requête
+export const utilisateursInfinityQueryOption = (utilisateursParamsDTO: IUtilisateursParams) => {
     return {
-        queryKey: [...utilisateurQueryKey, 'list', utilisateursSearchParams],
+        queryKey: utilisateurKeyQuery("list", utilisateursParamsDTO),
         queryFn: async ({ pageParam = 1 }) => {
-            const data = await utilisateurAPI.getAll({
-                ...utilisateursSearchParams,
+            const data = await obtenirTousUtilisateursAction({
+                ...utilisateursParamsDTO,
                 page: pageParam,
-                limit: 10,
             });
             return data;
         },
@@ -33,23 +31,16 @@ export const utilisateursInfinityQueryOption = (utilisateursSearchParams: IUtili
     };
 };
 
-// Hook pour récupérer les utilisateurs
-export const useUtilisateursInfinity = (
-    utilisateursSearchParams: IUtilisateursRechercheParams
+//2- Hook pour récupérer les utilisateurs
+export const useUtilisateursInfinityQuery = (
+    utilisateursParamsDTO: IUtilisateursParams
 ) => {
-    return useInfiniteQuery(utilisateursInfinityQueryOption(utilisateursSearchParams));
+    return useInfiniteQuery(utilisateursInfinityQueryOption(utilisateursParamsDTO));
 };
 
-// Hook pour précharger les utilisateurs
-export const prefetchUtilisateursInfinity = (
-    utilisateursSearchParams: IUtilisateursRechercheParams
+//3- Fonction pour précharger les utilisateurs
+export const prefetchUtilisateursInfinityQuery = (
+    utilisateursParamsDTO: IUtilisateursParams
 ) => {
-    return queryClient.prefetchInfiniteQuery(utilisateursInfinityQueryOption(utilisateursSearchParams));
-}
-
-// Fonction pour invalider le cache
-export const invalidateUtilisateursInfinity = (utilisateursSearchParams: IUtilisateursRechercheParams) => {
-    return queryClient.invalidateQueries({
-        queryKey: [...utilisateurQueryKey, 'list', utilisateursSearchParams],
-    });
+    return queryClient.prefetchInfiniteQuery(utilisateursInfinityQueryOption(utilisateursParamsDTO));
 }

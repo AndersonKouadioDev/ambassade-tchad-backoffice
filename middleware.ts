@@ -14,7 +14,7 @@ export default async function middleware(req: NextRequest) {
   const session = await auth();
 
   const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/';
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "development") {
     console.log(`Page dans le middleware : "${pathWithoutLocale}"`)
     console.log(session)
     console.log(await getTokenInfo())

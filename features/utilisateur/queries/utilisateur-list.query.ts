@@ -1,46 +1,38 @@
 import {
     useQuery,
 } from '@tanstack/react-query';
-import { utilisateurAPI } from '../apis/utilisateur.api';
-import { IUtilisateursRechercheParams } from '../types/utilisateur.type';
 import getQueryClient from '@/lib/get-query-client';
+import { obtenirTousUtilisateursAction } from '../actions/utilisateur.action';
+import { IUtilisateursParams } from '../types/utilisateur.type';
+import { utilisateurKeyQuery } from './index.query';
 
 const queryClient = getQueryClient();
 
-// Clé de cache 
-export const utilisateurQueryKey = ['utilisateur'] as const;
-
-// Option de requête
-export const utilisateursListQueryOption = (utilisateursSearchParams: IUtilisateursRechercheParams) => {
+//1- Option de requête optimisée
+export const utilisateursListQueryOption = (utilisateursParamsDTO: IUtilisateursParams) => {
     return {
-        queryKey: [...utilisateurQueryKey, 'list', utilisateursSearchParams],
+        queryKey: utilisateurKeyQuery("list", utilisateursParamsDTO),
         queryFn: async () => {
-            const data = await utilisateurAPI.getAll(utilisateursSearchParams);
-            return data;
+            return obtenirTousUtilisateursAction(utilisateursParamsDTO);
         },
-
         keepPreviousData: true,
-        staleTime: 5 * 60 * 1000,
+        placeholderData: (previousData: any) => previousData,
+        staleTime: 30 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
     };
 };
 
-// Hook pour récupérer les utilisateurs
-export const useUtilisateursList = (
-    utilisateursSearchParams: IUtilisateursRechercheParams
+//2- Hook pour récupérer les utilisateurs
+export const useUtilisateursListQuery = (
+    utilisateursParamsDTO: IUtilisateursParams
 ) => {
-    return useQuery(utilisateursListQueryOption(utilisateursSearchParams));
+    return useQuery(utilisateursListQueryOption(utilisateursParamsDTO));
 };
 
-// Hook pour précharger les utilisateurs
-export const prefetchUtilisateurs = (
-    utilisateursSearchParams: IUtilisateursRechercheParams
+//3- Fonction pour précharger les utilisateurs
+export const prefetchUtilisateursListQuery = (
+    utilisateursParamsDTO: IUtilisateursParams
 ) => {
-    return queryClient.prefetchQuery(utilisateursListQueryOption(utilisateursSearchParams));
-}
-
-// Fonction pour invalider le cache
-export const invalidateUtilisateurs = (utilisateursSearchParams: IUtilisateursRechercheParams) => {
-    return queryClient.invalidateQueries({
-        queryKey: [...utilisateurQueryKey, 'list', utilisateursSearchParams],
-    });
+    return queryClient.prefetchQuery(utilisateursListQueryOption(utilisateursParamsDTO));
 }

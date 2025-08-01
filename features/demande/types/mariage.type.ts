@@ -1,3 +1,4 @@
+import { IDemande } from "./demande.type";
 
 export interface IMariageDetails {
     id: string;
@@ -16,4 +17,6 @@ export interface IMariageDetails {
     wifeDomicile?: string;
     createdAt: Date;
     updatedAt: Date;
+
+    request?: IDemande;
 }

@@ -1,3 +1,5 @@
+import { IDemande } from "./demande.type";
+
 export interface IDecesDetails {
     id: string;
     requestId: string;
@@ -8,4 +10,6 @@ export interface IDecesDetails {
     deceasedNationality: string;
     createdAt: Date;
     updatedAt: Date;
+
+    request?: IDemande;
 }

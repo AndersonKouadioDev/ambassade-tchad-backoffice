@@ -10,6 +10,7 @@ const getQueryClient = cache(() => new QueryClient({
                 if (error?.response?.status === 404) return false;
                 return failureCount < 3;
             },
+            
         },
     },
 }));
