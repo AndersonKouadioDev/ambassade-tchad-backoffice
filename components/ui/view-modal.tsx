@@ -54,10 +54,10 @@ export const ViewModal: React.FC<ViewModalProps> = ({
       <DialogContent className="sm:max-w-[900px] lg:max-w-[1200px] max-h-[95vh] overflow-hidden flex flex-col p-0">
         {/* Header avec image de fond si disponible */}
         <div className="relative">
-          {type === 'actualite' && data.imageUrl && (
+          {(type === 'actualite' || type === 'evenement') && data.imageUrl && data.imageUrl.length > 0 && (
             <div className="relative h-64 w-full overflow-hidden">
               <Image
-                src={data.imageUrl}
+                src={data.imageUrl[0]} // Utiliser la première image pour les événements
                 alt={data.title}
                 fill
                 className="object-cover"
@@ -67,7 +67,9 @@ export const ViewModal: React.FC<ViewModalProps> = ({
           )}
           <div className={cn(
             "relative p-6",
-            type === 'actualite' && data.imageUrl ? "absolute bottom-0 left-0 right-0 text-white" : "bg-gradient-to-r from-embassy-blue-600 to-embassy-blue-700 text-white"
+            (type === 'actualite' || type === 'evenement') && data.imageUrl && data.imageUrl.length > 0 
+              ? "absolute bottom-0 left-0 right-0 text-white" 
+              : "bg-gradient-to-r from-embassy-blue-600 to-embassy-blue-700 text-white"
           )}>
             <div className="flex items-start justify-between">
               <div className="flex-1 pr-4">
@@ -81,7 +83,7 @@ export const ViewModal: React.FC<ViewModalProps> = ({
                 size="icon"
                 className={cn(
                   "h-10 w-10 rounded-full flex-shrink-0",
-                  type === 'actualite' && data.imageUrl 
+                  (type === 'actualite' || type === 'evenement') && data.imageUrl && data.imageUrl.length > 0
                     ? "text-white hover:bg-white/20 hover:text-white bg-black/20" 
                     : "text-white hover:bg-white/20 hover:text-white"
                 )}
@@ -97,26 +99,35 @@ export const ViewModal: React.FC<ViewModalProps> = ({
           {/* Métadonnées principales */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Date de création */}
-            {type === 'actualite' && (
+            {(type === 'actualite' || type === 'evenement') && (
               <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground">Date de création</label>
+                <label className="text-sm font-medium text-muted-foreground">
+                  {type === 'evenement' ? 'Date de l\'événement' : 'Date de création'}
+                </label>
                 <div className="flex items-center gap-2 text-sm text-foreground">
                   <Calendar className="w-4 h-4 text-embassy-blue-600" />
-                  <span>{data.createdAt instanceof Date ? data.createdAt.toLocaleDateString('fr-FR') : new Date(data.createdAt).toLocaleDateString('fr-FR')}</span>
+                  <span>
+                    {type === 'evenement' 
+                      ? (data.eventDate instanceof Date ? data.eventDate.toLocaleDateString('fr-FR') : new Date(data.eventDate).toLocaleDateString('fr-FR'))
+                      : (data.createdAt instanceof Date ? data.createdAt.toLocaleDateString('fr-FR') : new Date(data.createdAt).toLocaleDateString('fr-FR'))
+                    }
+                  </span>
                 </div>
               </div>
             )}
             {/* Statut */}
-            {type === 'actualite' && (
+            {(type === 'actualite' || type === 'evenement') && (
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground">Statut</label>
                 <div>
-                  <span className={cn("text-xs px-2 py-1 rounded", data.published ? "bg-emerald-100 text-emerald-700" : "bg-orange-100 text-orange-700")}>{data.published ? "Publié" : "Brouillon"}</span>
+                  <span className={cn("text-xs px-2 py-1 rounded", data.published ? "bg-emerald-100 text-emerald-700" : "bg-orange-100 text-orange-700")}>
+                    {data.published ? "Publié" : "Brouillon"}
+                  </span>
                 </div>
               </div>
             )}
             {/* Auteur */}
-            {type === 'actualite' && data.author && (
+            {(type === 'actualite' || type === 'evenement') && data.author && (
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground">Auteur</label>
                 <div className="flex items-center gap-3">
@@ -133,12 +144,23 @@ export const ViewModal: React.FC<ViewModalProps> = ({
                 </div>
               </div>
             )}
+            {/* Lieu pour les événements */}
+            {type === 'evenement' && data.location && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">Lieu</label>
+                <div className="text-sm text-foreground">
+                  {data.location}
+                </div>
+              </div>
+            )}
           </div>
           <div className="space-y-3">
-            <label className="text-lg font-semibold text-foreground">Contenu</label>
+            <label className="text-lg font-semibold text-foreground">
+              {type === 'evenement' ? 'Description' : 'Contenu'}
+            </label>
             <div className="prose prose-sm max-w-none dark:prose-invert">
               <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {data.content}
+                {type === 'evenement' ? data.description : data.content}
               </div>
             </div>
           </div>

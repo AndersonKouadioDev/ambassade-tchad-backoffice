@@ -32,6 +32,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "i.pravatar.cc",
       },
+      {
+        protocol: "https",
+        hostname: "fr.pinterest.com",
+      },
+      {
+        protocol: "https",
+        hostname: "pinterest.com",
+      },
     ],
   },
 };

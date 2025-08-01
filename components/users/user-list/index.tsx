@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/table"
 import TablePagination from "./table-pagination"
 import { columns } from "./column"
-import { data as initialData } from "@/app/[locale]/(protected)/users/data"
 import AddUserModal from "../user-modal/add-user"
 import { ViewUserModal } from "../user-modal/view-user"
 import { EditUserModal } from "../user-modal/edit-user"
@@ -36,7 +35,6 @@ const UserList = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  const [data, setData] = React.useState<typeof initialData>(initialData)
   const [isOpen, setIsOpen] = React.useState(false)
 
   const [formData, setFormData] = React.useState({
