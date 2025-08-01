@@ -1,19 +1,12 @@
 import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
 
 
-export enum ActualiteStatus {
-    PUBLISHED = "PUBLISHED",
-    UNPUBLISHED = "UNPUBLISHED",
-    DRAFT = "DRAFT"
-}
 
-
-
-export interface IActualite {   
+export interface IActualite {
     id: string;
     title: string;
     content: string;
-    imageUrl?: Array<string>;
+    imageUrls?: string[]; // Images uploadées via fichiers
     published: boolean;
     authorId: string;
     createdAt?: Date;
@@ -23,7 +16,6 @@ export interface IActualite {
 }
 
 export interface IActualiteRechercheParams {
-    status: any;
     title?: string;
     content?: string;
     published?: boolean;
@@ -33,9 +25,13 @@ export interface IActualiteRechercheParams {
 }
 
 export interface IActualiteStats {
-    allActualites: number;
-    allActualitesSeries: { date: string; value: number }[];
-    publishedActualites: number;
-    unpublishedActualites: number;
-    actualitesByAuthor: { authorId: string; count: number }[];
+    total: number;
+    published: number;
+    unpublished: number;
+    byAuthor: {
+        authorId: string;
+        _count: {
+            id: number;
+        };
+    }[];
 }

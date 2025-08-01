@@ -1,13 +1,12 @@
 import { useState, useMemo } from "react";
 import { useQueryStates } from 'nuqs';
-
-import { toast } from "sonner";
 import { IPhotoRechercheParams } from "../types/photo.type";
-import { photoFiltersClient } from "../filters/phot.filters";import { EvenementDTO } from "@/features/evenement/schemas/evenement.schema";
-import { PhotoDTO } from "../schemas/photo.schema";
-import { invalidateAllPhotos } from "../queries/photo-details.query";
-import { photoAPI } from "../actions/photo.action";
 import { usePhotosList } from "../queries/photo-list.query";
+import { createPhoto, updatePhoto, deletePhoto } from "../actions/photo.action";
+import { PhotoDTO } from "../schemas/photo.schema";
+import { toast } from "sonner";
+import { invalidateAllPhotos } from "../queries/photo-details.query";
+import { photoFiltersClient } from "../filters/photo.filters";
 
 export const usePhotoCardList = () => {
   // Gestion des paramètres d'URL via Nuqs
@@ -26,31 +25,24 @@ export const usePhotoCardList = () => {
     if (filters.title && filters.title.trim()) {
       params.title = filters.title.trim();
     }
-    
+
     if (filters.description && filters.description.trim()) {
       params.description = filters.description.trim();
     }
-    
-    console.log('useEvenementListTable - currentSearchParams:', params);
+
+    // Si published est 'all' ou undefined, ne pas l'inclure du tout
+
     return params;
   }, [filters]);
 
   const { data, isLoading, error } = usePhotosList(currentSearchParams);
 
-  console.log('useEvenementListTable - React Query result:', { data, isLoading, error });
+  console.log('usePhotoCardList - React Query result:', { data, isLoading, error });
 
-  const handleTextFilterChange = (filterName: 'title' | 'description' | 'authorId', value: string) => {
-    setFilters(prev => ({
+  const handleTextFilterChange = (filterName: 'title' | 'description', value: string) => {
+    setFilters((prev: any) => ({
       ...prev,
       [filterName]: value,
-      page: 1, // Réinitialise à la première page
-    }));
-  };
-
-  const handlePublishedFilterChange = (value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      published: value === "all" ? undefined : value === "true",
       page: 1, // Réinitialise à la première page
     }));
   };
@@ -58,9 +50,16 @@ export const usePhotoCardList = () => {
 
   const handleCreate = async (formData: PhotoDTO, formDataToSend?: FormData) => {
     try {
-      await photoAPI.create(formData, formDataToSend);
-      toast.success("Photo créée avec succès");
-      await invalidateAllPhotos();
+      const result = await createPhoto(formData as any);
+
+      if (result.success) {
+        toast.success(result.message);
+        await invalidateAllPhotos();
+      } else {
+        toast.error(result.message);
+      }
+
+      return result;
     } catch (error) {
       toast.error("Erreur lors de la création de la photo");
       throw error;
@@ -69,9 +68,16 @@ export const usePhotoCardList = () => {
 
   const handleUpdate = async (id: string, formData: PhotoDTO) => {
     try {
-      await photoAPI.update(id, formData);
-      toast.success("Photo mise à jour avec succès");
-      await invalidateAllPhotos();
+      const result = await updatePhoto(id, formData as any);
+
+      if (result.success) {
+        toast.success(result.message);
+        await invalidateAllPhotos();
+      } else {
+        toast.error(result.message);
+      }
+
+      return result;
     } catch (error) {
       toast.error("Erreur lors de la mise à jour de la photo");
       throw error;
@@ -80,9 +86,16 @@ export const usePhotoCardList = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await photoAPI.delete(id);
-      toast.success("Photo supprimée avec succès");
-      await invalidateAllPhotos();
+      const result = await deletePhoto(id);
+
+      if (result.success) {
+        toast.success(result.message);
+        await invalidateAllPhotos();
+      } else {
+        toast.error(result.message);
+      }
+
+      return result;
     } catch (error) {
       toast.error("Erreur lors de la suppression de la photo");
       throw error;
@@ -100,17 +113,17 @@ export const usePhotoCardList = () => {
     },
   };
 
-  console.log('useEvenementListTable - paginationData:', paginationData);
+  console.log('usePhotoCardList - paginationData:', paginationData);
 
   const handlePageChange = (page: number) => {
-    setFilters(prev => ({
+    setFilters((prev: any) => ({
       ...prev,
       page,
     }));
   };
 
   const handleItemsPerPageChange = (limit: number) => {
-    setFilters(prev => ({
+    setFilters((prev: any) => ({
       ...prev,
       limit,
       page: 1, // Retour à la première page lors du changement de limite
@@ -129,7 +142,6 @@ export const usePhotoCardList = () => {
       itemsPerPage: paginationData.meta.limit,
     },
     handleTextFilterChange,
-    handlePublishedFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
     handleCreate,

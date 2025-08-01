@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
 import { IVideoRechercheParams } from "../types/video.type";
-import {videoAPI } from "../actions/video.action";
+import {getVideoTousAction } from "../actions/video.action";
 
 
 
@@ -15,7 +15,7 @@ export const videoListQueryOption = (videoSearchParams: IVideoRechercheParams) =
     return {
         queryKey: [...videoQueryKey, 'list', videoSearchParams],    
         queryFn: async () => {
-            const data = await videoAPI.getAll(videoSearchParams);
+            const data = await getVideoTousAction(videoSearchParams);
             return data;
         }
         ,

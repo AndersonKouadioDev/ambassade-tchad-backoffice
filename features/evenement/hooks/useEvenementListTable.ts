@@ -24,25 +24,17 @@ export const useEvenementListTable = () => {
     if (filters.title && filters.title.trim()) {
       params.title = filters.title.trim();
     }
-    
+
     if (filters.description && filters.description.trim()) {
       params.description = filters.description.trim();
     }
-    
+
     if (filters.authorId && filters.authorId.trim()) {
       params.authorId = filters.authorId.trim();
     }
-    
-    // Gérer published (string enum -> boolean)
-    if (filters.published === 'true') {
-      params.published = true;
-    } else if (filters.published === 'false') {
-      params.published = false;
-    }
+
     // Si published est 'all' ou undefined, ne pas l'inclure du tout
-    
-    console.log('useEvenementListTable - currentSearchParams:', params);
-    console.log('useEvenementListTable - filters.published type:', typeof filters.published, 'value:', filters.published);
+
     return params;
   }, [filters]);
 
@@ -70,15 +62,15 @@ export const useEvenementListTable = () => {
 
   const handleCreate = async (formData: EvenementDTO, formDataToSend?: FormData) => {
     try {
-      const result = await createEvenement(formData, formDataToSend);
-      
+      const result = await createEvenement(formData as any);
+
       if (result.success) {
         toast.success(result.message);
         await invalidateAllEvenements();
       } else {
         toast.error(result.message);
       }
-      
+
       return result;
     } catch (error) {
       toast.error("Erreur lors de la création de l'événement");
@@ -88,15 +80,15 @@ export const useEvenementListTable = () => {
 
   const handleUpdate = async (id: string, formData: EvenementDTO) => {
     try {
-      const result = await updateEvenement(id, formData);
-      
+      const result = await updateEvenement(id, formData as any);
+
       if (result.success) {
         toast.success(result.message);
         await invalidateAllEvenements();
       } else {
         toast.error(result.message);
       }
-      
+
       return result;
     } catch (error) {
       toast.error("Erreur lors de la mise à jour de l'événement");
@@ -107,14 +99,14 @@ export const useEvenementListTable = () => {
   const handleDelete = async (id: string) => {
     try {
       const result = await deleteEvenement(id);
-      
+
       if (result.success) {
         toast.success(result.message);
         await invalidateAllEvenements();
       } else {
         toast.error(result.message);
       }
-      
+
       return result;
     } catch (error) {
       toast.error("Erreur lors de la suppression de l'événement");

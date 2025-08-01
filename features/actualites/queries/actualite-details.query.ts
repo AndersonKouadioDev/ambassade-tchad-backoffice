@@ -1,6 +1,7 @@
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
 import { actualiteAPI } from "../api/actualites.api";
+import { getActualiteDetailAction } from "../actions/actualites.action";
 const queryClient = getQueryClient();
 
 // la clé de cache
@@ -10,8 +11,8 @@ export const actualiteQueryOption = (id: string) => {
     return {
         queryKey: actualiteQueryKey(id),
         queryFn: async () => {    
-            if (!id) throw new Error("L'identifiant de l'actualite est requis");
-            const data = await actualiteAPI.getById(id);
+           
+            const data = await getActualiteDetailAction(id);
             return data;
         },
         enabled: !!id,

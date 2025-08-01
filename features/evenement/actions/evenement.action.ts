@@ -1,8 +1,7 @@
-import { api } from "@/lib/api";
-import { EvenementDTO, evenementSchema } from "../schemas/evenement.schema";
-import { IEvenement } from "@/types/evenement.types";
-import { processAndValidateFormData } from "ak-zod-form-kit";
+"use server";
 import { evenementAPI } from "../apis/evenement.api";
+import { IEvenementRechercheParams } from "../types/evenement.type";
+
 
 /**
  * Fonction pour créer un nouvel événement
@@ -10,39 +9,29 @@ import { evenementAPI } from "../apis/evenement.api";
  * @returns Un objet indiquant le succès de l'opération et un message
  */
 export async function createEvenement(
-    formdata: EvenementDTO,
-    formData?: FormData
+    formdata: FormData
 ): Promise<{ success: boolean; message: string }> {
     console.log('createEvenement - Données reçues:', formdata);
-    console.log('createEvenement - FormData reçu:', formData);
-    
-    // Vérification des données du formulaire
-    const result = processAndValidateFormData(evenementSchema, formdata, {
-        outputFormat: "object",
-    });
-
-    console.log('createEvenement - Résultat validation:', result);
-
-    if (!result.success) {
-        console.error('createEvenement - Erreurs de validation:', result.errorsInString);
-        return {
-            success: false,
-            message: result.errorsInString || "Des erreurs de validation sont survenues.",
-        };
-    }
 
     try {
-        console.log('createEvenement - Appel API avec données:', result.data);
-        console.log('createEvenement - Appel API avec FormData:', formData);
-        
-        // Création de l'événement
-        const createdEvent = await evenementAPI.create(result.data as EvenementDTO, formData);
-        
-        console.log('createEvenement - Événement créé:', createdEvent);
-        
+        console.log('createEvenement - Appel API avec données:', formdata);
+
+        // Création de l'évènement
+        const createdEvenement = await evenementAPI.create(formdata);
+
+        console.log('createEvenement - Evenement créé:', createdEvenement);
+
+        if (!createdEvenement || !createdEvenement.id) {
+            console.error('createEvenement - Réponse API invalide:', createdEvenement);
+            return {
+                success: false,
+                message: "La création a échoué - réponse API invalide.",
+            };
+        }
+
         return {
             success: true,
-            message: "Événement créé avec succès.",
+            message: "évènement créée avec succès.",
         };
     } catch (apiError: any) {
         console.error('createEvenement - Erreur API:', apiError);
@@ -51,56 +40,56 @@ export async function createEvenement(
             status: apiError.status,
             data: apiError.data,
         });
-        
+
         return {
             success: false,
-            message: apiError.message || "Erreur lors de la création de l'événement.",
+            message: apiError.message || "Erreur lors de la création de l'évènement.",
         };
     }
 }
 
 
-// Mise à jour d'un événement existant
+// Mise à jour d'un Evenement existant
 export async function updateEvenement(
     id: string,
-    formdata: EvenementDTO
+    formData: FormData
 ): Promise<{ success: boolean; message: string }> {
-    // Vérification des données du formulaire
-    const result = processAndValidateFormData(evenementSchema, formdata, {
-        outputFormat: "object",
-    });
+    console.log('=== UPDATE Evenement ACTION ===');
+    console.log('ID:', id); console.log('updateEvenement - FormData reçu:', formData);
 
-    if (!result.success) {
-        return {
-            success: false,
-            message: result.errorsInString || "Des erreurs de validation sont survenues.",
-        };
-    }
-
-    // mise à jour de l'événement
+    // mise à jour de l'Evenement
     try {
-        const updated = await evenementAPI.update(id, result.data as EvenementDTO);
-        console.log("Événement mis à jour :", updated);
+        console.log('updateEvenement - Appel API avec FormData:', formData);
+
+        const updated = await evenementAPI.update(id, formData);
+        console.log("Evenement mis à jour :", updated);
+
         return {
             success: true,
-            message: "Événement mis à jour avec succès.",
+            message: "évènement mise à jour avec succès.",
         };
     } catch (apiError: any) {
+        console.error('updateEvenement - Erreur API:', apiError);
+        console.error('updateEvenement - Détails erreur:', {
+            message: apiError.message,
+            status: apiError.status,
+            data: apiError.data,
+        });
         return {
             success: false,
-            message: apiError.message || "Erreur lors de la mise à jour de l'événement.",
+            message: apiError.message || "Erreur lors de la mise à jour de l'évènement.",
         };
     }
 }
-// Suppression d'un événement
+// Suppression d'un Evenement
 export async function deleteEvenement(
     id: string
 ): Promise<{ success: boolean; message: string }> {
-    // Vérification de l'ID de l'événement et verification de espace dans id
+    // Vérification de l'ID de l'evenement et verification de espace dans id
     if (!id || id.trim() === "") {
         return {
             success: false,
-            message: "ID de l'événement requis.",
+            message: "ID de l'evenement requis.",
         };
     }
     // Vérification de l'existence de l'événement
@@ -109,13 +98,31 @@ export async function deleteEvenement(
         await evenementAPI.delete(id);
         return {
             success: true,
-            message: "Événement supprimé avec succès.",
+            message: "evenement supprimé avec succès.",
         };
     } catch (apiError: any) {
         return {
             success: false,
-            message: apiError.message || "Erreur lors de la suppression de l'événement.",
+            message: apiError.message || "Erreur lors de la suppression de l'evenement.",
         };
     }
 }
 
+// Les gets sont appelés dans les queries
+
+export async function getEvenementDetailAction(id: string) {
+    if (!id || id.trim() === "") {
+        throw new Error("ID de l'évènement requis.");
+    }
+    return evenementAPI.getById(id);
+}
+
+export async function getEvenementTousAction(params: IEvenementRechercheParams) {
+
+    return evenementAPI.getAll(params);
+}
+
+export async function getEvenementStatsAction() {
+
+    return evenementAPI.getStats();
+}

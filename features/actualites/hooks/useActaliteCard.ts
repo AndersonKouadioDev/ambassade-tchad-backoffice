@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import { useQueryStates } from 'nuqs';
 import { toast } from "sonner";
-import { ActualiteStatus, IActualiteRechercheParams } from "../types/actualites.type";
 
 import { ActualiteDTO } from "../schemas/actualites.schema";
 import { createActualite, deleteActualite } from "../actions/actualites.action";
@@ -11,6 +10,7 @@ import { invalidateAllActualites } from "../queries/actualite-details.query";
 import { updateActualite } from "../actions/actualites.action";
 import { useActualitesList } from "../queries/actualite-list.query";
 import { actualiteFiltersClient } from "../filters/actualite.filters";
+import { IActualiteRechercheParams } from "../types/actualites.type";
 
 export const useActualiteCard = () => {
   // Gestion des paramètres d'URL via Nuqs
@@ -23,7 +23,6 @@ export const useActualiteCard = () => {
     const params: IActualiteRechercheParams = {
         page: Number(filters.page) || 1,
         limit: Number(filters.limit) || 12,
-        status: undefined
     };
 
     // Ajouter seulement les paramètres qui ont des valeurs valides
@@ -35,21 +34,19 @@ export const useActualiteCard = () => {
       params.content = filters.content.trim();
     }
     
-    if (filters.authorId && filters.authorId.trim()) {
-      params.authorId = filters.authorId.trim();
+    // Gérer published (string enum -> boolean)
+    if (filters.published === 'true') {
+      params.published = true;
+    } else if (filters.published === 'false') {
+      params.published = false;
     }
+    // Si published est 'all' ou undefined, ne pas l'inclure du tout
     
-    // Gérer published (boolean)
-    if (filters.published !== null && filters.published !== undefined) {
-      params.published = filters.published;
-    }
-    
-    // Gérer status (enum)
-    if (filters.status && filters.status !== null) {
-      params.status = filters.status;
-    }
-    
+    // Gérer status (string enum)
+   
     console.log('useActualiteCard - currentSearchParams:', params);
+    console.log('useActualiteCard - filters.published type:', typeof filters.published, 'value:', filters.published);
+    console.log('useActualiteCard - filters.status type:', typeof filters.status, 'value:', filters.status);
     return params;
   }, [filters]);
 
@@ -68,7 +65,7 @@ export const useActualiteCard = () => {
   const handlePublishedFilterChange = (value: string) => {
     setFilters((prev: any) => ({
       ...prev,
-      published: value === "all" ? undefined : value === "true",
+      published: value as 'true' | 'false' | 'all',
       page: 1, // Réinitialise à la première page
     }));
   };
@@ -76,14 +73,14 @@ export const useActualiteCard = () => {
   const handleStatusFilterChange = (value: string) => {
     setFilters((prev: any) => ({
       ...prev,
-      status: value === "_all_" ? undefined : (value as ActualiteStatus),
+      status: value as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'all',
       page: 1, // Réinitialise à la première page
     }));
   };
 
   const handleCreate = async (formData: ActualiteDTO, formDataToSend?: FormData) => {
     try {
-      const result = await createActualite(formData, formDataToSend);
+      const result = await createActualite(formData as any);
       
       if (result.success) {
         toast.success(result.message);
@@ -101,7 +98,7 @@ export const useActualiteCard = () => {
 
   const handleUpdate = async (id: string, formData: ActualiteDTO) => {
     try {
-      const result = await updateActualite(id, formData);
+      const result = await updateActualite(id, formData as any);
       
       if (result.success) {
         toast.success(result.message);

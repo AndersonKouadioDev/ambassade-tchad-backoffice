@@ -1,6 +1,6 @@
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
-import { photoAPI } from "../actions/photo.action";
+import { getPhotoStatsAction } from "../actions/photo.action";
 
 const queryClient = getQueryClient();
 
@@ -11,7 +11,7 @@ export const photoStatsQueryOption = () => {
     return {        
         queryKey: photoQueryKey,
         queryFn: async () => {
-            const data = await photoAPI.getStats();
+            const data = await getPhotoStatsAction();
             return data;
         },
         keepPreviousData: true,

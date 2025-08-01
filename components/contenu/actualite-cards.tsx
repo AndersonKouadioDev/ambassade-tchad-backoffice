@@ -3,7 +3,7 @@
 import * as React from "react";
 import { SquarePen, Trash2, Calendar, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { IActualite } from "@/types/actualite.types";
+import { IActualite } from "@/features/actualites/types/actualites.type";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -53,10 +53,10 @@ export const ActualiteCards: React.FC<ActualiteCardsProps> = ({
               </div>
             </CardHeader>
             <CardContent className="space-y-3 p-0">
-              {actualite.imageUrl && (
+              {actualite.imageUrl && actualite.imageUrl.length > 0 && (
                 <div className="relative h-48 w-full rounded-lg overflow-hidden bg-muted">
                   <Image
-                    src={actualite.imageUrl}
+                    src={actualite.imageUrl[0]}
                     alt={actualite.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -81,7 +81,7 @@ export const ActualiteCards: React.FC<ActualiteCardsProps> = ({
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Calendar className="w-4 h-4" />
-                {actualite.createdAt instanceof Date ? actualite.createdAt.toLocaleDateString("fr-FR") : new Date(actualite.createdAt).toLocaleDateString("fr-FR")}
+                {actualite.createdAt instanceof Date ? actualite.createdAt.toLocaleDateString("fr-FR") : actualite.createdAt ? new Date(actualite.createdAt).toLocaleDateString("fr-FR") : "Date inconnue"}
               </div>
               <div>
                 {actualite.published ? (

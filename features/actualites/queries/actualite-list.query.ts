@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
 import { IActualiteRechercheParams } from "../types/actualites.type";
-import { actualiteAPI } from "../api/actualites.api";
+import { getActualiteTousAction } from "../actions/actualites.action";
+import { en } from "@faker-js/faker";
 
 
 
@@ -13,14 +14,15 @@ const actualiteQueryKey = ['actualite'] as const;
 // Option de requête
 export const actualiteListQueryOption = (actualiteSearchParams: IActualiteRechercheParams) => {
     return {
-        queryKey: [...actualiteQueryKey, 'list', actualiteSearchParams],    
+        queryKey: [...actualiteQueryKey, 'list', actualiteSearchParams],
         queryFn: async () => {
-            const data = await actualiteAPI.getAll(actualiteSearchParams);
+            const data = await getActualiteTousAction(actualiteSearchParams);
             return data;
         }
         ,
         keepPreviousData: true,
         staleTime: 5 * 60 * 1000,
+        enable: true,
     };
 }
 
@@ -29,21 +31,22 @@ export const useActualitesList = (actualiteSearchParams: IActualiteRecherchePara
     return useQuery(actualiteListQueryOption(actualiteSearchParams));
 };
 
-// Hook pour précharger les actualites
+// Fonction pour précharger les actualites
 export const prefetchActualitesList = (actualiteSearchParams: IActualiteRechercheParams) => {
     return queryClient.prefetchQuery(actualiteListQueryOption(actualiteSearchParams));
 }
 
 // Fonction pour invalider le cache
-export const invalidateActualitesList = (actualiteSearchParams: IActualiteRechercheParams) => {
+export const invalidateActualitesList = () => {
     return queryClient.invalidateQueries({
-        queryKey: [...actualiteQueryKey, 'list', actualiteSearchParams],
-    });
+        queryKey: [...actualiteQueryKey],
+    })
 }
 
 // Fonction pour invalider tous les actualites
-export const invalidateAllActualites = () => {
-    return queryClient.invalidateQueries({  
+export const invalidateAllActualites = async () => {
+    queryClient.clear();
+    return queryClient.invalidateQueries({
         queryKey: actualiteQueryKey,
     });
 }   

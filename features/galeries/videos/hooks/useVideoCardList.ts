@@ -1,12 +1,11 @@
 import { useState, useMemo } from "react";
 import { useQueryStates } from 'nuqs';
-
-import { toast } from "sonner";
-import { IVideoRechercheParams } from "../types/video.type";
-import { videoFiltersClient } from "../filters/video.filters";
-import { invalidateAllVideos } from "../queries/video-list.query";
-import { videoAPI } from "../actions/video.action";
 import { useVideosList } from "../queries/video-list.query";
+import { toast } from "sonner";
+import { invalidateAllVideos } from "../queries/video-list.query";
+import { videoFiltersClient } from "../filters/video.filters";
+import { IVideoRechercheParams } from "../types/video.type";
+import { createVideo, deleteVideo, updateVideo } from "../actions/video.action";
 import { VideoDTO } from "../schemas/video.schema";
 
 export const useVideoCardList = () => {
@@ -26,52 +25,59 @@ export const useVideoCardList = () => {
     if (filters.title && filters.title.trim()) {
       params.title = filters.title.trim();
     }
-    
+
     if (filters.description && filters.description.trim()) {
       params.description = filters.description.trim();
     }
-    
-    console.log('useEvenementListTable - currentSearchParams:', params);
+
+    // Si published est 'all' ou undefined, ne pas l'inclure du tout
+
     return params;
   }, [filters]);
 
   const { data, isLoading, error } = useVideosList(currentSearchParams);
 
-  console.log('useEvenementListTable - React Query result:', { data, isLoading, error });
+  console.log('useVideoCardList - React Query result:', { data, isLoading, error });
 
-  const handleTextFilterChange = (filterName: 'title' | 'description' | 'authorId', value: string) => {
-    setFilters(prev => ({
+  const handleTextFilterChange = (filterName: 'title' | 'description', value: string) => {
+    setFilters((prev: any) => ({
       ...prev,
       [filterName]: value,
       page: 1, // Réinitialise à la première page
     }));
   };
 
-  const handlePublishedFilterChange = (value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      published: value === "all" ? undefined : value === "true",
-      page: 1, // Réinitialise à la première page
-    }));
-  };
 
-
-  const handleCreate = async (formData: VideoDTO, formDataToSend?: FormData) => {
+  const handleCreate = async (data: VideoDTO) => {
     try {
-      await videoAPI.create(formData, formDataToSend);
-      toast.success("Video créée avec succès");
-      await invalidateAllVideos();
+      const result = await createVideo(data as any);
+
+      if (result.success) {
+        toast.success(result.message);
+        await invalidateAllVideos();
+      } else {
+        toast.error(result.message);
+      }
+
+      return result;
     } catch (error) {
       toast.error("Erreur lors de la création de la video");
       throw error;
     }
   };
 
-  const handleUpdate = async (id: string, formData: VideoDTO) => {
+    const handleUpdate = async (id: string, formData: VideoDTO) => {
     try {
-      await videoAPI.update(id, formData);
-      toast.success("Video mise à jour avec succès");
-      await invalidateAllVideos();
+      const result = await updateVideo(id, formData as any);
+
+      if (result.success) {
+        toast.success(result.message);
+        await invalidateAllVideos();
+      } else {
+        toast.error(result.message);
+      }
+
+      return result;
     } catch (error) {
       toast.error("Erreur lors de la mise à jour de la video");
       throw error;
@@ -80,9 +86,16 @@ export const useVideoCardList = () => {
 
   const handleDelete = async (id: string) => {
     try {
-        await videoAPI.delete(id);
-      toast.success("Video supprimée avec succès");
-      await invalidateAllVideos();
+      const result = await deleteVideo(id);
+
+      if (result.success) {
+        toast.success(result.message);
+          await invalidateAllVideos();
+      } else {
+        toast.error(result.message);
+      }
+
+      return result;
     } catch (error) {
       toast.error("Erreur lors de la suppression de la video");
       throw error;
@@ -100,17 +113,17 @@ export const useVideoCardList = () => {
     },
   };
 
-  console.log('useEvenementListTable - paginationData:', paginationData);
+  console.log('useVideoCardList - paginationData:', paginationData);
 
   const handlePageChange = (page: number) => {
-    setFilters(prev => ({
+    setFilters((prev: any) => ({
       ...prev,
       page,
     }));
   };
 
   const handleItemsPerPageChange = (limit: number) => {
-    setFilters(prev => ({
+    setFilters((prev: any) => ({
       ...prev,
       limit,
       page: 1, // Retour à la première page lors du changement de limite
@@ -129,7 +142,6 @@ export const useVideoCardList = () => {
       itemsPerPage: paginationData.meta.limit,
     },
     handleTextFilterChange,
-    handlePublishedFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
     handleCreate,

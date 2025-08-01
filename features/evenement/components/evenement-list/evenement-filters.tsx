@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { useTranslations } from "next-intl";
 import { Search, Plus } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -12,32 +11,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-interface EvenementFiltersProps {
+
+interface EvenentFiltersProps {
   filters: {
     title: string;
     published: 'true' | 'false' | 'all' | null;
+
   };
   onTextFilterChange: (filterName: 'title' | 'description' | 'authorId', value: string) => void;
   onPublishedFilterChange: (value: string) => void;
   onCreate: () => void;
 }
 
-export const EvenementFilters: React.FC<EvenementFiltersProps> = ({
+export const EvenementFilters: React.FC<EvenentFiltersProps> = ({
   filters,
   onTextFilterChange,
   onPublishedFilterChange,
-  onStatusFilterChange,
   onCreate,
 }) => {
-  const t = useTranslations("contenu.gestionEvenement");
-
   return (
     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
-            placeholder="Rechercher un événement..."
+            placeholder="Rechercher une actualité..."
             value={filters.title || ""}
             onChange={(e) => onTextFilterChange("title", e.target.value)}
             className="pl-10 w-full sm:w-64"
@@ -57,12 +55,13 @@ export const EvenementFilters: React.FC<EvenementFiltersProps> = ({
             <SelectItem value="false">Brouillon</SelectItem>
           </SelectContent>
         </Select>
+
       </div>
 
-                <Button onClick={onCreate} className="w-full sm:w-auto">
-            <Plus className="w-4 h-4 mr-2" />
-            Créer un événement
-          </Button>
+      <Button onClick={onCreate} className="w-full sm:w-auto">
+        <Plus className="w-4 h-4 mr-2" />
+        Créer une actualité
+      </Button>
     </div>
   );
 }; 

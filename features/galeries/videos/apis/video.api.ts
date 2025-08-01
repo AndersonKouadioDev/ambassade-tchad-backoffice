@@ -1,15 +1,15 @@
 import { PaginatedResponse } from "@/types";
-import {api } from "@/lib/api";
+import { api } from "@/lib/api";
 import { SearchParams } from "ak-api-http";
 import { IVideo, IVideoRechercheParams, IVideoStats } from "../types/video.type";
 import { VideoDTO } from "../schemas/video.schema";
 export interface IVideoAPI {
-  getAll: (params: IVideoRechercheParams) => Promise<PaginatedResponse<IVideo>>;
-  getById: (id: string) => Promise<IVideo>;
-  getStats: () => Promise<IVideoStats>;
-  create: (data: VideoDTO, formData?: FormData) => Promise<IVideo>;
-  update: (id: string, data: VideoDTO) => Promise<IVideo>;
-  delete: (id: string) => Promise<void>;
+    getAll: (params: IVideoRechercheParams) => Promise<PaginatedResponse<IVideo>>;
+    getById: (id: string) => Promise<IVideo>;
+    getStats: () => Promise<IVideoStats>;
+    create: (data: VideoDTO) => Promise<IVideo>;
+    update: (id: string, data: VideoDTO) => Promise<IVideo>;
+    delete: (id: string) => Promise<void>;
 }
 
 export const videoAPI: IVideoAPI = {
@@ -17,7 +17,9 @@ export const videoAPI: IVideoAPI = {
         return api.request<PaginatedResponse<IVideo>>({
             endpoint: `/videos`,
             method: "GET",
-            searchParams:params as SearchParams,
+            searchParams: {
+                ...params as unknown as SearchParams,
+            },
         });
     },
 
@@ -25,6 +27,12 @@ export const videoAPI: IVideoAPI = {
         return api.request<IVideo>({
             endpoint: `/videos/${id}`,
             method: "GET",
+            config: {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            },  
+            
         });
     },
 
@@ -35,37 +43,36 @@ export const videoAPI: IVideoAPI = {
         });
     },
 
-    create(data: VideoDTO, formData?: FormData): Promise<IVideo> {
+    create(data: VideoDTO): Promise<IVideo> {
         console.log('videoAPI.create - Données reçues:', data);
-        console.log('videoAPI.create - FormData reçu:', formData);
-        
-        // Si on a FormData, l'utiliser, sinon utiliser les données JSON
-        const requestData = formData || data;
-        
+
         return api.request<IVideo>({
             endpoint: `/videos`,
             method: "POST",
-            data: requestData,
-        }).then(response => {
-            console.log('videoAPI.create - Réponse API:', response);
-            return response;
-        }).catch(error => {
-            console.error('videoAPI.create - Erreur API:', error);
-            console.error('videoAPI.create - Détails erreur:', {
-                message: error.message,
-                status: error.status,
-                data: error.data,
-            });
-            throw error;
+            config: {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            },
+            data: data,
         });
+
     },
 
-            update(id: string, data: VideoDTO): Promise<IVideo> {
+    update(id: string, data: VideoDTO): Promise<IVideo> {
+        console.log('videoAPI.update - Données reçues:', data);
+        console.log('videoAPI.update - FormData reçu:', data);
+
         return api.request<IVideo>({
             endpoint: `/videos/${id}`,
             method: "PUT",
-            data,
-        });
+            config: {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            },
+            data: data,
+        })
     },
 
     delete(id: string): Promise<void> {
@@ -74,5 +81,5 @@ export const videoAPI: IVideoAPI = {
             method: "DELETE",
         });
     },
- 
+
 };

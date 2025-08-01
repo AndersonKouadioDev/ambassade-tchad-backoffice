@@ -1,6 +1,7 @@
 import getQueryClient from "@/lib/get-query-client";
-import { evenementAPI } from "../apis/evenement.api";
 import { useQuery } from "@tanstack/react-query";
+import { getEvenementDetailAction } from "../actions/evenement.action";
+
 const queryClient = getQueryClient();
 
 // la clé de cache
@@ -10,8 +11,7 @@ export const evenementQueryOption = (id: string) => {
     return {
         queryKey: evenementQueryKey(id),
         queryFn: async () => {    
-            if (!id) throw new Error("L'identifiant de l'événement est requis");
-            const data = await evenementAPI.getById(id);
+            const data = await getEvenementDetailAction(id);
             return data;
         },
         enabled: !!id,

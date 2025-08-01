@@ -13,6 +13,10 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
         protocol: "https",
         hostname: "api.lorem.space",
       },
@@ -39,6 +43,22 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "pinterest.com",
+      },
+      {
+        protocol: "https",
+        hostname: "example.com",
+      },
+      {
+        protocol: "http",
+        hostname: "example.com",
+      },
+      {
+        protocol: "https",
+        hostname: "api.ambassade-tchad.com",
+      },
+      {
+        protocol: "http",
+        hostname: "api.ambassade-tchad.com",
       },
     ],
   },
