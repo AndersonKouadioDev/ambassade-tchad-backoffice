@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useTransition, useCallback, useMemo } from "react";
+import { Fragment, useCallback, useMemo } from "react";
 import {
   Dialog,
   Transition,
@@ -18,17 +18,17 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import {
   UtilisateurAddDTO,
   UtilisateurAddSchema,
 } from "../../schema/utilisateur.schema";
-import { ajouterUtilisateurAction } from "../../actions/utilisateur.action";
 import { UtilisateurRole } from "../../types/utilisateur.type";
 import { getEnumValues } from "@/utils/getEnumValues";
 import { Button } from "@heroui/react";
-import { useInvalidateUtilisateurQuery } from "../../queries/index.query";
 import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
+import { useAjouterUtilisateurMutation } from "../../queries/utilisateur.mutation";
+import { processAndValidateFormData } from "ak-zod-form-kit";
+import { toast } from "sonner";
 
 type Props = {
   isOpen: boolean;
@@ -36,16 +36,17 @@ type Props = {
 };
 
 export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
-  const [isPending, startTransition] = useTransition();
-
   const roleOptions = useMemo(() => getEnumValues(UtilisateurRole), []);
-  const invalidateUtilisateurQuery = useInvalidateUtilisateurQuery();
+
+  const { mutateAsync: ajouterUtilisateurMutation, isPending } =
+    useAjouterUtilisateurMutation();
 
   const {
     register,
     setValue,
     handleSubmit,
     formState: { errors, isValid },
+    reset,
     watch,
   } = useForm<UtilisateurAddDTO>({
     resolver: zodResolver(UtilisateurAddSchema),
@@ -55,28 +56,45 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
   const handleClose = useCallback(() => {
     if (!isPending) {
       setIsOpen(false);
+      setTimeout(() => reset({ role: undefined }), 200);
     }
-  }, [isPending, setIsOpen]);
+  }, [isPending, setIsOpen, reset]);
 
   const onSubmit = useCallback(
-    (data: UtilisateurAddDTO) => {
-      startTransition(async () => {
-        try {
-          await ajouterUtilisateurAction(data);
+    async (formdata: UtilisateurAddDTO) => {
+      try {
+        // Validation des données
+        const result = processAndValidateFormData(
+          UtilisateurAddSchema,
+          formdata,
+          {
+            outputFormat: "object",
+          }
+        );
 
-          toast.success("Ajout réussi");
-
-          await invalidateUtilisateurQuery();
-          handleClose();
-        } catch (error) {
-          toast.error("Une erreur inattendue s'est produite", {
-            description:
-              error instanceof Error ? error.message : "Erreur inconnue",
-          });
+        if (!result.success) {
+          throw new Error(
+            result.errorsInString ||
+              "Une erreur est survenue lors de la validation des données."
+          );
         }
-      });
+
+        // Ajout de l'utilisateur
+        await ajouterUtilisateurMutation(result.data as UtilisateurAddDTO);
+
+        // Fermeture de la modal
+        handleClose();
+      } catch (error) {
+        // Gestion des erreurs de la requête depuis le hook de mutation
+
+        // Surcharge des erreurs de la requête
+        toast.error("Erreur :", {
+          description:
+            error instanceof Error ? error.message : "Erreur inconnue",
+        });
+      }
     },
-    [invalidateUtilisateurQuery, handleClose]
+    [ajouterUtilisateurMutation, handleClose]
   );
 
   const handleRoleChange = useCallback(

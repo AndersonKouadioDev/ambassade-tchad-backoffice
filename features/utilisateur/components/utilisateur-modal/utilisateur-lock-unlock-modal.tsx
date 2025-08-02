@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useTransition, useCallback } from "react";
+import { Fragment, useCallback } from "react";
 import {
   Dialog,
   Transition,
@@ -12,10 +12,9 @@ import { toast } from "sonner";
 import { Button } from "@heroui/react";
 import { IUtilisateur } from "../../types/utilisateur.type";
 import {
-  activerUtilisateurAction,
-  desactiverUtilisateurAction,
-} from "../../actions/utilisateur.action";
-import { useInvalidateUtilisateurQuery } from "../../queries/index.query";
+  useActiverUtilisateurMutation,
+  useDesactiverUtilisateurMutation,
+} from "../../queries/utilisateur.mutation";
 
 type Props = {
   isOpen: boolean;
@@ -28,8 +27,12 @@ export function UtilisateurLockUnlockModal({
   setIsOpen,
   utilisateur,
 }: Props) {
-  const [isPending, startTransition] = useTransition();
-  const invalidateUtilisateurQuery = useInvalidateUtilisateurQuery();
+  const { mutateAsync: activerMutation, isPending: isActivating } =
+    useActiverUtilisateurMutation();
+  const { mutateAsync: desactiverMutation, isPending: isDeactivating } =
+    useDesactiverUtilisateurMutation();
+
+  const isPending = isActivating || isDeactivating;
 
   const handleClose = useCallback(() => {
     if (!isPending) {
@@ -41,38 +44,34 @@ export function UtilisateurLockUnlockModal({
     utilisateur?.status === "INACTIVE" ||
     utilisateur?.status === "DELETED" ||
     false;
+
   const actionText = isLocked ? "Activer" : "Verrouiller";
   const actionMessage = isLocked
     ? "Cet utilisateur pourra se connecter à nouveau"
     : "Cet utilisateur ne pourra plus se connecter";
 
-  const handleLockUnlock = useCallback(() => {
-    if (!utilisateur?.id) return;
+  const handleLockUnlock = useCallback(async () => {
+    // Vérification de l'ID utilisateur
+    if (!utilisateur?.id) {
+      throw new Error(
+        "Impossible d'effectuer l'action: ID utilisateur manquant."
+      );
+    }
 
-    startTransition(async () => {
-      try {
-        if (isLocked) {
-          await activerUtilisateurAction(utilisateur.id);
-        } else {
-          await desactiverUtilisateurAction(utilisateur.id);
-        }
-
-        toast.success(
-          isLocked
-            ? "Utilisateur activé avec succès"
-            : "Utilisateur verrouillé avec succès"
-        );
-
-        await invalidateUtilisateurQuery();
-        handleClose();
-      } catch (error) {
-        toast.error("Une erreur inattendue s'est produite", {
-          description:
-            error instanceof Error ? error.message : "Erreur inconnue",
-        });
+    try {
+      if (isLocked) {
+        await activerMutation(utilisateur.id);
+      } else {
+        await desactiverMutation(utilisateur.id);
       }
-    });
-  }, [utilisateur?.id, isLocked, invalidateUtilisateurQuery, handleClose]);
+
+      handleClose();
+    } catch (error) {
+      toast.error("Erreur : ", {
+        description: error instanceof Error ? error.message : "Erreur inconnue",
+      });
+    }
+  }, [utilisateur, isLocked, activerMutation, desactiverMutation, handleClose]);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>

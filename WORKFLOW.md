@@ -1,41 +1,100 @@
-# 1. Tester l'API sur postman, lire les interfaces (fournir des devs backend) : Afin de mieux comprendre les données du système et bien organiser les modules pour une meilleure lisibilité et intégration.
 
-# 2. Créer le module dans features/[module]/ : Créer le dossier du module dans le dossier features. C'est le dossier principal du module.
+Ce guide détaille le processus de création d'une nouvelle fonctionnalité (module) dans l'architecture Next-LB. Il s'appuie sur les principes des **Tranches Verticales** et du **MVVM**, garantissant cohérence, maintenabilité et scalabilité.
 
-# 3. Ajouter les types de l'API dans /features/[module]/types/ : Créer le dossier types dans le dossier du module. C'est le dossier des types de l'API.
+### Étape 1 : Créer le Dossier Racine du Module
 
-# 4. Ajouter les schemas et DTO dans /features/[module]/schemas/ : Créer le dossier schemas dans le dossier du module. C'est le dossier des schemas et DTO.
+* **Emplacement** : `src/features/[nom-du-module]/`
+* **Description** : Conteneur principal de votre fonctionnalité.
 
-# 5. Ajouter les API routes dans /features/[module]/api/ : Créer le dossier api dans le dossier du module. C'est le dossier des API routes (on crée les requêtes et on retourne les données, en cas d'echec une exception est levée automatiquement).
+### Étape 2 : Définir le Modèle (Données & Logique Métier)
 
-# 6. Ajouter les actions (les requêtes de mutations) dans /features/[module]/actions/ : Créer le dossier actions dans le dossier du module. C'est le dossier des actions serveurs (server action). On utilise toutes les API routes crées pour les requêtes.
+Le Modèle gère les données, leur structure, validation et interaction avec le backend.
 
-# 7. Ajouter les queries (les requêtes de lecture) dans /features/[module]/queries/ : Créer le dossier queries dans le dossier du module. C'est le dossier des queries tanstack. On utilise les actions serveur pour optimiser les requêtes de lecture avec le cache.
+#### 2.1 Ajouter les Types
 
-# 8. Ajouter les pages dans /app/[locale]/[module]/ : Créer les pages dans le dossier app/local pour le module. C'est le dossier des pages. Préférer les pages server components avec un preloader avec tanstack.
+* **Emplacement** : `src/features/[nom-du-module]/types/`
+* **Description** : Définitions TypeScript (interfaces, énumérations) spécifiques au module, non générées par Zod.
+* **Exemple** : `utilisateur.type.ts`.
 
-# 9. Ajouter les composants dans /components/[module]/ : Créer le dossier components dans le dossier du module. C'est le dossier des composants. Faites suivre du nom des composants, le nom du traitement (-view, -add, -edit, -delete) et le nom du type de composant (-form, -modal, -table, -list). Exemple: utilisateur-add-form.tsx, utilisateur-edit-modal.tsx, utilisateur-view-table.tsx, utilisateur-view-list.tsx. Ecrire le nom du fichier ou du dossier (si le composant a des sous-composants) en minuscule. Par contre le nom de la fonction ou du composant est en camelCase.
+#### 2.2 Ajouter les Schémas et DTOs
 
-# 10. Ajouter les ViewModels (les hooks) dans /features/[module]/[hooks, utils, helpers]/ : Créer le dossier hooks, utils, helpers dans le dossier du module. C'est le dossier des ViewModels. Il sont responsables de la logique métier et de la gestion des états de l'interface utilisateur.
+* **Emplacement** : `src/features/[nom-du-module]/schemas/`
+* **Description** : Schémas de validation **Zod** pour les données. Les types TypeScript dérivés (`z.infer<typeof MonSchema>`) sont nos **DTOs (Data Transfer Objects)**.
+* **Exemple** : `utilisateur.schema.ts`.
 
-# 11. Ajouter les utilitaires (helpers, utils) dans /features/[module]/[utils, helpers]/ : Créer le dossier utils, helpers dans le dossier du module. C'est le dossier des utilitaires. On peut tester les utilitaires, les API routes, les actions et les queries dans le dossier tests.
+#### 2.3 Ajouter les Fonctions API Brutes
 
-# 12. Ajouter les tests dans /features/[module]/tests/ : Créer le dossier tests dans le dossier du module.
+* **Emplacement** : `src/features/[nom-du-module]/api/`
+* **Description** : Fonctions encapsulant les appels HTTP bruts vers le backend via **ak-api-http**.
+* **Rôle MVVM** : Couche **Modèle**.
+* **Important** : Les exceptions sont gérées automatiquement par `lib/api.ts`. Ne connaissent **PAS** TanStack Query ni les Server Actions.
+* **Exemple** : `utilisateur.api.ts`.
 
-# 13. Ajouter les styles dans /styles/[module]/ : Créer le dossier styles dans le dossier du module.
+#### 2.4 Ajouter les Server Actions (Requêtes de Mutations)
 
-# Remarque 01: MVVM (Model-View-ViewModel)
-- Le model : l'ensemble des dossiers types, schemas, api, actions, queries.
-- Le view :l'ensemble des dossiers components et pages.
-- Le view-model: le dossier hooks.
+* **Emplacement** : `src/features/[nom-du-module]/actions/`
+* **Description** : Fonctions **Server Actions Next.js** ("use server"). Point d'entrée sécurisé client-backend. Appellent les fonctions API brutes.
+* **Rôle MVVM** : Couche **Modèle**.
+* **Sécurité** : Évite l'exposition d'informations sensibles et permet des validations avec **ak-zod-form-kit**.
+* **Convention** : Utilisez ces actions dans vos hooks TanStack Query.
+* **Exemple** : `utilisateur.action.ts`.
 
-# Remarque 02: Vertical Slice Architecture
-- la création du dossier features où on va organiser les fichiers selon le module.
+### Étape 3 : Définir le ViewModel (Présentation & État UI)
 
-# Remarque 03: Les mêmes éléments dans des dossiers à la racine du dossier
-- lorsqu'il y a des types globaux, des utils, des helpers, des styles... globaux, on les met dans des dossiers à la racine du dossier. components/(ui, partials, layout, navigation, blocks), utils/ , helpers/, styles/,...
+Le ViewModel prépare les données pour la Vue et gère la logique de présentation et les états de l'UI.
 
-# A ne pas faire 01:
-- Passer toujours les services API routes dans les actions serveur et utiliser les actions serveur dans les queries et non l'inverse.
-- Ne pas appeler les API routes directement dans les queries, utiliser plutôt les actions serveur de peur d'exposer les informations sensibles du backend.
+#### 3.1 Ajouter les Queries et Mutations TanStack Query
 
+* **Emplacement** : `src/features/[nom-du-module]/queries/`
+* **Description** : Hooks `useQuery` et `useMutation` de **TanStack Query**. Gèrent le cache, les re-fetches, les états.
+* **Rôle MVVM** : Couche **ViewModel**.
+* **Convention** : Doivent impérativement appeler les **Server Actions**, pas les fonctions API brutes.
+* **Exemple** : `utilisateur-list.query.ts`, `utilisateur.mutation.ts`, `index.query.ts`.
+
+#### 3.2 Ajouter les Hooks Personnalisés (ViewModels)
+
+* **Emplacement** : `src/features/[nom-du-module]/hooks/`
+* **Description** : Hooks personnalisés encapsulant la logique de présentation complexe et les états UI spécifiques au module. C'est le ViewModel pur.
+* **Rôle MVVM** : Couche **ViewModel**.
+* **Quand l'utiliser** : Pour isoler la logique UI complexe du composant Vue. Appellent les hooks de `queries/`.
+* **Exemple** : `useUtilisateurListTable.ts`.
+
+#### 3.3 Ajouter les Définitions de Filtres URL
+
+* **Emplacement** : `src/features/[nom-du-module]/filters/`
+* **Description** : Schémas de parsing pour les paramètres d'URL (filtres, pagination) via **nuqs**.
+* **Rôle MVVM** : Couche **ViewModel** (gestion de l'état de présentation via l'URL).
+* **Exemple** : `utilisateur.filters.ts`.
+
+### Étape 4 : Définir la Vue (Interface Utilisateur)
+
+La Vue est la couche responsable de l'affichage de l'interface utilisateur.
+
+#### 4.1 Ajouter les Pages
+
+* **Emplacement** : `src/app/[locale]/[module]/`
+* **Description** : Pages Next.js, points d'entrée UI. Préférer les **Server Components** pour le préchargement de données.
+* **Rôle MVVM** : Couche **Vue**.
+* **Convention** : Préchargement avec TanStack Query (`prefetchQuery`).
+* **Exemple** : `src/app/[locale]/(protected)/users/page.tsx`.
+
+#### 4.2 Ajouter les Composants Spécifiques au Module
+
+* **Emplacement** : `src/features/[nom-du-module]/components/`
+* **Description** : Composants React spécifiques à cette fonctionnalité.
+* **Rôle MVVM** : Couche **Vue**.
+* **Convention de nommage des fichiers/dossiers** : Minuscule. Nom du composant : `[nom-du-module]-[traitement]-[type-de-composant].tsx`.
+* **Exemples** : `utilisateur-add-form.tsx`, `utilisateur-list/index.tsx`.
+* **Nommage des fonctions/composants** : `PascalCase` (ex: `UtilisateurAddForm`, `UserList`).
+* **Gestion des données** : Affiche l'UI et interagit avec les ViewModels (hooks).
+
+### Étape 5 : Ajouter les Utilitaires et Helpers
+
+* **Emplacement** : `src/features/[nom-du-module]/utils/` ou `src/features/[nom-du-module]/helpers/`
+* **Description** : Fonctions utilitaires pures, spécifiques au module.
+* **Exemple** : `getUtilisateurRole.ts`.
+
+### Étape 6 : Ajouter les Tests
+
+* **Emplacement** : `src/features/[nom-du-module]/tests/`
+* **Description** : Tests unitaires et d'intégration du module.

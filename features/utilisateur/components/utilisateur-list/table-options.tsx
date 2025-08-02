@@ -87,12 +87,14 @@ export function TableOptions({
           )}
         </div>
         <div className="flex justify-end md:justify-start">
-          <Button
-            onPress={() => modalHandlers.setAddOpen(true)}
-            color="primary"
-          >
-            Ajouter un utilisateur
-          </Button>
+          {type === "personnel" && (
+            <Button
+              onPress={() => modalHandlers.setAddOpen(true)}
+              color="primary"
+            >
+              Ajouter un utilisateur
+            </Button>
+          )}
         </div>
       </div>
     </div>

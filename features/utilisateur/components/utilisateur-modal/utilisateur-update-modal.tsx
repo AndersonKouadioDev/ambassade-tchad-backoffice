@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Fragment,
-  useEffect,
-  useTransition,
-  useCallback,
-  useMemo,
-} from "react";
+import { Fragment, useEffect, useCallback, useMemo } from "react";
 import {
   Dialog,
   Transition,
@@ -28,11 +22,10 @@ import {
   UtilisateurUpdateSchema,
   UtilisateurRoleDTO,
 } from "../../schema/utilisateur.schema";
-import { modifierRoleAction } from "../../actions/utilisateur.action";
 import { IUtilisateur, UtilisateurRole } from "../../types/utilisateur.type";
 import { getEnumValues } from "@/utils/getEnumValues";
 import { Button } from "@heroui/react";
-import { useInvalidateUtilisateurQuery } from "../../queries/index.query";
+import { useModifierRoleMutation } from "../../queries/utilisateur.mutation";
 import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
 
 type Props = {
@@ -46,10 +39,10 @@ export function UtilisateurUpdateModal({
   setIsOpen,
   utilisateur,
 }: Props) {
-  const [isPending, startTransition] = useTransition();
+  const { mutateAsync: modifierRoleMutation, isPending } =
+    useModifierRoleMutation();
 
   const roleOptions = useMemo(() => getEnumValues(UtilisateurRole), []);
-  const invalidateUtilisateurQuery = useInvalidateUtilisateurQuery();
 
   const {
     setValue,
@@ -60,9 +53,6 @@ export function UtilisateurUpdateModal({
   } = useForm<UtilisateurRoleDTO>({
     resolver: zodResolver(UtilisateurUpdateSchema),
     mode: "onChange",
-    defaultValues: {
-      role: undefined,
-    },
   });
 
   const handleClose = useCallback(() => {
@@ -73,24 +63,23 @@ export function UtilisateurUpdateModal({
   }, [isPending, setIsOpen, reset]);
 
   const onSubmit = useCallback(
-    (data: UtilisateurRoleDTO) => {
-      startTransition(async () => {
-        try {
-          await modifierRoleAction(utilisateur?.id || "", data);
-
-          toast.success("Modification réussie");
-
-          await invalidateUtilisateurQuery();
-          handleClose();
-        } catch (error) {
-          toast.error("Une erreur inattendue s'est produite", {
-            description:
-              error instanceof Error ? error.message : "Erreur inconnue",
-          });
-        }
-      });
+    async (data: UtilisateurRoleDTO) => {
+      if (!utilisateur?.id) {
+        throw new Error(
+          "Impossible de modifier le rôle: ID utilisateur manquant."
+        );
+      }
+      try {
+        await modifierRoleMutation({ id: utilisateur.id, data });
+        handleClose();
+      } catch (error) {
+        toast.error("Erreur : ", {
+          description:
+            error instanceof Error ? error.message : "Erreur inconnue",
+        });
+      }
     },
-    [invalidateUtilisateurQuery, handleClose, utilisateur?.id]
+    [modifierRoleMutation, handleClose, utilisateur]
   );
 
   useEffect(() => {

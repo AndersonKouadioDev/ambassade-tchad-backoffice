@@ -222,7 +222,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
 
           <div className="space-y-2">
             <label htmlFor="eventDate" className="block text-sm font-medium">
-              Date de l'évènement *
+              Date de l&apos;évènement *
             </label>
             <Popover>
               <PopoverTrigger asChild>

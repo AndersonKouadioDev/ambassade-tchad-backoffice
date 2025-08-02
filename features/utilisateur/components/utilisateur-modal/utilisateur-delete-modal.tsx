@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useTransition, useCallback } from "react";
+import { Fragment, useCallback } from "react";
 import {
   Dialog,
   Transition,
@@ -9,10 +9,9 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { toast } from "sonner";
-import { supprimerUtilisateurAction } from "../../actions/utilisateur.action"; // You'll need to create this action
 import { IUtilisateur } from "../../types/utilisateur.type";
 import { Button } from "@heroui/react";
-import { useInvalidateUtilisateurQuery } from "../../queries/index.query";
+import { useSupprimerUtilisateurMutation } from "../../queries/utilisateur.mutation";
 
 type Props = {
   isOpen: boolean;
@@ -25,9 +24,8 @@ export function UtilisateurDeleteModal({
   setIsOpen,
   utilisateur,
 }: Props) {
-  const [isPending, startTransition] = useTransition();
-
-  const invalidateUtilisateurQuery = useInvalidateUtilisateurQuery();
+  const { mutateAsync: supprimerUtilisateurMutation, isPending } =
+    useSupprimerUtilisateurMutation();
 
   const handleClose = useCallback(() => {
     if (!isPending) {
@@ -37,29 +35,18 @@ export function UtilisateurDeleteModal({
 
   const handleDelete = useCallback(async () => {
     if (!utilisateur?.id) {
-      toast.error("Impossible de supprimer l'utilisateur: ID manquant.");
-      return;
+      throw new Error("Impossible de supprimer l'utilisateur: ID manquant.");
     }
 
-    startTransition(async () => {
-      try {
-        await supprimerUtilisateurAction(utilisateur.id);
-
-        toast.success("Suppression réussie");
-
-        await invalidateUtilisateurQuery();
-        handleClose();
-      } catch (error) {
-        toast.error(
-          "Une erreur inattendue s'est produite lors de la suppression",
-          {
-            description:
-              error instanceof Error ? error.message : "Erreur inconnue",
-          }
-        );
-      }
-    });
-  }, [invalidateUtilisateurQuery, handleClose, utilisateur?.id]);
+    try {
+      await supprimerUtilisateurMutation(utilisateur.id);
+      handleClose();
+    } catch (error) {
+      toast.error("Une erreur : ", {
+        description: error instanceof Error ? error.message : "Erreur inconnue",
+      });
+    }
+  }, [supprimerUtilisateurMutation, handleClose, utilisateur]);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -94,8 +81,8 @@ export function UtilisateurDeleteModal({
 
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette
-                    action est irréversible.
+                    Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cet
+                    utilisateur sera banni de l&apos;application.
                   </p>
                 </div>
 
