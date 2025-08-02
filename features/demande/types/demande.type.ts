@@ -2,7 +2,7 @@ import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
 import { ServiceType } from "@/features/service/types/service.type";
 import { IVisaDetails } from "./visa.type";
 import { IActeNaissanceDetails } from "./acte-naissance.type";
-import { ICarteConsulaireDetails } from "./carte-consulaire.type ";
+import { ICarteConsulaireDetails } from "./carte-consulaire.type";
 import { ILaissezPasserDetails } from "./laissez-passer.type";
 import { IMariageDetails } from "./mariage.type";
 import { IDecesDetails } from "./deces.type";
@@ -10,6 +10,22 @@ import { IProcurationDetails } from "./procuration.type";
 import { ICertificatNationaliteDetails } from "./certificat-nationalite.type";
 import { IDocument } from "@/features/documents/types/documents.type";
 import { IPaiement } from "@/features/paiement/types/paiement.type";
+
+
+export enum Genre {
+    MALE = 'MALE',
+    FEMALE = 'FEMALE',
+    OTHER = 'OTHER'
+}
+
+export enum SituationMatrimoniale {
+    SINGLE = 'SINGLE',
+    MARRIED = 'MARRIED',
+    DIVORCED = 'DIVORCED',
+    WIDOWED = 'WIDOWED',
+    OTHER = 'OTHER'
+}
+
 
 export enum DemandeStatus {
     NEW = 'NEW',
@@ -68,3 +84,20 @@ export interface IHistoriqueStatutDemande {
     changer?: IUtilisateur;
 }
 
+export interface IDemandeRechercheParams {
+    status?: DemandeStatus;
+    serviceType?: ServiceType;
+    userId?: string;
+    fromDate?: string;
+    toDate?: string;
+    page?: number;
+    limit?: number;
+    ticketNumber?: string;
+}
+
+export interface IDemandeStatsResponse {
+    total: number;
+    completed: number;
+    pending: number;
+    rejected: number;
+}

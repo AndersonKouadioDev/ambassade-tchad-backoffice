@@ -27,7 +27,6 @@ import { getEnumValues } from "@/utils/getEnumValues";
 import { Button } from "@heroui/react";
 import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
 import { useAjouterUtilisateurMutation } from "../../queries/utilisateur.mutation";
-import { processAndValidateFormData } from "ak-zod-form-kit";
 import { toast } from "sonner";
 
 type Props = {
@@ -63,32 +62,13 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
   const onSubmit = useCallback(
     async (formdata: UtilisateurAddDTO) => {
       try {
-        // Validation des données
-        const result = processAndValidateFormData(
-          UtilisateurAddSchema,
-          formdata,
-          {
-            outputFormat: "object",
-          }
-        );
-
-        if (!result.success) {
-          throw new Error(
-            result.errorsInString ||
-              "Une erreur est survenue lors de la validation des données."
-          );
-        }
-
         // Ajout de l'utilisateur
-        await ajouterUtilisateurMutation(result.data as UtilisateurAddDTO);
+        await ajouterUtilisateurMutation(formdata);
 
         // Fermeture de la modal
         handleClose();
       } catch (error) {
-        // Gestion des erreurs de la requête depuis le hook de mutation
-
-        // Surcharge des erreurs de la requête
-        toast.error("Erreur :", {
+        toast.error("Erreur : ", {
           description:
             error instanceof Error ? error.message : "Erreur inconnue",
         });

@@ -5,6 +5,7 @@ import getQueryClient from '@/lib/get-query-client';
 import { obtenirTousUtilisateursAction } from '../actions/utilisateur.action';
 import { IUtilisateursParams } from '../types/utilisateur.type';
 import { utilisateurKeyQuery } from './index.query';
+import { toast } from 'sonner';
 
 const queryClient = getQueryClient();
 
@@ -20,6 +21,11 @@ export const utilisateursListQueryOption = (utilisateursParamsDTO: IUtilisateurs
         staleTime: 30 * 1000,
         refetchOnWindowFocus: false,
         refetchOnMount: true,
+        onError: (error: Error) => {
+            toast.error("Erreur lors de la récupération des utilisateurs:", {
+                description: error.message,
+            });
+        },
     };
 };
 

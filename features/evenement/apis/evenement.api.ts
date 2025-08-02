@@ -62,7 +62,7 @@ export const evenementAPI: IEvenementAPI = {
 
         return api.request<IEvenement>({
             endpoint: `/events/${id}`,
-            method: "PUT",
+            method: "PATCH",
             config: {
                 headers: {
                     "Content-Type": "multipart/form-data"

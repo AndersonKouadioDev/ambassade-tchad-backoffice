@@ -1,15 +1,13 @@
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
 import { getEvenementStatsAction } from "../actions/evenement.action";
+import { evenementKeyQuery } from "./index.query";
 
 const queryClient = getQueryClient();
-
-export const evenementQueryKey = ['evenement', 'stats'] as const;
-
 // Option de requête
 export const evenementStatsQueryOption = () => {
     return {
-        queryKey: evenementQueryKey,
+        queryKey: evenementKeyQuery(),
         queryFn: async () => {
            const data = await getEvenementStatsAction();
            return data;
@@ -30,9 +28,3 @@ export const prefetchEvenementStats = () => {
     return queryClient.prefetchQuery(evenementStatsQueryOption());
 }
 
-// Fonction pour invalider le cache
-export const invalidateEvenementStats = () => {
-    return queryClient.invalidateQueries({
-        queryKey: evenementQueryKey,
-    });
-}   

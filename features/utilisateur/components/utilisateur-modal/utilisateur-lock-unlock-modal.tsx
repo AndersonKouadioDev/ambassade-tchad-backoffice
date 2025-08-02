@@ -51,18 +51,11 @@ export function UtilisateurLockUnlockModal({
     : "Cet utilisateur ne pourra plus se connecter";
 
   const handleLockUnlock = useCallback(async () => {
-    // Vérification de l'ID utilisateur
-    if (!utilisateur?.id) {
-      throw new Error(
-        "Impossible d'effectuer l'action: ID utilisateur manquant."
-      );
-    }
-
     try {
       if (isLocked) {
-        await activerMutation(utilisateur.id);
+        await activerMutation(utilisateur?.id || "");
       } else {
-        await desactiverMutation(utilisateur.id);
+        await desactiverMutation(utilisateur?.id || "");
       }
 
       handleClose();

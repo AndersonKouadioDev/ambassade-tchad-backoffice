@@ -64,13 +64,8 @@ export function UtilisateurUpdateModal({
 
   const onSubmit = useCallback(
     async (data: UtilisateurRoleDTO) => {
-      if (!utilisateur?.id) {
-        throw new Error(
-          "Impossible de modifier le rôle: ID utilisateur manquant."
-        );
-      }
       try {
-        await modifierRoleMutation({ id: utilisateur.id, data });
+        await modifierRoleMutation({ id: utilisateur?.id || "", data });
         handleClose();
       } catch (error) {
         toast.error("Erreur : ", {

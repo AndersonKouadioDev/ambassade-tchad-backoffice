@@ -33,7 +33,6 @@ export const formatImageUrl = (imageUrl: string): string => {
   if (imageUrl.startsWith('/')) {
     return `${baseUrl}${imageUrl}`;
   }
-  
   // Par défaut, ajouter le préfixe de base
   return `${baseUrl}/${imageUrl}`;
 };

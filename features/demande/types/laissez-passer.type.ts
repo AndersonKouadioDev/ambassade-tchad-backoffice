@@ -1,4 +1,4 @@
-import { DocumentJustificationType } from "./carte-consulaire.type ";
+import { DocumentJustificationType } from "./carte-consulaire.type";
 import { IDemande } from "./demande.type";
 
 export interface ILaissezPasserDetails {

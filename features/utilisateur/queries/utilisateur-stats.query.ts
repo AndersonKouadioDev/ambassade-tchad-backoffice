@@ -4,6 +4,7 @@ import {
 import getQueryClient from '@/lib/get-query-client';
 import { obtenirStatsUtilisateursAction } from '../actions/utilisateur.action';
 import { utilisateurKeyQuery } from './index.query';
+import { toast } from 'sonner';
 
 const queryClient = getQueryClient();
 
@@ -17,6 +18,11 @@ export const utilisateurStatsQueryOption = ({ type }: { type: "personnel" | "dem
 
         keepPreviousData: true,
         staleTime: 5 * 60 * 1000,
+        onError: (error: Error) => {
+            toast.error("Erreur lors de la récupération des stats utilisateurs:", {
+                description: error.message,
+            });
+        },
     };
 };
 

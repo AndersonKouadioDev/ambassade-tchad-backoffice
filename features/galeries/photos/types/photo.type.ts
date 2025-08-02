@@ -3,7 +3,7 @@ export interface IPhoto {
     id: string;
     title: string;
     description: string;
-    imageUrl?: Array<string>;
+    imageUrl?: string[];
     createdAt?: Date;
     updatedAt?: Date;
 
@@ -17,6 +17,5 @@ export interface IPhotoRechercheParams {
 }
 
 export interface IPhotoStats {
-    allPhotos: number;
-    allPhotosSeries: { date: string; value: number }[];
+    total: number;
 }

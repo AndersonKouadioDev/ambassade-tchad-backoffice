@@ -19,7 +19,7 @@ export const useInvalidateUtilisateurQuery = () => {
         });
 
         await queryClient.refetchQueries({
-            queryKey: ['utilisateur'],
+            queryKey: utilisateurKeyQuery(),
             type: 'active'
         });
     };

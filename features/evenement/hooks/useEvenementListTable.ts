@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useQueryStates } from 'nuqs';
 import { evenementFiltersClient } from '../filters/evenement.filters';
 import { IEvenementRechercheParams } from "../types/evenement.type";
-import { useEvenementsList, invalidateAllEvenements } from "../queries/evenement-list.query";
+import { useEvenementsList } from "../queries/evenement-list.query";
 import { createEvenement, updateEvenement, deleteEvenement } from "../actions/evenement.action";
 import { EvenementDTO } from "../schemas/evenement.schema";
 import { toast } from "sonner";
@@ -66,7 +66,6 @@ export const useEvenementListTable = () => {
 
       if (result.success) {
         toast.success(result.message);
-        await invalidateAllEvenements();
       } else {
         toast.error(result.message);
       }
@@ -84,7 +83,6 @@ export const useEvenementListTable = () => {
 
       if (result.success) {
         toast.success(result.message);
-        await invalidateAllEvenements();
       } else {
         toast.error(result.message);
       }
@@ -102,7 +100,6 @@ export const useEvenementListTable = () => {
 
       if (result.success) {
         toast.success(result.message);
-        await invalidateAllEvenements();
       } else {
         toast.error(result.message);
       }

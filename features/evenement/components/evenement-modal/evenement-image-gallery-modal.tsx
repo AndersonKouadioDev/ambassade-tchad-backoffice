@@ -81,12 +81,13 @@ export const EvenementImageGalleryModal: React.FC<EvenementImageGalleryModalProp
         )}
 
         {/* Image principale */}
-        <div className="relative w-full h-full flex items-center justify-center p-8">
-          <div className="relative w-full h-full max-w-4xl max-h-full">
+        <div className="relative flex items-center justify-center p-8">
+          <div className="relative aspect-square max-w-4xl">
             <Image
               src={formatImageUrl(images[currentImageIndex])}
               alt={`${title} - Image ${currentImageIndex + 1}`}
               fill
+
               className="object-contain"
               priority
             />

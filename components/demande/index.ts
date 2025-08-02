@@ -12,25 +12,3 @@ export { DemandViewModal } from './modals/demand-view-modal';
 
 // Export des composants existants (rétrocompatibilité)
 export { default as DemandedList } from './demande-list';
-export { default as ViewDemand } from './demande-modal/view-demand';
-export { default as EditDemand } from './demande-modal/edit-demand';
-
-// Export des types
-export type {
-  ServiceType,
-  RequestStatus,
-  Request,
-  CreateRequestData,
-  UpdateStatusData,
-  ServiceFormConfig,
-  FormField,
-  FormSection
-} from '../../types/demande.types';
-
-export {
-  SERVICE_LABELS,
-  STATUS_LABELS,
-  STATUS_COLORS,
-  ServiceType as ServiceTypeEnum,
-  RequestStatus as RequestStatusEnum
-} from '../../types/demande.types';

@@ -1,11 +1,7 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useQueryStates } from 'nuqs';
 import { IPhotoRechercheParams } from "../types/photo.type";
 import { usePhotosList } from "../queries/photo-list.query";
-import { createPhoto, updatePhoto, deletePhoto } from "../actions/photo.action";
-import { PhotoDTO } from "../schemas/photo.schema";
-import { toast } from "sonner";
-import { invalidateAllPhotos } from "../queries/photo-details.query";
 import { photoFiltersClient } from "../filters/photo.filters";
 
 export const usePhotoCardList = () => {
@@ -20,18 +16,15 @@ export const usePhotoCardList = () => {
       page: Number(filters.page) || 1,
       limit: Number(filters.limit) || 12,
     };
-
-    // Ajouter seulement les paramètres qui ont des valeurs valides
-    if (filters.title && filters.title.trim()) {
+  
+    if (filters.title?.trim()) {
       params.title = filters.title.trim();
     }
-
-    if (filters.description && filters.description.trim()) {
+  
+    if (filters.description?.trim()) {
       params.description = filters.description.trim();
     }
-
-    // Si published est 'all' ou undefined, ne pas l'inclure du tout
-
+  
     return params;
   }, [filters]);
 
@@ -39,67 +32,12 @@ export const usePhotoCardList = () => {
 
   console.log('usePhotoCardList - React Query result:', { data, isLoading, error });
 
-  const handleTextFilterChange = (filterName: 'title' | 'description', value: string) => {
+  const handleTextFilterChange =(filterName: 'title' | 'description', value: string) => {
     setFilters((prev: any) => ({
       ...prev,
       [filterName]: value,
       page: 1, // Réinitialise à la première page
     }));
-  };
-
-
-  const handleCreate = async (formData: PhotoDTO, formDataToSend?: FormData) => {
-    try {
-      const result = await createPhoto(formData as any);
-
-      if (result.success) {
-        toast.success(result.message);
-        await invalidateAllPhotos();
-      } else {
-        toast.error(result.message);
-      }
-
-      return result;
-    } catch (error) {
-      toast.error("Erreur lors de la création de la photo");
-      throw error;
-    }
-  };
-
-  const handleUpdate = async (id: string, formData: PhotoDTO) => {
-    try {
-      const result = await updatePhoto(id, formData as any);
-
-      if (result.success) {
-        toast.success(result.message);
-        await invalidateAllPhotos();
-      } else {
-        toast.error(result.message);
-      }
-
-      return result;
-    } catch (error) {
-      toast.error("Erreur lors de la mise à jour de la photo");
-      throw error;
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const result = await deletePhoto(id);
-
-      if (result.success) {
-        toast.success(result.message);
-        await invalidateAllPhotos();
-      } else {
-        toast.error(result.message);
-      }
-
-      return result;
-    } catch (error) {
-      toast.error("Erreur lors de la suppression de la photo");
-      throw error;
-    }
   };
 
   // Extraction des données de pagination
@@ -144,9 +82,6 @@ export const usePhotoCardList = () => {
     handleTextFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
-    handleCreate,
-    handleUpdate,
-    handleDelete,
   };
 };
 

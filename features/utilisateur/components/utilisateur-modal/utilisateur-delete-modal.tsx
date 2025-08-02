@@ -34,15 +34,11 @@ export function UtilisateurDeleteModal({
   }, [isPending, setIsOpen]);
 
   const handleDelete = useCallback(async () => {
-    if (!utilisateur?.id) {
-      throw new Error("Impossible de supprimer l'utilisateur: ID manquant.");
-    }
-
     try {
-      await supprimerUtilisateurMutation(utilisateur.id);
+      await supprimerUtilisateurMutation(utilisateur?.id || "");
       handleClose();
     } catch (error) {
-      toast.error("Une erreur : ", {
+      toast.error("Erreur : ", {
         description: error instanceof Error ? error.message : "Erreur inconnue",
       });
     }

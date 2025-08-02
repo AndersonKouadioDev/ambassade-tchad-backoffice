@@ -1,15 +1,14 @@
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
 import { getPhotoStatsAction } from "../actions/photo.action";
+import { photoKeyQuery } from "./index.query";
 
 const queryClient = getQueryClient();
-
-export const photoQueryKey = ['photo', 'stats'] as const;
 
 // Option de requête
 export const photoStatsQueryOption = () => {
     return {        
-        queryKey: photoQueryKey,
+        queryKey: photoKeyQuery(),
         queryFn: async () => {
             const data = await getPhotoStatsAction();
             return data;
@@ -28,9 +27,4 @@ export const prefetchPhotoStats = () => {
     return queryClient.prefetchQuery(photoStatsQueryOption());
 }
 
-// Fonction pour invalider le cache
-export const invalidatePhotoStats = () => {
-    return queryClient.invalidateQueries({
-        queryKey: photoQueryKey,
-    });
-}   
+

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatImageUrl } from "@/features/actualites/utils/image-utils";
 
 interface ViewModalProps {
   isOpen: boolean;
@@ -57,7 +58,7 @@ export const ViewModal: React.FC<ViewModalProps> = ({
           {(type === 'actualite' || type === 'evenement') && data.imageUrl && data.imageUrl.length > 0 && (
             <div className="relative h-64 w-full overflow-hidden">
               <Image
-                src={data.imageUrl[0]} // Utiliser la première image pour les événements
+               src={formatImageUrl(data.imageUrl[0])}
                 alt={data.title}
                 fill
                 className="object-cover"

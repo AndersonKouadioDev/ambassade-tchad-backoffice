@@ -12,8 +12,6 @@ import { ActualitePagination } from "./actualite-list/actualite-pagination";
 import { ActualiteImageGalleryModal } from "./actualite-modal/evenement-image-gallery-modal";
 import { ActualiteViewModal } from "./actualite-modal/evenement-view-modal";
 
-
-
 export const ActualiteList: React.FC = () => {
   const router = useRouter();
   const {

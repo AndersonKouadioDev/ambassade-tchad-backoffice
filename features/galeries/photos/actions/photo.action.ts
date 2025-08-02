@@ -116,7 +116,7 @@ export async function getPhotoDetailAction(id: string) {
     if (!id || id.trim() === "") {
         throw new Error("ID de la photo requis.");
     }
-            return photoAPI.getById(id);
+    return photoAPI.getById(id);
 }
 
 export async function getPhotoTousAction(params: IPhotoRechercheParams) {

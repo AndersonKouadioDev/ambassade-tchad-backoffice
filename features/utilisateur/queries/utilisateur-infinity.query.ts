@@ -7,6 +7,7 @@ import getQueryClient from '@/lib/get-query-client';
 import { obtenirTousUtilisateursAction } from '../actions/utilisateur.action';
 import { IUtilisateursParams } from '../types/utilisateur.type';
 import { utilisateurKeyQuery } from './index.query';
+import { toast } from 'sonner';
 
 const queryClient = getQueryClient();
 
@@ -27,6 +28,11 @@ export const utilisateursInfinityQueryOption = (utilisateursParamsDTO: IUtilisat
         getNextPageParam: (lastPage: PaginatedResponse<IUtilisateur>) => {
             const hasNextPage = lastPage.meta.totalPages > lastPage.meta.page;
             return hasNextPage ? lastPage.meta.page + 1 : undefined;
+        },
+        onError: (error: Error) => {
+            toast.error("Erreur lors de la récupération des utilisateurs:", {
+                description: error.message,
+            });
         },
     };
 };

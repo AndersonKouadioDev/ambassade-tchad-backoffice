@@ -4,6 +4,7 @@ import {
 import getQueryClient from '@/lib/get-query-client';
 import { obtenirUnUtilisateurAction } from '../actions/utilisateur.action';
 import { utilisateurKeyQuery } from './index.query';
+import { toast } from 'sonner';
 
 const queryClient = getQueryClient();
 
@@ -13,9 +14,15 @@ export const utilisateurQueryOption = (id: string) => {
     return {
         queryKey: utilisateurKeyQuery("detail", id),
         queryFn: async () => {
+            if (!id) throw new Error("L'identifiant utilisateur est requis");
             return obtenirUnUtilisateurAction(id);
         },
         enabled: !!id,
+        onError: (error: Error) => {
+            toast.error("Erreur lors de la récupération de l'utilisateur:", {
+                description: error.message,
+            });
+        },
     };
 };
 

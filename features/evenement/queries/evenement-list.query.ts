@@ -2,18 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
 import { IEvenementRechercheParams } from "../types/evenement.type";
 import {getEvenementTousAction } from "../actions/evenement.action";
+import { evenementKeyQuery } from "./index.query";
 
 
 
 const queryClient = getQueryClient();
 
-// la clé de cache
-const evenementQueryKey = ['evenement'] as const;
 
 // Option de requête
 export const evenementListQueryOption = (evenementSearchParams: IEvenementRechercheParams) => {
     return {
-           queryKey: [...evenementQueryKey, 'list', evenementSearchParams],
+           queryKey: evenementKeyQuery('list',evenementSearchParams),
            queryFn: async () => {
                const data = await getEvenementTousAction(evenementSearchParams);
                return data;
@@ -35,23 +34,3 @@ export const prefetchEvenementsList = (evenementSearchParams: IEvenementRecherch
     return queryClient.prefetchQuery(evenementListQueryOption(evenementSearchParams));
 }
 
-// Fonction pour invalider le cache
-export const invalidateEvenementsList = (evenementSearchParams: IEvenementRechercheParams) => {
-    return queryClient.invalidateQueries({
-        queryKey: [...evenementQueryKey, 'list', evenementSearchParams],
-    });
-}
-
-// Fonction pour invalider tous les événements
-export const invalidateAllEvenements = () => {
-    return queryClient.invalidateQueries({  
-        queryKey: evenementQueryKey,
-    });
-}
-
-// Fonction pour invalider un événement spécifique
-export const invalidateEvenement = (id: string) => {
-    return queryClient.invalidateQueries({  
-        queryKey: [...evenementQueryKey, 'detail', id],
-    });
-}   
