@@ -23,13 +23,12 @@ interface PhotoCardProps {
   photo: IPhoto;
   onView: (photo: IPhoto) => void;
   onEdit: (photo: IPhoto) => void;
-  onDelete: (photo: IPhoto) => void;
 }
 
 export const PhotoCard: React.FC<PhotoCardProps> = ({
   photo,
   onView,
-  onDelete,
+
 }) => {
   const [imageError, setImageError] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
@@ -42,7 +41,6 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
 
   const handleConfirmDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onDelete(photo);
     setShowDeleteAlert(false);
   };
 

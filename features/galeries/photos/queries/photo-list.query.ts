@@ -2,18 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
 import { IPhotoRechercheParams } from "../types/photo.type";
 import { getPhotoTousAction } from "../actions/photo.action";
+import { photoKeyQuery } from "./index.query";
 
 
 
 const queryClient = getQueryClient();
 
-// la clé de cache
-const photoQueryKey = ['photo'] as const;
 
 // Option de requête
 export const photoListQueryOption = (photoSearchParams: IPhotoRechercheParams) => {
     return {
-        queryKey: [...photoQueryKey, 'list', photoSearchParams],    
+        queryKey: photoKeyQuery('list', photoSearchParams),    
         queryFn: async () => {
             const data = await getPhotoTousAction(photoSearchParams);
             return data;
@@ -34,16 +33,5 @@ export const prefetchPhotosList = (photoSearchParams: IPhotoRechercheParams) => 
     return queryClient.prefetchQuery(photoListQueryOption(photoSearchParams));
 }
 
-// Fonction pour invalider le cache
-export const invalidatePhotosList = (photoSearchParams: IPhotoRechercheParams) => {
-    return queryClient.invalidateQueries({
-        queryKey: [...photoQueryKey, 'list', photoSearchParams],
-    });
-}
 
-// Fonction pour invalider tous les événements
-export const invalidateAllEvenements = () => {
-    return queryClient.invalidateQueries({  
-        queryKey: photoQueryKey,
-    });
-}   
+   

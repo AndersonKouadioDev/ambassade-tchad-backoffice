@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Eye, Image as ImageIcon } from "lucide-react";
 import { IEvenement } from "../../types/evenement.type";
+import { formatImageUrl } from "@/features/actualites/utils/image-utils";
 
 interface EvenementViewModal {
   evenement: IEvenement | null;
@@ -39,7 +40,7 @@ export const EvenementViewModal: React.FC<EvenementViewModal> = ({
     return (
       <div className="relative h-56 w-full overflow-hidden">
         <Image
-          src={evenement.imageUrl[0]}
+          src={formatImageUrl(evenement.imageUrl[0])}
           alt={evenement.title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"

@@ -13,19 +13,18 @@ import { PhotoCard } from "./photo-list/photo-card";
 import { PhotoPagination } from "./photo-pagination/photo-pagination";
 import { PhotoViewModal } from "./photo-modal/photo-view-modal";
 import { PhotoImageGalleryModal } from "./photo-modal/photo-image-gallery-modal";
-import error from "next/error";
 
 export const PhotoList: React.FC = () => {
   const router = useRouter();
   const {
     data,
     isLoading,
+    error,
     filters,
     pagination,
     handleTextFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
-    handleDelete,
   } = usePhotoCardList(); // Utiliser le hook des photos à la place
 
   const [selectedPhoto, setSelectedPhoto] = useState<IPhoto | null>(null);
@@ -42,9 +41,6 @@ export const PhotoList: React.FC = () => {
     router.push(`/contenu/photo/edit/${photo.id}`);
   };
 
-  const handleDeletePhoto= async (photo: IPhoto) => {
-    await handleDelete(photo.id);
-  };
 
   // En
   const handleCreatePhoto = () => {
@@ -121,7 +117,6 @@ export const PhotoList: React.FC = () => {
                 photo={photo}
                 onView={handleView}
                 onEdit={handleEdit}
-                onDelete={handleDeletePhoto}
               />
             ))}
           </div>

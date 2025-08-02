@@ -18,11 +18,7 @@ export const photoAPI: IPhotoAPI = {
         return api.request<PaginatedResponse<IPhoto>>({
             endpoint: `/photos`,
             method: "GET",
-            searchParams: {
-                ...params as unknown as SearchParams,
-            },
-            
-
+            searchParams: params as SearchParams
         });
     },
 

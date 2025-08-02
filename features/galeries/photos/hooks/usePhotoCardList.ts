@@ -1,11 +1,7 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useQueryStates } from 'nuqs';
 import { IPhotoRechercheParams } from "../types/photo.type";
 import { usePhotosList } from "../queries/photo-list.query";
-import { createPhoto, updatePhoto, deletePhoto } from "../actions/photo.action";
-import { PhotoDTO } from "../schemas/photo.schema";
-import { toast } from "sonner";
-import { invalidateAllPhotos } from "../queries/photo-details.query";
 import { photoFiltersClient } from "../filters/photo.filters";
 
 export const usePhotoCardList = () => {
@@ -42,61 +38,6 @@ export const usePhotoCardList = () => {
       [filterName]: value,
       page: 1, // Réinitialise à la première page
     }));
-  };
-
-
-  const handleCreate = async (formData: PhotoDTO, formDataToSend?: FormData) => {
-    try {
-      const result = await createPhoto(formData as any);
-
-      if (result.success) {
-        toast.success(result.message);
-        await invalidateAllPhotos();
-      } else {
-        toast.error(result.message);
-      }
-
-      return result;
-    } catch (error) {
-      toast.error("Erreur lors de la création de la photo");
-      throw error;
-    }
-  };
-
-  const handleUpdate = async (id: string, formData: PhotoDTO) => {
-    try {
-      const result = await updatePhoto(id, formData as any);
-
-      if (result.success) {
-        toast.success(result.message);
-        await invalidateAllPhotos();
-      } else {
-        toast.error(result.message);
-      }
-
-      return result;
-    } catch (error) {
-      toast.error("Erreur lors de la mise à jour de la photo");
-      throw error;
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const result = await deletePhoto(id);
-
-      if (result.success) {
-        toast.success(result.message);
-        await invalidateAllPhotos();
-      } else {
-        toast.error(result.message);
-      }
-
-      return result;
-    } catch (error) {
-      toast.error("Erreur lors de la suppression de la photo");
-      throw error;
-    }
   };
 
   // Extraction des données de pagination
@@ -141,9 +82,6 @@ export const usePhotoCardList = () => {
     handleTextFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
-    handleCreate,
-    handleUpdate,
-    handleDelete,
   };
 };
 

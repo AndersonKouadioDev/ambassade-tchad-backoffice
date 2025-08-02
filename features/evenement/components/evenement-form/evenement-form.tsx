@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useTransition } from "react";
+import React, { useState, useRef, useTransition, isValidElement } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X, Image as ImageIcon, Trash2, Eye } from "lucide-react";
@@ -10,16 +10,13 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { processAndValidateFormData } from "ak-zod-form-kit";
-import { cn, DatePicker, Input, Textarea } from "@heroui/react";
+import { cn, Input, Textarea } from "@heroui/react";
 import { IEvenement } from "../../types/evenement.type";
 import { EvenementDTO, evenementSchema } from "../../schemas/evenement.schema";
 import {
   createEvenement,
   updateEvenement,
 } from "../../actions/evenement.action";
-import { invalidateAllEvenements, invalidateEvenement } from "../../queries/evenement-list.query";
-import getQueryClient from "@/lib/get-query-client";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
@@ -30,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { useInvalidateEvenementQuery } from "../../queries/index.query";
 
 //
 
@@ -51,14 +49,15 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
   const router = useRouter();
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const queryClient = getQueryClient();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    evenement?.eventDate instanceof Date 
-      ? evenement.eventDate 
-      : evenement?.eventDate 
-        ? new Date(evenement.eventDate)
-        : new Date()
+    evenement?.eventDate instanceof Date
+      ? evenement.eventDate
+      : evenement?.eventDate
+      ? new Date(evenement.eventDate)
+      : new Date()
   );
+
+  const invalideEvenement = useInvalidateEvenementQuery();
 
   const {
     register,
@@ -72,10 +71,10 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
       title: evenement?.title || "",
       description: evenement?.description || "",
       location: evenement?.location || "",
-      eventDate: evenement?.eventDate 
-        ? (evenement.eventDate instanceof Date 
-            ? evenement.eventDate.toISOString() 
-            : evenement.eventDate)
+      eventDate: evenement?.eventDate
+        ? evenement.eventDate instanceof Date
+          ? evenement.eventDate.toISOString()
+          : evenement.eventDate
         : "",
       published: evenement?.published || false,
     },
@@ -143,7 +142,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
 
       // Créer le FormData directement
       const formData = createFormData(submitData);
-      
+
       if (evenement) {
         res = await updateEvenement(evenement.id, formData);
       } else {
@@ -151,29 +150,10 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
       }
 
       if (res.success) {
-        toast.success(res.message);
-        
-        // Mettre à jour le cache optimistiquement
-        if (evenement) {
-          queryClient.setQueryData(
-            ['evenement', 'detail', evenement.id],
-            {
-              ...evenement,
-              title: data.title,
-              description: data.description,
-              eventDate: new Date(data.eventDate),
-              location: data.location,
-              published: data.published,
-            }
-          );
-        }
-        
-        router.push("/contenu/evenement");
         // Invalider tous les événements et l'événement spécifique
-        await Promise.all([
-          invalidateAllEvenements(),
-          evenement ? invalidateEvenement(evenement.id) : Promise.resolve()
-        ]);
+        await invalideEvenement();
+        toast.success(res.message);
+        router.push("/contenu/evenement");
       } else {
         toast.error(res.message);
       }
@@ -181,54 +161,72 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle>
-          {evenement ? "Modifier l'événement" : "Créer un nouvel événement"}
+    <Card className="w-full max-w-5xl mx-auto shadow-md">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-semibold">
+          {evenement ? "Modifier l'événement" : "Créer un événement"}
         </CardTitle>
       </CardHeader>
+
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-6">
-          {/* Titre */}
-          <div className="space-y-2">
-            <Input
-              id="title"
-              {...register("title")}
-              placeholder="Entrez le titre de l'actualité..."
-              className={errors.title ? "border-red-500" : ""}
-              label="Titre de l'actualité"
-            />
-            {errors.title && (
-              <p className="text-sm text-red-500">{errors.title.message}</p>
-            )}
+        <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Titre */}
+            <div className="space-y-2">
+              <Label htmlFor="title">Titre de l'événement *</Label>
+              <Input
+                id="title"
+                {...register("title")}
+                placeholder="Ex: Conférence annuelle..."
+                className={cn("!text-black placeholder:text-gray-500",errors.title && "border-red-500")}
+              />
+              {errors.title && (
+                <p className="text-xs text-red-500">{errors.title.message}</p>
+              )}
+            </div>
+
+            {/* Lieu */}
+            <div className="space-y-2">
+              <Label htmlFor="location">Lieu *</Label>
+              <Input
+                id="location"
+                {...register("location")}
+                placeholder="Ex: Paris, Salle 3"
+                className={cn("text-red placeholder:text-gray-500",errors.location && "border-red-500")}
+              />
+              {errors.location && (
+                <p className="text-xs text-red-500">
+                  {errors.location.message}
+                </p>
+              )}
+            </div>
           </div>
-          {/* Contenu */}
+
+          {/* Description */}
           <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
             <Textarea
-              id="content"
+              id="description"
               {...register("description")}
-              placeholder="Rédigez la description de l'évènement..."
-              rows={6}
-              className={errors.description ? "border-red-500" : ""}
-              label="Description de l'évènement"
+              rows={5}
+              placeholder="Détaillez ici l'événement..."
+              className={cn("!text-black placeholder:text-gray-500",errors.description && "border-red-500")}
             />
             {errors.description && (
-              <p className="text-sm text-red-500">
+              <p className="text-xs text-red-500">
                 {errors.description.message}
               </p>
             )}
           </div>
-          {/* Date de l'événement */}
 
+          {/* Date */}
           <div className="space-y-2">
-            <label htmlFor="eventDate" className="block text-sm font-medium">
-              Date de l'évènement *
-            </label>
+            <Label htmlFor="eventDate">Date de l'vénement *</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full justify-start text-left font-normal"
+                  className="w-full text-left justify-start"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {selectedDate
@@ -247,132 +245,84 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
                     }
                   }}
                 />
-                <input type="hidden" {...register("eventDate")} />
               </PopoverContent>
             </Popover>
-          </div>
-
-          {/* Lieu */}
-          <div className="space-y-2 ">
-            <Input
-              id="location"
-              {...register("location")}
-              placeholder="Entrez le lieu de l'évènement..."
-              className={errors.location ? "border-red-500" : ""}
-              label="Lieu de l'évènement*"
-            />
-            {errors.location && (
-              <p className="text-sm text-red-500">{errors.location.message}</p>
+            <input type="hidden" {...register("eventDate")} />
+            {errors.eventDate && (
+              <p className="text-xs text-red-500">{errors.eventDate.message}</p>
             )}
           </div>
+
           {/* Images */}
-          <div className="space-y-4">
-            {/* Zone d'upload */}
+          <div className="space-y-2">
+            <Label>Images</Label>
             <div
-              className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer"
+              className="border-2 border-dashed p-6 rounded-lg text-center hover:border-gray-400 cursor-pointer"
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
             >
               <input
-                ref={fileInputRef}
                 type="file"
                 multiple
                 accept="image/*"
-                name="images"
+                ref={fileInputRef}
                 onChange={handleFileSelect}
                 className="hidden"
               />
-
-              <div className="space-y-4">
-                <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                  <Upload className="w-8 h-8 text-gray-400" />
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Glissez-déposez vos images ici
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    ou cliquez pour sélectionner des fichiers image
-                  </p>
-                  <p className="text-xs text-gray-400 mt-2">
-                    Seuls les fichiers image sont acceptés
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-                  <span>Formats supportés :</span>
-                  <Badge className="text-xs">JPG</Badge>
-                  <Badge className="text-xs">PNG</Badge>
-                </div>
-              </div>
+              <Upload className="mx-auto text-gray-400 w-10 h-10" />
+              <p className="mt-2 text-sm text-gray-500">
+                Glissez-déposez ou cliquez pour ajouter des images
+              </p>
             </div>
 
-            {/* Images affichées */}
             {imageFiles.length > 0 && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-medium">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-medium">
                     Images sélectionnées ({imageFiles.length})
                   </h4>
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
+                    className="text-red-500"
                     onClick={() => setImageFiles([])}
-                    className="text-red-600 hover:text-red-700"
                   >
-                    <Trash2 className="w-4 h-4 mr-2" />
+                    <Trash2 className="w-4 h-4 mr-1" />
                     Tout supprimer
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {imageFiles.map((imageFile) => (
-                    <div key={imageFile.id} className="relative group">
-                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {imageFiles.map((img) => (
+                    <div key={img.id} className="relative group">
+                      <div className="aspect-square border rounded overflow-hidden bg-gray-100">
                         <Image
-                          src={imageFile.preview}
-                          alt={imageFile.name}
+                          src={img.preview}
+                          alt={img.name}
                           fill
-                          className="w-full h-full object-cover"
+                          className="object-cover"
                         />
-
-                        {/* Overlay avec actions */}
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <div className="flex gap-2">
-                            <Button
-                              type="button"
-                              color="secondary"
-                              size="sm"
-                              className="w-8 h-8 p-0 "
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open(imageFile.preview, "_blank");
-                              }}
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="w-4 h-8 p-0"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleImageRemove(imageFile.id);
-                              }}
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          </div>
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex justify-center items-center gap-2 transition">
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => window.open(img.preview, "_blank")}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => handleImageRemove(img.id)}
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
                         </div>
                       </div>
-
-                      {/* Nom du fichier */}
-                      <p className="text-xs text-gray-600 mt-1 truncate text-center">
-                        {imageFile.name}
+                      <p className="text-xs truncate text-center mt-1">
+                        {img.name}
                       </p>
                     </div>
                   ))}
@@ -380,26 +330,26 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
               </div>
             )}
           </div>
-          {/* Statut de publication */}
-          <div className="flex items-center space-x-2">
+
+          {/* Switch publié */}
+          <div className="flex items-center gap-3">
             <Switch
               id="published"
               checked={watchedPublished}
               onCheckedChange={(checked) => setValue("published", checked)}
             />
-            <Label htmlFor="published">Publier l&apos;actualité</Label>
-            <Badge color={watchedPublished ? "default" : "secondary"}>
-              {watchedPublished ? "Publié" : "Brouillon"}
-            </Badge>
+            <Label htmlFor="published">Publier l’événement</Label>
+            <Badge>{watchedPublished ? "Publié" : "Brouillon"}</Badge>
           </div>
-          {/* Boutons d'action */}
-          <div className="flex gap-3 justify-end">
-            <Button type="button" variant="ghost" onClick={handleCancel}>
+
+          {/* Boutons */}
+          <div className="flex justify-end gap-2">
+            <Button variant="ghost" onClick={handleCancel}>
               Annuler
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading
-                ? "Enregistrement..."
+                ? "Enregistrement en cours..."
                 : evenement
                 ? "Modifier"
                 : "Créer"}
