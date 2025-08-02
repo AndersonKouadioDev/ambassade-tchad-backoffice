@@ -11,7 +11,7 @@ import { ICertificatNationaliteDetails } from "./certificat-nationalite.type";
 import { IDocument } from "@/features/documents/types/documents.type";
 import { IPaiement } from "@/features/paiement/types/paiement.type";
 
-export enum RequestStatus {
+export enum DemandeStatus {
     NEW = 'NEW',
     IN_REVIEW_DOCS = 'IN_REVIEW_DOCS',
     PENDING_ADDITIONAL_INFO = 'PENDING_ADDITIONAL_INFO',
@@ -31,7 +31,7 @@ export interface IDemande {
     ticketNumber: string;
     userId: string;
     serviceType: ServiceType;
-    status: RequestStatus;
+    status: DemandeStatus;
     submissionDate: Date;
     completionDate?: Date;
     issuedDate?: Date;
@@ -58,8 +58,8 @@ export interface IDemande {
 export interface IHistoriqueStatutDemande {
     id: string;
     requestId: string;
-    oldStatus?: RequestStatus;
-    newStatus: RequestStatus;
+    oldStatus?: DemandeStatus;
+    newStatus: DemandeStatus;
     changerId: string;
     changedAt: Date;
     reason?: string;

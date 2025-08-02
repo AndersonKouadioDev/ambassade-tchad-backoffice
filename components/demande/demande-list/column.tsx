@@ -10,12 +10,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import type { Demande, RequestStatus, ServiceType } from "@/types/demande.types"
 import { format, isValid } from "date-fns"
 import { fr } from "date-fns/locale"
 import { useTranslations } from "next-intl"
+import { IDemande , DemandeStatus} from "@/features/demande/types/demande.type"
+import { ServiceType } from "@/features/service/types/service.type"
 
-export type DataProps = Demande
+export type DataProps = IDemande
 
 // Fonction utilitaire pour formater les dates de manière sécurisée
 const formatSafeDate = (dateValue: any, formatString: string = "dd/MM/yyyy") => {
@@ -37,8 +38,8 @@ const formatSafeDate = (dateValue: any, formatString: string = "dd/MM/yyyy") => 
 };
 
 // Fonction utilitaire pour obtenir les couleurs des statuts
-const getStatusColor = (status: RequestStatus): string => {
-  const colorMap: Record<RequestStatus, string> = {
+const getStatusColor = (status: DemandeStatus): string => {
+  const colorMap: Record<DemandeStatus, string> = {
     NEW: "bg-blue-100 text-blue-700 border-blue-200",
     IN_REVIEW_DOCS: "bg-yellow-100 text-yellow-700 border-yellow-200",
     PENDING_ADDITIONAL_INFO: "bg-orange-100 text-orange-700 border-orange-200",
@@ -49,6 +50,8 @@ const getStatusColor = (status: RequestStatus): string => {
     READY_FOR_PICKUP: "bg-purple-100 text-purple-700 border-purple-200",
     DELIVERED: "bg-green-100 text-green-700 border-green-200",
     ARCHIVED: "bg-slate-100 text-slate-700 border-slate-200",
+    EXPIRED: "bg-red-100 text-red-700 border-red-200",
+    RENEWAL_REQUESTED: "bg-yellow-100 text-yellow-700 border-yellow-200",
   }
   return colorMap[status] || "bg-gray-100 text-gray-700 border-gray-200"
 }
@@ -56,8 +59,8 @@ const getStatusColor = (status: RequestStatus): string => {
 // Hook utilitaire pour obtenir le libellé des statuts
 const useStatusLabel = () => {
   const t = useTranslations("gestionDemande.statuses")
-  return (status: RequestStatus): string => {
-    const labelMap: Record<RequestStatus, string> = {
+  return (status: DemandeStatus): string => {
+    const labelMap: Record<DemandeStatus, string> = {
       NEW: t("new"),
       IN_REVIEW_DOCS: t("inReviewDocs"),
       PENDING_ADDITIONAL_INFO: t("pendingAdditionalInfo"),
@@ -68,6 +71,8 @@ const useStatusLabel = () => {
       READY_FOR_PICKUP: t("readyForPickup"),
       DELIVERED: t("delivered"),
       ARCHIVED: t("archived"),
+      EXPIRED: t("expired"),
+      RENEWAL_REQUESTED: t("renewalRequested"),
     }
     return labelMap[status] || status
   }
@@ -157,7 +162,7 @@ export const useColumns = (): ColumnDef<DataProps>[] => {
     accessorKey: "status",
     header: t("status"),
     cell: ({ row }) => {
-      const status = row.getValue<RequestStatus>("status")
+      const status = row.getValue<DemandeStatus>("status")
       return (
         <Badge className={cn("rounded-full px-3 py-1 text-xs font-medium border", getStatusColor(status))}>
           {getStatusLabel(status)}
@@ -196,9 +201,9 @@ export const useColumns = (): ColumnDef<DataProps>[] => {
     cell: ({ row, table }) => {
       const demande = row.original
       const meta = table.options.meta as {
-        onView?: (demande: Demande) => void
-        onEdit?: (demande: Demande) => void
-        onDelete?: (demande: Demande) => void
+        onView?: (demande: IDemande) => void
+        onEdit?: (demande: IDemande) => void
+        onDelete?: (demande: IDemande) => void
       }
       
       return (

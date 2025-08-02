@@ -46,7 +46,6 @@ import {
   Calendar,
   Clock,
   Settings,
-  MoreHorizontal,
   CheckCircle,
   XCircle,
   AlertCircle,
@@ -59,11 +58,7 @@ import {
 import { ViewDemandModal } from "../modals/view-demand-modal";
 import { EditDemandModal } from "../modals/edit-demand-modal";
 import { DeleteDemandeModal } from "../demande-modal/delete-demand";
-import type {
-  ServiceType,
-  RequestStatus,
-  Demande,
-} from "@/types/demande.types";
+
 import {
   useDemandesList,
   useUpdateDemandeStatus,
@@ -75,10 +70,20 @@ import Loader from "@/components/loader";
 import { useTranslations } from "next-intl";
 import { formatSafeDate } from "@/lib/date-utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { DemandeStatus, IDemande } from "@/features/demande/types/demande.type";
+import { ServiceType } from "@/features/service/types/service.type";
 
-// Mapping des statuts avec icônes et couleurs
-const getStatusInfo = (status: RequestStatus) => {
-  const statusMap = {
+const getStatusInfo = (status: DemandeStatus) => {
+  const statusMap: Record<
+    DemandeStatus,
+    {
+      icon: any;
+      color: string;
+      textColor: string;
+      bgColor: string;
+      borderColor: string;
+    }
+  > = {
     NEW: {
       icon: AlertCircle,
       color: "bg-blue-500",
@@ -149,9 +154,130 @@ const getStatusInfo = (status: RequestStatus) => {
       bgColor: "bg-gray-50 dark:bg-gray-900/20",
       borderColor: "border-gray-200 dark:border-gray-800",
     },
+    // Added missing statuses
+    EXPIRED: {
+      icon: XCircle,
+      color: "bg-red-600",
+      textColor: "text-red-700",
+      bgColor: "bg-red-50 dark:bg-red-900/20",
+      borderColor: "border-red-300 dark:border-red-800",
+    },
+    RENEWAL_REQUESTED: {
+      icon: RefreshCw,
+      color: "bg-indigo-500",
+      textColor: "text-indigo-600",
+      bgColor: "bg-indigo-50 dark:bg-indigo-900/20",
+      borderColor: "border-indigo-200 dark:border-indigo-800",
+    },
   };
   return statusMap[status] || statusMap.NEW;
 };
+
+// Fonction utilitaire pour les libellés de statut
+const getStatusLabel = (status: DemandeStatus): string => {
+  const labelMap: Record<DemandeStatus, string> = {
+    NEW: "Nouveau",
+    IN_REVIEW_DOCS: "Révision docs",
+    PENDING_ADDITIONAL_INFO: "Info requise",
+    APPROVED_BY_AGENT: "Approuvé agent",
+    APPROVED_BY_CHEF: "Approuvé chef",
+    APPROVED_BY_CONSUL: "Approuvé consul",
+    REJECTED: "Rejeté",
+    READY_FOR_PICKUP: "Prêt",
+    DELIVERED: "Livré",
+    ARCHIVED: "Archivé",
+    // Added missing statuses
+    EXPIRED: "Expiré",
+    RENEWAL_REQUESTED: "Renouvellement demandé",
+  };
+  return labelMap[status] || status;
+};
+
+// // Mapping des statuts avec icônes et couleurs
+// const getStatusInfo = (status: DemandeStatus) => {
+//   const statusMap: Record<
+//     DemandeStatus,
+//     {
+//       icon: any;
+//       color: string;
+//       textColor: string;
+//       bgColor: string;
+//       borderColor: string;
+//     }
+//   > = {
+//     NEW: {
+//       icon: AlertCircle,
+//       color: "bg-blue-500",
+//       textColor: "text-blue-600",
+//       bgColor: "bg-blue-50 dark:bg-blue-900/20",
+//       borderColor: "border-blue-200 dark:border-blue-800",
+//     },
+//     IN_REVIEW_DOCS: {
+//       icon: Clock,
+//       color: "bg-yellow-500",
+//       textColor: "text-yellow-600",
+//       bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
+//       borderColor: "border-yellow-200 dark:border-yellow-800",
+//     },
+//     PENDING_ADDITIONAL_INFO: {
+//       icon: AlertCircle,
+//       color: "bg-orange-500",
+//       textColor: "text-orange-600",
+//       bgColor: "bg-orange-50 dark:bg-orange-900/20",
+//       borderColor: "border-orange-200 dark:border-orange-800",
+//     },
+//     APPROVED_BY_AGENT: {
+//       icon: CheckCircle,
+//       color: "bg-green-500",
+//       textColor: "text-green-600",
+//       bgColor: "bg-green-50 dark:bg-green-900/20",
+//       borderColor: "border-green-200 dark:border-green-800",
+//     },
+//     APPROVED_BY_CHEF: {
+//       icon: CheckCircle,
+//       color: "bg-green-600",
+//       textColor: "text-green-600",
+//       bgColor: "bg-green-50 dark:bg-green-900/20",
+//       borderColor: "border-green-200 dark:border-green-800",
+//     },
+//     APPROVED_BY_CONSUL: {
+//       icon: CheckCircle,
+//       color: "bg-green-700",
+//       textColor: "text-green-600",
+//       bgColor: "bg-green-50 dark:bg-green-900/20",
+//       borderColor: "border-green-200 dark:border-green-800",
+//     },
+//     REJECTED: {
+//       icon: XCircle,
+//       color: "bg-red-500",
+//       textColor: "text-red-600",
+//       bgColor: "bg-red-50 dark:bg-red-900/20",
+//       borderColor: "border-red-200 dark:border-red-800",
+//     },
+//     READY_FOR_PICKUP: {
+//       icon: CheckCircle,
+//       color: "bg-purple-500",
+//       textColor: "text-purple-600",
+//       bgColor: "bg-purple-50 dark:bg-purple-900/20",
+//       borderColor: "border-purple-200 dark:border-purple-800",
+//     },
+//     DELIVERED: {
+//       icon: CheckCircle,
+//       color: "bg-emerald-500",
+//       textColor: "text-emerald-600",
+//       bgColor: "bg-emerald-50 dark:bg-emerald-900/20",
+//       borderColor: "border-emerald-200 dark:border-emerald-800",
+//     },
+//     ARCHIVED: {
+//       icon: Building,
+//       color: "bg-gray-500",
+//       textColor: "text-gray-600",
+//       bgColor: "bg-gray-50 dark:bg-gray-900/20",
+//       borderColor: "border-gray-200 dark:border-gray-800",
+//     },
+//   };
+//   return statusMap[status] || statusMap.NEW;
+// };
 
 // Mapping des services avec icônes
 const getServiceInfo = (service: ServiceType) => {
@@ -183,7 +309,7 @@ const ModernDemandeTable = () => {
   const [rowSelection, setRowSelection] = useState({});
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [statusFilter, setStatusFilter] = useState<RequestStatus | undefined>();
+  const [statusFilter, setStatusFilter] = useState<DemandeStatus | undefined>();
   const [serviceFilter, setServiceFilter] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -209,10 +335,10 @@ const ModernDemandeTable = () => {
   const [viewOpen, setViewOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [currentDemande, setCurrentDemande] = useState<Demande | null>(null);
+  const [currentDemande, setCurrentDemande] = useState<IDemande | null>(null);
 
   // Définition des colonnes modernes
-  const columns: ColumnDef<Demande>[] = [
+  const columns: ColumnDef<IDemande>[] = [
     {
       id: "ticket",
       header: "Ticket",
@@ -239,8 +365,8 @@ const ModernDemandeTable = () => {
       cell: ({ row }) => {
         const demande = row.original;
         const user = demande.user;
-        const initials = `${user.firstName?.charAt(0) || ""}${
-          user.lastName?.charAt(0) || ""
+        const initials = `${user?.firstName?.charAt(0) || ""}${
+          user?.lastName?.charAt(0) || ""
         }`;
 
         return (
@@ -252,11 +378,11 @@ const ModernDemandeTable = () => {
             </Avatar>
             <div>
               <div className="font-semibold text-gray-900 dark:text-gray-100">
-                {user.firstName} {user.lastName}
+                {user?.firstName} {user?.lastName}
               </div>
               <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                 <Mail className="w-3 h-3 mr-1" />
-                {user.email}
+                {user?.email}
               </div>
               {demande.contactPhoneNumber && (
                 <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
@@ -406,7 +532,7 @@ const ModernDemandeTable = () => {
     },
   });
 
-  const handleSubmitEdit = async (updatedData: Partial<Demande>) => {
+  const handleSubmitEdit = async (updatedData: Partial<IDemande>) => {
     if (!currentDemande) return;
 
     try {
@@ -447,7 +573,7 @@ const ModernDemandeTable = () => {
   };
 
   const handleStatusFilterChange = (status: string) => {
-    setStatusFilter(status === "" ? undefined : (status as RequestStatus));
+    setStatusFilter(status === "" ? undefined : (status as DemandeStatus));
     setPage(1);
   };
 
@@ -461,22 +587,22 @@ const ModernDemandeTable = () => {
     setPage(1);
   };
 
-  // Fonction utilitaire pour les libellés de statut
-  const getStatusLabel = (status: RequestStatus): string => {
-    const labelMap: Record<RequestStatus, string> = {
-      NEW: "Nouveau",
-      IN_REVIEW_DOCS: "Révision docs",
-      PENDING_ADDITIONAL_INFO: "Info requise",
-      APPROVED_BY_AGENT: "Approuvé agent",
-      APPROVED_BY_CHEF: "Approuvé chef",
-      APPROVED_BY_CONSUL: "Approuvé consul",
-      REJECTED: "Rejeté",
-      READY_FOR_PICKUP: "Prêt",
-      DELIVERED: "Livré",
-      ARCHIVED: "Archivé",
-    };
-    return labelMap[status] || status;
-  };
+  // // Fonction utilitaire pour les libellés de statut
+  // const getStatusLabel = (status: DemandeStatus): string => {
+  //   const labelMap: Record<DemandeStatus, string> = {
+  //     NEW: "Nouveau",
+  //     IN_REVIEW_DOCS: "Révision docs",
+  //     PENDING_ADDITIONAL_INFO: "Info requise",
+  //     APPROVED_BY_AGENT: "Approuvé agent",
+  //     APPROVED_BY_CHEF: "Approuvé chef",
+  //     APPROVED_BY_CONSUL: "Approuvé consul",
+  //     REJECTED: "Rejeté",
+  //     READY_FOR_PICKUP: "Prêt",
+  //     DELIVERED: "Livré",
+  //     ARCHIVED: "Archivé",
+  //   };
+  //   return labelMap[status] || status;
+  // };
 
   // Show loading state
   if (isLoading && !data.length) {
@@ -512,7 +638,7 @@ const ModernDemandeTable = () => {
               Gestion des Demandes
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              {demandesData?.total || 0} demandes au total
+              {demandesData?.meta?.total || 0} demandes au total
             </p>
           </div>
 
@@ -569,7 +695,7 @@ const ModernDemandeTable = () => {
                   Statut
                   {statusFilter && (
                     <Badge className="ml-2 bg-embassy-yellow-200 dark:bg-embassy-yellow-800 text-embassy-yellow-800 dark:text-embassy-yellow-200">
-                      1
+                      {statusFilter}
                     </Badge>
                   )}
                   <ChevronDown className="ml-2 h-4 w-4" />
@@ -593,11 +719,17 @@ const ModernDemandeTable = () => {
                 {Object.values([
                   "NEW",
                   "IN_REVIEW_DOCS",
+                  "PENDING_ADDITIONAL_INFO",
                   "APPROVED_BY_AGENT",
+                  "APPROVED_BY_CHEF",
+                  "APPROVED_BY_CONSUL",
                   "REJECTED",
+                  "READY_FOR_PICKUP",
                   "DELIVERED",
                   "ARCHIVED",
-                ] as RequestStatus[]).map((status) => (
+                  "EXPIRED",
+                  "RENEWAL_REQUESTED",
+                ] as DemandeStatus[]).map((status) => (
                   <DropdownMenuCheckboxItem
                     key={status}
                     checked={statusFilter === status}
@@ -778,16 +910,17 @@ const ModernDemandeTable = () => {
           <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
             <span>
               {table.getFilteredSelectedRowModel().rows.length} sur{" "}
-              {demandesData?.total || 0} sélectionnés
+              {demandesData?.meta?.total || 0} sélectionnés
             </span>
             <Badge className="border-embassy-blue-300 dark:border-embassy-blue-600 text-embassy-blue-700 dark:text-embassy-blue-400">
-              Page {page} sur {Math.ceil((demandesData?.total || 0) / limit)}
+              Page {page} sur{" "}
+              {Math.ceil((demandesData?.meta?.total || 0) / limit)}
             </Badge>
-            {demandesData?.total && (
+            {demandesData?.meta?.total && (
               <span className="text-xs">
                 Affichage {(page - 1) * limit + 1} à{" "}
-                {Math.min(page * limit, demandesData.total)} sur{" "}
-                {demandesData.total} résultats
+                {Math.min(page * limit, demandesData?.meta?.total)} sur{" "}
+                {demandesData?.meta?.total} résultats
               </span>
             )}
           </div>
@@ -814,7 +947,7 @@ const ModernDemandeTable = () => {
               variant="outline"
               size="sm"
               onClick={() => setPage((prev) => prev + 1)}
-              disabled={!demandesData?.hasNextPage || isLoading}
+              disabled={!demandesData?.meta?.totalPages || isLoading}
               className="border-embassy-blue-300 dark:border-embassy-blue-600 text-embassy-blue-700 dark:text-embassy-blue-400 hover:bg-embassy-blue-50 dark:hover:bg-embassy-blue-900/30 disabled:opacity-50"
             >
               Suivant
@@ -823,9 +956,9 @@ const ModernDemandeTable = () => {
               variant="outline"
               size="sm"
               onClick={() =>
-                setPage(Math.ceil((demandesData?.total || 0) / limit))
+                setPage(Math.ceil((demandesData?.meta?.total || 0) / limit))
               }
-              disabled={!demandesData?.hasNextPage || isLoading}
+              disabled={!demandesData?.meta?.totalPages || isLoading}
               className="border-embassy-blue-300 dark:border-embassy-blue-600 text-embassy-blue-700 dark:text-embassy-blue-400 hover:bg-embassy-blue-50 dark:hover:bg-embassy-blue-900/30 disabled:opacity-50"
             >
               Dernier

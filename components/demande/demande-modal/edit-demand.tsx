@@ -1,93 +1,109 @@
-"use client"
+"use client";
 
-import { Dialog, Transition } from "@headlessui/react"
-import { Fragment, useState } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Demande, RequestStatus, ServiceType } from "@/types/demande.types"
-import { User, Mail, Phone, FileText } from "lucide-react"
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { User, Mail, Phone, FileText } from "lucide-react";
+import { IDemande, DemandeStatus } from "@/features/demande/types/demande.type";
+import { ServiceType } from "@/features/service/types/service.type";
 
 interface EditDemandeModalProps {
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
-  demande: Demande
-  onSubmit: (updatedDemande: Partial<Demande>) => void
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  demande: IDemande;
+  onSubmit: (updatedDemande: Partial<IDemande>) => void;
 }
 
 // Fonctions utilitaires pour les libellés
-function getStatusLabel(status: RequestStatus): string {
-  const labels: Record<RequestStatus, string> = {
-    PENDING: "En attente",
-    UNDER_REVIEW: "En révision",
-    APPROVED: "Approuvé",
+function getStatusLabel(status: DemandeStatus): string {
+  const labels: Record<DemandeStatus, string> = {
+    NEW: "Nouveau",
+    IN_REVIEW_DOCS: "Révision documents",
+    PENDING_ADDITIONAL_INFO: "Info supplémentaire requise",
+    APPROVED_BY_AGENT: "Approuvé par agent",
+    APPROVED_BY_CHEF: "Approuvé par chef",
+    APPROVED_BY_CONSUL: "Approuvé par consul",
     REJECTED: "Rejeté",
-    COMPLETED: "Terminé"
-  }
-  return labels[status]
+    READY_FOR_PICKUP: "Prêt pour retrait",
+    DELIVERED: "Livré",
+    ARCHIVED: "Archivé",
+    EXPIRED: "Expiré",
+    RENEWAL_REQUESTED: "Renouvellement demandé",
+  };
+  return labels[status];
 }
 
 function getServiceLabel(service: ServiceType): string {
   const labels: Record<ServiceType, string> = {
     VISA: "Visa",
-    PASSPORT: "Passeport",
-    BIRTH_CERTIFICATE: "Acte de naissance",
-    MARRIAGE_CERTIFICATE: "Acte de mariage",
-    DEATH_CERTIFICATE: "Acte de décès",
+    BIRTH_ACT_APPLICATION: "Acte de naissance",
+    CONSULAR_CARD: "Carte consulaire",
+    LAISSEZ_PASSER: "Laissez-passer",
+    MARRIAGE_CAPACITY_ACT: "Acte de capacité de mariage",
+    DEATH_ACT_APPLICATION: "Acte de décès",
+    POWER_OF_ATTORNEY: "Procuration",
     NATIONALITY_CERTIFICATE: "Certificat de nationalité",
-    RESIDENCE_PERMIT: "Permis de séjour",
-    OTHER: "Autre"
-  }
-  return labels[service]
+  };
+  return labels[service];
 }
 
-export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditDemandeModalProps) {
+export function EditDemandeModal({
+  isOpen,
+  setIsOpen,
+  demande,
+  onSubmit,
+}: EditDemandeModalProps) {
+
   const [formData, setFormData] = useState({
     status: demande.status,
     serviceType: demande.serviceType,
-    personalInfo: {
-      firstName: demande.personalInfo.firstName,
-      lastName: demande.personalInfo.lastName,
-      email: demande.personalInfo.email,
-      dateOfBirth: demande.personalInfo.dateOfBirth,
-      placeOfBirth: demande.personalInfo.placeOfBirth,
-      nationality: demande.personalInfo.nationality,
-      gender: demande.personalInfo.gender
+    user: {
+      firstName: demande.user?.firstName,
+      lastName: demande.user?.lastName,
+      email: demande.user?.email,
+      dateOfBirth: "",
+      placeOfBirth: "",
+      nationality: "",
+      gender: "",
     },
     contactInfo: {
-      phone: demande.contactInfo.phone,
-      address: demande.contactInfo.address,
-      city: demande.contactInfo.city,
-      country: demande.contactInfo.country,
-      postalCode: demande.contactInfo.postalCode
-    }
-  })
+      phone: "",
+      address: "",
+      city: "",
+      country: "",
+      postalCode: "",
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(formData)
-    setIsOpen(false)
-  }
+    e.preventDefault();
+    // onSubmit(formData);
+    setIsOpen(false);
+  };
 
   const updateFormData = (section: string, field: string, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [section]: {
-        ...prev[section as keyof typeof prev],
-        [field]: value
-      }
-    }))
-  }
+    }));
+  };
 
   const updateDirectField = (field: string, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
-    }))
-  }
+      [field]: value,
+    }));
+  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -106,7 +122,10 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                   </Dialog.Title>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 max-h-[70vh] overflow-y-auto">
+                <form
+                  onSubmit={handleSubmit}
+                  className="p-6 max-h-[70vh] overflow-y-auto"
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Informations générales */}
                     <Card>
@@ -121,7 +140,12 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                           <Label htmlFor="serviceType">Type de service</Label>
                           <Select
                             value={formData.serviceType}
-                            onValueChange={(value) => updateDirectField('serviceType', value as ServiceType)}
+                            onValueChange={(value) =>
+                              updateDirectField(
+                                "serviceType",
+                                value as ServiceType
+                              )
+                            }
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Sélectionner un service" />
@@ -139,13 +163,18 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                           <Label htmlFor="status">Statut</Label>
                           <Select
                             value={formData.status}
-                            onValueChange={(value) => updateDirectField('status', value as RequestStatus)}
+                            onValueChange={(value) =>
+                              updateDirectField(
+                                "status",
+                                value as DemandeStatus
+                              )
+                            }
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Sélectionner un statut" />
                             </SelectTrigger>
                             <SelectContent>
-                              {Object.values(RequestStatus).map((status) => (
+                              {Object.values(DemandeStatus).map((status) => (
                                 <SelectItem key={status} value={status}>
                                   {getStatusLabel(status)}
                                 </SelectItem>
@@ -170,16 +199,28 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                             <Label htmlFor="firstName">Prénom</Label>
                             <Input
                               id="firstName"
-                              value={formData.personalInfo.firstName}
-                              onChange={(e) => updateFormData('personalInfo', 'firstName', e.target.value)}
+                              value={formData.user.firstName}
+                              onChange={(e) =>
+                                updateFormData(
+                                  "user",
+                                  "firstName",
+                                  e.target.value
+                                )
+                              }
                             />
                           </div>
                           <div>
                             <Label htmlFor="lastName">Nom</Label>
                             <Input
                               id="lastName"
-                              value={formData.personalInfo.lastName}
-                              onChange={(e) => updateFormData('personalInfo', 'lastName', e.target.value)}
+                              value={formData.user.lastName}
+                              onChange={(e) =>
+                                updateFormData(
+                                  "user",
+                                  "lastName",
+                                  e.target.value
+                                )
+                              }
                             />
                           </div>
                         </div>
@@ -188,8 +229,14 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                           <Input
                             id="email"
                             type="email"
-                            value={formData.personalInfo.email}
-                            onChange={(e) => updateFormData('personalInfo', 'email', e.target.value)}
+                            value={formData.user.email}
+                            onChange={(e) =>
+                              updateFormData(
+                                "user",
+                                "email",
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                         <div>
@@ -197,31 +244,53 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                           <Input
                             id="dateOfBirth"
                             type="date"
-                            value={formData.personalInfo.dateOfBirth}
-                            onChange={(e) => updateFormData('personalInfo', 'dateOfBirth', e.target.value)}
+                            value={formData.user.dateOfBirth}
+                            onChange={(e) =>
+                              updateFormData(
+                                "user",
+                                "dateOfBirth",
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                         <div>
-                          <Label htmlFor="placeOfBirth">Lieu de naissance</Label>
+                          <Label htmlFor="placeOfBirth">
+                            Lieu de naissance
+                          </Label>
                           <Input
                             id="placeOfBirth"
-                            value={formData.personalInfo.placeOfBirth}
-                            onChange={(e) => updateFormData('personalInfo', 'placeOfBirth', e.target.value)}
+                            value={formData.user.placeOfBirth}
+                            onChange={(e) =>
+                              updateFormData(
+                                "user",
+                                "placeOfBirth",
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                         <div>
                           <Label htmlFor="nationality">Nationalité</Label>
                           <Input
                             id="nationality"
-                            value={formData.personalInfo.nationality}
-                            onChange={(e) => updateFormData('personalInfo', 'nationality', e.target.value)}
+                            value={formData.user.nationality}
+                            onChange={(e) =>
+                              updateFormData(
+                                "user",
+                                "nationality",
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                         <div>
                           <Label htmlFor="gender">Sexe</Label>
                           <Select
-                            value={formData.personalInfo.gender}
-                            onValueChange={(value) => updateFormData('personalInfo', 'gender', value)}
+                            value={formData.user.gender}
+                            onValueChange={(value) =>
+                              updateFormData("user", "gender", value)
+                            }
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Sélectionner" />
@@ -249,7 +318,13 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                           <Input
                             id="phone"
                             value={formData.contactInfo.phone}
-                            onChange={(e) => updateFormData('contactInfo', 'phone', e.target.value)}
+                            onChange={(e) =>
+                              updateFormData(
+                                "contactInfo",
+                                "phone",
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                         <div>
@@ -257,7 +332,13 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                           <Input
                             id="country"
                             value={formData.contactInfo.country}
-                            onChange={(e) => updateFormData('contactInfo', 'country', e.target.value)}
+                            onChange={(e) =>
+                              updateFormData(
+                                "contactInfo",
+                                "country",
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                         <div>
@@ -265,15 +346,27 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                           <Input
                             id="city"
                             value={formData.contactInfo.city}
-                            onChange={(e) => updateFormData('contactInfo', 'city', e.target.value)}
+                            onChange={(e) =>
+                              updateFormData(
+                                "contactInfo",
+                                "city",
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                         <div>
                           <Label htmlFor="postalCode">Code postal</Label>
                           <Input
                             id="postalCode"
-                            value={formData.contactInfo.postalCode || ''}
-                            onChange={(e) => updateFormData('contactInfo', 'postalCode', e.target.value)}
+                            value={formData.contactInfo.postalCode || ""}
+                            onChange={(e) =>
+                              updateFormData(
+                                "contactInfo",
+                                "postalCode",
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                         <div className="md:col-span-2">
@@ -281,7 +374,13 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                           <Textarea
                             id="address"
                             value={formData.contactInfo.address}
-                            onChange={(e) => updateFormData('contactInfo', 'address', e.target.value)}
+                            onChange={(e) =>
+                              updateFormData(
+                                "contactInfo",
+                                "address",
+                                e.target.value
+                              )
+                            }
                             rows={3}
                           />
                         </div>
@@ -290,14 +389,14 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
                   </div>
 
                   <div className="mt-6 flex justify-end gap-3">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
+                    <Button
+                      type="button"
+                      variant="outline"
                       onClick={() => setIsOpen(false)}
                     >
                       Annuler
                     </Button>
-                    <Button 
+                    <Button
                       type="submit"
                       className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
@@ -311,5 +410,5 @@ export function EditDemandeModal({ isOpen, setIsOpen, demande, onSubmit }: EditD
         </div>
       </Dialog>
     </Transition>
-  )
+  );
 }

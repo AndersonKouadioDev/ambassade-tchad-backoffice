@@ -5,19 +5,20 @@ import { Fragment } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Demande, RequestStatus, ServiceType } from "@/types/demande.types"
 import { AlertTriangle, User, FileText } from "lucide-react"
+import { IDemande, DemandeStatus } from "@/features/demande/types/demande.type"
+import { ServiceType } from "@/features/service/types/service.type"
 
 interface DeleteDemandeModalProps {
   isOpen: boolean
   setIsOpen: (open: boolean) => void
-  demande: Demande | null
+  demande: IDemande | null
   onConfirm: () => void
 }
 
 // Fonctions utilitaires pour les libellés
-function getStatusLabel(status: RequestStatus): string {
-  const labels: Record<RequestStatus, string> = {
+function getStatusLabel(status: DemandeStatus): string {
+  const labels: Record<DemandeStatus, string> = {
     NEW: "Nouveau",
     IN_REVIEW_DOCS: "Révision documents",
     PENDING_ADDITIONAL_INFO: "Info supplémentaire requise",
@@ -27,7 +28,9 @@ function getStatusLabel(status: RequestStatus): string {
     REJECTED: "Rejeté",
     READY_FOR_PICKUP: "Prêt pour retrait",
     DELIVERED: "Livré",
-    ARCHIVED: "Archivé"
+    ARCHIVED: "Archivé",
+    EXPIRED: "Expiré",
+    RENEWAL_REQUESTED: "Renouvellement demandé"
   }
   return labels[status] || status
 }
@@ -50,7 +53,7 @@ export function DeleteDemandeModal({ isOpen, setIsOpen, demande, onConfirm }: De
   if (!demande) return null
 
   const user = demande.user;
-  const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`
+  const initials = `${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`
 
   const handleConfirm = () => {
     onConfirm()
@@ -86,10 +89,10 @@ export function DeleteDemandeModal({ isOpen, setIsOpen, demande, onConfirm }: De
                       </Avatar>
                       <div>
                         <p className="font-medium text-gray-900">
-                          {user.firstName} {user.lastName}
+                          {user?.firstName} {user?.lastName}
                         </p>
                         <p className="text-sm text-gray-600">
-                          {user.email}
+                          {user?.email}
                         </p>
                       </div>
                     </div>
@@ -101,13 +104,13 @@ export function DeleteDemandeModal({ isOpen, setIsOpen, demande, onConfirm }: De
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-gray-600">Service:</span>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge className="text-xs">
                           {getServiceLabel(demande.serviceType)}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-gray-600">Statut:</span>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge className="text-xs">
                           {getStatusLabel(demande.status)}
                         </Badge>
                       </div>
@@ -123,13 +126,12 @@ export function DeleteDemandeModal({ isOpen, setIsOpen, demande, onConfirm }: De
                   
                   <div className="flex justify-end gap-3">
                     <Button 
-                      variant="outline" 
                       onClick={() => setIsOpen(false)}
                     >
                       Annuler
                     </Button>
                     <Button 
-                      variant="destructive"
+                      variant="ghost"
                       onClick={handleConfirm}
                       className="bg-red-600 hover:bg-red-700 text-white"
                     >
