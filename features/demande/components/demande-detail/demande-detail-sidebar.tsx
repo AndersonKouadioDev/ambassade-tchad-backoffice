@@ -5,9 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusTimeline } from "../status-timeline";
 import { IDemande, DemandeStatus } from "@/features/demande/types/demande.type";
-import { Edit, Download, Clock } from "lucide-react";
-
-export function DemandeDetailSidebar({ demande }: { demande: IDemande }) {
+import { Download, Clock } from "lucide-react";
+interface DemandeDetailSidebarProps {
+  demande: IDemande;
+  setIsOpen: (open: boolean) => void;
+}
+export function DemandeDetailSidebar({
+  demande,
+  setIsOpen,
+}: DemandeDetailSidebarProps) {
   return (
     <div className="space-y-8">
       {/* Status Timeline */}
@@ -26,17 +32,13 @@ export function DemandeDetailSidebar({ demande }: { demande: IDemande }) {
           <CardTitle className="text-lg">Actions rapides</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <Button className="w-full gap-2">
+          <Button className="w-full gap-2" onClick={() => setIsOpen(true)}>
             <Clock className="h-4 w-4" />
             Mettre à jour le statut
           </Button>
           <Button variant="outline" className="w-full gap-2">
             <Download className="h-4 w-4" />
             Télécharger le dossier
-          </Button>
-          <Button variant="outline" className="w-full gap-2">
-            <Edit className="h-4 w-4" />
-            Modifier la demande
           </Button>
         </CardContent>
       </Card>

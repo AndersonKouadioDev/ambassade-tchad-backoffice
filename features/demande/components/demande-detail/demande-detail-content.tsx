@@ -16,23 +16,25 @@ export function DemandeDetailContent({ demande }: { demande: IDemande }) {
     <div className="lg:col-span-2 space-y-8">
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-3">
+          <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
             <Hash className="h-6 w-6 text-primary" />
             Informations générales
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2">
+            {/* Numéro de ticket */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Hash className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Numéro de ticket</span>
               </div>
-              <p className="text-lg font-mono bg-muted px-3 py-2 rounded">
+              <p className="text-base sm:text-lg font-mono bg-muted px-3 py-2 rounded break-all">
                 {demande.ticketNumber}
               </p>
             </div>
 
+            {/* Date de soumission */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -45,6 +47,7 @@ export function DemandeDetailContent({ demande }: { demande: IDemande }) {
               </p>
             </div>
 
+            {/* Demandeur */}
             {demande.user && (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
@@ -57,14 +60,14 @@ export function DemandeDetailContent({ demande }: { demande: IDemande }) {
                   </p>
                   <div className="flex items-center gap-2 mt-1">
                     <Mail className="h-3 w-3 text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground break-all">
                       {demande.user.email}
                     </p>
                   </div>
                   {demande.user.phoneNumber && (
                     <div className="flex items-center gap-2 mt-1">
                       <Phone className="h-3 w-3 text-muted-foreground" />
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">
                         {demande.user.phoneNumber}
                       </p>
                     </div>
@@ -73,6 +76,7 @@ export function DemandeDetailContent({ demande }: { demande: IDemande }) {
               </div>
             )}
 
+            {/* Contact de la demande */}
             {demande.contactPhoneNumber && (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
@@ -81,12 +85,13 @@ export function DemandeDetailContent({ demande }: { demande: IDemande }) {
                     Contact de la demande
                   </span>
                 </div>
-                <p className="text-sm text-foreground">
+                <p className="text-sm text-foreground whitespace-nowrap overflow-hidden text-ellipsis">
                   {demande.contactPhoneNumber}
                 </p>
               </div>
             )}
 
+            {/* Completion Date */}
             {demande.completionDate && (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
@@ -103,6 +108,7 @@ export function DemandeDetailContent({ demande }: { demande: IDemande }) {
               </div>
             )}
 
+            {/* Issued Date */}
             {demande.issuedDate && (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">

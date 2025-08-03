@@ -45,12 +45,6 @@ export function getMenuList(pathname: string, t: any): Group[] {
           icon: "heroicons-outline:home",
           submenus: []
         },
-      ],
-    },
-    {
-      groupLabel: "",
-      id: "main",
-      menus: [
         {
           id: "demande",
           href: "/demande",
@@ -125,15 +119,6 @@ export function getMenuList(pathname: string, t: any): Group[] {
               children: [],
             },
           ],
-        },
-
-        {
-          id: "archive",
-          href: "/archive",
-          label: "Archive",
-          active: pathname.startsWith("/archive"),
-          icon: "heroicons-outline:archive-box",
-          submenus: [],
         },
         {
           id: "users",

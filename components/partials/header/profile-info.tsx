@@ -1,3 +1,5 @@
+"use client";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +13,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
-import { auth } from "@/lib/auth";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { LogoutButton } from "./logout-button";
+import { useSession } from "next-auth/react";
 
-const ProfileInfo = async () => {
-  const session = await auth();
+const ProfileInfo = () => {
+  const session = useSession();
   return (
     <div className="md:block hidden">
       <DropdownMenu>
@@ -25,13 +27,13 @@ const ProfileInfo = async () => {
           <div className="flex items-center gap-3 text-embassy-blue-800 hover:bg-embassy-blue-50  bg-embassy-blue-50 rounded-lg px-2 py-1 transition-all duration-200 dark:text-embassy-blue-200 dark:hover:bg-embassy-blue-800/30">
             <Image
               src="/images/all-img/user3.png"
-              alt={session?.user?.name?.charAt(0) || "User"}
+              alt={session?.data?.user?.name?.charAt(0) || "User"}
               width={36}
               height={36}
               className="rounded-full border-2 border-embassy-blue-200 dark:border-embassy-blue-600"
             />
             <div className="text-sm font-semibold capitalize lg:block hidden">
-              {session?.user?.name}
+              {session?.data?.user?.name}
             </div>
             <span className="text-base me-2.5 lg:inline-block hidden text-white dark:text-embassy-blue-400">
               <Icon icon="heroicons-outline:chevron-down"></Icon>
@@ -44,21 +46,21 @@ const ProfileInfo = async () => {
         >
           <DropdownMenuLabel className="flex gap-3 items-center mb-1 p-4 border-b border-embassy-blue-100 dark:border-embassy-blue-700/30">
             <Image
-              src={session?.user?.image || "/images/all-img/user3.png"}
-              alt={session?.user?.name?.charAt(0) || "User"}
+              src={session?.data?.user?.image || "/images/all-img/user3.png"}
+              alt={session?.data?.user?.name?.charAt(0) || "User"}
               width={40}
               height={40}
               className="rounded-full border-2 border-embassy-blue-200 dark:border-embassy-blue-600"
             />
             <div>
               <div className="text-sm font-semibold text-embassy-blue-800 capitalize dark:text-embassy-blue-200">
-                {session?.user?.name}
+                {session?.data?.user?.name}
               </div>
               <Link
                 href="/dashboard"
                 className="text-xs text-embassy-blue-600 hover:text-embassy-blue-800 transition-colors dark:text-embassy-blue-400 dark:hover:text-embassy-blue-300"
               >
-                {session?.user?.email}
+                {session?.data?.user?.email}
               </Link>
             </div>
           </DropdownMenuLabel>

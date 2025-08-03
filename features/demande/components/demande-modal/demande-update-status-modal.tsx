@@ -8,7 +8,6 @@ import {
   DialogPanel,
   TransitionChild,
 } from "@headlessui/react";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -18,27 +17,40 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  UtilisateurAddDTO,
-  UtilisateurAddSchema,
-} from "../../schema/utilisateur.schema";
-import { UtilisateurRole } from "../../types/utilisateur.type";
+import { toast } from "sonner";
 import { getEnumValues } from "@/utils/getEnumValues";
 import { Button } from "@heroui/react";
-import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
-import { useAjouterUtilisateurMutation } from "../../queries/utilisateur.mutation";
-import { toast } from "sonner";
+import { DemandeStatus, IDemande } from "../../types/demande.type";
+import { useUpdateDemandStatusMutation } from "../../queries/demande.mutation";
+import {
+  DemandUpdateDTO,
+  DemandUpdateSchema,
+} from "../../schema/demande.schema";
+import { getDemandeStatusLabel } from "../../utils/getDemandeStatusLabel";
+import { Textarea } from "@/components/ui/textarea";
+import { areShowReasonObservation } from "../../utils/areShowReasonObservation";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  demande: IDemande | null;
 };
 
-export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
-  const roleOptions = useMemo(() => getEnumValues(UtilisateurRole), []);
+export function DemandeUpdateStatusModal({
+  isOpen,
+  setIsOpen,
+  demande,
+}: Props) {
+  const { mutateAsync: updateDemandStatusMutation, isPending } =
+    useUpdateDemandStatusMutation();
 
-  const { mutateAsync: ajouterUtilisateurMutation, isPending } =
-    useAjouterUtilisateurMutation();
+  const statusOptions = useMemo(
+    () =>
+      getEnumValues(DemandeStatus).filter(
+        (status) => status !== demande?.status
+      ),
+    [demande?.status]
+  );
 
   const {
     register,
@@ -47,25 +59,30 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
     formState: { errors, isValid },
     reset,
     watch,
-  } = useForm<UtilisateurAddDTO>({
-    resolver: zodResolver(UtilisateurAddSchema),
+  } = useForm<DemandUpdateDTO>({
+    resolver: zodResolver(DemandUpdateSchema),
     mode: "onChange",
   });
 
   const handleClose = useCallback(() => {
     if (!isPending) {
       setIsOpen(false);
-      setTimeout(() => reset({ role: undefined }), 200);
+      setTimeout(
+        () =>
+          reset({
+            status: undefined,
+            reason: undefined,
+            observation: undefined,
+          }),
+        200
+      );
     }
   }, [isPending, setIsOpen, reset]);
 
   const onSubmit = useCallback(
-    async (formdata: UtilisateurAddDTO) => {
+    async (data: DemandUpdateDTO) => {
       try {
-        // Ajout de l'utilisateur
-        await ajouterUtilisateurMutation(formdata);
-
-        // Fermeture de la modal
+        await updateDemandStatusMutation({ id: demande?.id || "", data });
         handleClose();
       } catch (error) {
         toast.error("Erreur : ", {
@@ -74,17 +91,22 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
         });
       }
     },
-    [ajouterUtilisateurMutation, handleClose]
+    [updateDemandStatusMutation, handleClose, demande]
   );
 
-  const handleRoleChange = useCallback(
+  const handleStatusChange = useCallback(
     (value: string) => {
-      setValue("role", value as UtilisateurRole, {
+      setValue("status", value as DemandeStatus, {
         shouldValidate: true,
         shouldDirty: true,
       });
     },
     [setValue]
+  );
+
+  const verifyIfReasonObservationShow = useMemo(
+    () => areShowReasonObservation(watch("status")),
+    [watch]
   );
 
   return (
@@ -115,86 +137,45 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
             >
               <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <DialogTitle className="text-lg font-medium text-gray-900 mb-4">
-                  Ajouter un utilisateur
+                  {`Modifier le statut de la demande`}
                 </DialogTitle>
 
                 <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                   <div>
-                    <Input
-                      {...register("firstName")}
-                      placeholder="Prénom"
-                      type="text"
-                    />
-                    {errors.firstName && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.firstName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Input
-                      {...register("lastName")}
-                      placeholder="Nom"
-                      type="text"
-                    />
-                    {errors.lastName && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.lastName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Input
-                      {...register("email")}
-                      placeholder="Email"
-                      type="email"
-                    />
-                    {errors.email && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Input
-                      {...register("phoneNumber")}
-                      placeholder="Téléphone"
-                      type="tel"
-                    />
-                    {errors.phoneNumber && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.phoneNumber.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
                     <Select
-                      value={watch("role")?.toString() || ""}
-                      onValueChange={handleRoleChange}
+                      onValueChange={handleStatusChange}
                       disabled={isPending}
                     >
                       <SelectTrigger
                         className={`w-full ${
-                          errors.role ? "border-red-500" : ""
+                          errors.status ? "border-red-500" : ""
                         }`}
                       >
-                        <SelectValue placeholder="Choisir un rôle" />
+                        <SelectValue placeholder="Choisir un statut" />
                       </SelectTrigger>
                       <SelectContent>
-                        {roleOptions.map((role) => (
-                          <SelectItem key={role} value={role.toString()}>
-                            {getUtilisateurRole(role)}
+                        {statusOptions.map((status) => (
+                          <SelectItem key={status} value={status.toString()}>
+                            {getDemandeStatusLabel(status).label}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.role && (
+                    {errors.status && (
                       <p className="text-sm text-red-500 mt-1">
-                        {errors.role.message}
+                        {errors.status.message}
                       </p>
                     )}
                   </div>
+                  {verifyIfReasonObservationShow.reason && (
+                    <Textarea {...register("reason")} placeholder="La raison" />
+                  )}
+                  {verifyIfReasonObservationShow.observation && (
+                    <Textarea
+                      {...register("observation")}
+                      placeholder="Observation"
+                    />
+                  )}
 
                   <div className="flex justify-end gap-3 pt-4">
                     <Button
@@ -211,7 +192,7 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
                       disabled={isPending || !isValid}
                       className="px-4 py-2 text-sm text-white bg-primary rounded-md hover:bg-primary/90 disabled:opacity-50"
                     >
-                      {isPending ? "Ajout..." : "Ajouter"}
+                      {isPending ? "Modification..." : "Modifier"}
                     </Button>
                   </div>
                 </form>

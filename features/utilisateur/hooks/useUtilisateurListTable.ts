@@ -56,17 +56,17 @@ export function useUtilisateurListTable({ columns, type }: IUtilisateurListTable
     const [currentUser, setCurrentUser] = useState<DataProps | null>(null);
 
     const handleLockUnlockUser = useCallback((user: DataProps) => {
-        setCurrentUser(user);
+        setCurrentUser(prev => user);
         setLockUnlockOpen(true);
     }, []);
 
     const handleEditUser = useCallback((user: DataProps) => {
-        setCurrentUser(user);
+        setCurrentUser(prev => user);
         setEditOpen(true);
     }, []);
 
     const handleDeleteUser = useCallback((user: DataProps) => {
-        setCurrentUser(user);
+        setCurrentUser(prev => user);
         setDeleteOpen(true);
     }, []);
 
