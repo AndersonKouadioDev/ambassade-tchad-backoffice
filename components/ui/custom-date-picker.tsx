@@ -507,7 +507,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
               >
                 {preset.label}
                 {preset.shortcut && showShortcuts && (
-                  <Badge variant="secondary" className="ml-auto text-xs">
+                  <Badge className="ml-auto text-xs">
                     Ctrl+{preset.shortcut}
                   </Badge>
                 )}

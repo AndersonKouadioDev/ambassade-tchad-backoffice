@@ -3,7 +3,7 @@
 import React, { useState, useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, X, Image as ImageIcon, Plus, Trash2, Eye } from "lucide-react";
+import { Upload, X,Trash2, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -128,7 +128,6 @@ export const PhotoForm: React.FC<PhotoFormProps> = ({ photo }) => {
       if (res.success) {
         toast.success(res.message);
         router.push("/contenu/photo");
-        await invalidatePhotoList();
       } else {
         toast.error(res.message);
       }

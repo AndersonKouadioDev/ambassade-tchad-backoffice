@@ -1,7 +1,7 @@
-import { IUser } from "@/features/users/types/user.type";
+import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
 
 export interface ILoginResponse {
-  user: IUser;
+  user: IUtilisateur;
   accessToken: string;
   refreshToken: string;
 }

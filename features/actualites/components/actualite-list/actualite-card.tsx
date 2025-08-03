@@ -269,8 +269,8 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
             <div className="p-6">
               <div className="mb-6">
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Êtes-vous sûr de vouloir supprimer l'actualité{" "}
-                  <strong>"{actualite.title}"</strong> ?
+                  Êtes-vous sûr de vouloir supprimer l&apos;actualité{" "}
+                  <strong>{actualite.title}</strong> ?
                 </p>
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
                   <div className="flex items-start gap-3">
@@ -280,7 +280,7 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
                         Attention
                       </p>
                       <p className="text-red-700 dark:text-red-300">
-                        Cette action supprimera définitivement l'actualité et
+                        Cette action supprimera définitivement l&apos;actualité et
                         toutes ses données associées. Cette opération ne peut
                         pas être annulée.
                       </p>

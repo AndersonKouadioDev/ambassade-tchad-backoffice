@@ -1,4 +1,4 @@
-import ServiceCardsContainer from "@/components/contenu/service-cards-container";
+// import ServiceCardsContainer from "@/components/contenu/service-cards-container";
 import { useTranslations } from "next-intl";
 
 export default function ServicePage() {
@@ -15,7 +15,7 @@ export default function ServicePage() {
         </div>
       </div>
       
-      <ServiceCardsContainer />
+      {/* <ServiceCardsContainer /> */}
     </div>
   );
 }

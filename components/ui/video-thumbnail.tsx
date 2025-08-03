@@ -70,7 +70,7 @@ export const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
         <div className="absolute inset-0 flex items-center justify-center">
           <Button
             size="lg"
-            variant="secondary"
+            variant="default"
             className={cn(
               "rounded-full bg-white/90 hover:bg-white text-embassy-blue-600 h-16 w-16 p-0 shadow-lg transition-all duration-300",
               isHovered ? "scale-110" : "scale-100"

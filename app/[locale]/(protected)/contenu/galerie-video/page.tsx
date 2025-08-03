@@ -1,4 +1,4 @@
-import GalerieVideoCardsContainer from "@/components/contenu/galerie-video-cards-container";
+// import GalerieVideoCardsContainer from "@/components/contenu/galerie-video-cards-container";
 import { useTranslations } from "next-intl";
 
 export default function VideoListPage() {
@@ -15,7 +15,7 @@ export default function VideoListPage() {
         </div>
       </div>
       
-      <GalerieVideoCardsContainer />
+      {/* <GalerieVideoCardsContainer /> */}
     </div>
   );
 }
