@@ -1,7 +1,5 @@
 import { IUtilisateur } from "@/features/utilisateur/types/utilisateur.type";
 
-
-
 export interface IActualite {
     id: string;
     title: string;

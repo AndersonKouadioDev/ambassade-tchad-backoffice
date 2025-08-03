@@ -2,11 +2,11 @@ import { IDemande, IHistoriqueStatutDemande } from "@/features/demande/types/dem
 import { IDocument } from "@/features/documents/types/documents.type";
 import { IPaiement } from "@/features/paiement/types/paiement.type";
 import { IEvenement } from "@/features/evenement/types/evenement.type";
-import { IActualite } from "@/features/actualite/types/actualite.type";
 import { IDepense } from "@/features/depense/types/depense.type";
 import { IService } from "@/features/service/types/service.type";
 import { IParametre, } from "@/features/parametre/types/parametre.type";
 import { INotification, IParametreNotification } from "@/features/notification/types/notification.type";
+import { IActualite } from "@/features/actualites/types/actualites.type";
 
 export enum UtilisateurRole {
   AGENT = "AGENT",

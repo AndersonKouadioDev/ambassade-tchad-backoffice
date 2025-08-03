@@ -55,7 +55,7 @@ export function getMenuList(pathname: string, t: any): Group[] {
           id: "demande",
           href: "/demande",
           label: "Gestion des demandes",
-          active: pathname === "/demande",
+          active: pathname.startsWith("/demande"),
           icon: "heroicons-outline:clipboard-document",
           submenus: [],
         },
@@ -68,7 +68,7 @@ export function getMenuList(pathname: string, t: any): Group[] {
           submenus: [
             {
               href: "/finance/rapport",
-              label:"Rapport financière",
+              label: "Rapport financière",
               active: pathname === "/finance/rapport",
               icon: "",
               children: [],
@@ -89,36 +89,36 @@ export function getMenuList(pathname: string, t: any): Group[] {
           active: pathname.startsWith("/contenu"),
           icon: "heroicons-outline:clipboard-document",
           submenus: [
-            { 
-              href:"/contenu/actualite",
+            {
+              href: "/contenu/actualite",
               label: "Actualités",
               active: pathname === "/contenu/actualite",
               icon: "",
               children: [],
             },
-            { 
-              href:"/contenu/evenement",
+            {
+              href: "/contenu/evenement",
               label: "Evènéments",
               active: pathname === "/contenu/evenement",
               icon: "",
               children: [],
             },
-            { 
-              href:"/contenu/galerie-photo",
+            {
+              href: "/contenu/galerie-photo",
               label: "Galérie Photos",
               active: pathname === "/contenu/galerie-photo",
               icon: "",
               children: [],
             },
-            { 
-              href:"/contenu/galerie-video",
+            {
+              href: "/contenu/galerie-video",
               label: "Galerie vidéos",
               active: pathname === "/contenu/galerie-video",
               icon: "",
               children: [],
             },
-            { 
-              href:"/contenu/services",
+            {
+              href: "/contenu/services",
               label: "Services",
               active: pathname === "/contenu/services",
               icon: "",
@@ -126,7 +126,7 @@ export function getMenuList(pathname: string, t: any): Group[] {
             },
           ],
         },
-       
+
         {
           id: "archive",
           href: "/archive",
@@ -144,10 +144,10 @@ export function getMenuList(pathname: string, t: any): Group[] {
           submenus: [],
         },
         {
-          id: "demandeurs",
-          href: "/demandeurs",
-          label: "Gestion des demandeurs",
-          active: pathname === "/demandeurs",
+          id: "citoyens",
+          href: "/citoyens",
+          label: "Gestion des citoyens",
+          active: pathname.startsWith("/citoyens"),
           icon: "heroicons-outline:user-group",
           submenus: [],
         },
@@ -814,7 +814,7 @@ export function getHorizontalMenuList(pathname: string, t: any): Group[] {
           label: t("forms"),
           active: pathname.includes("/forms"),
           icon: "heroicons-outline:clipboard-list",
-         submenus: [
+          submenus: [
             {
               href: "/forms/input",
               label: t("input"),

@@ -54,7 +54,6 @@ export interface IDemande {
     contactPhoneNumber?: string;
     observations?: string;
     amount: number;
-    createdAt: Date;
     updatedAt: Date;
 
     user?: IUtilisateur;
@@ -97,7 +96,10 @@ export interface IDemandeRechercheParams {
 
 export interface IDemandeStatsResponse {
     total: number;
-    completed: number;
-    pending: number;
-    rejected: number;
+    byStatus: {
+        [k in DemandeStatus]: number;
+    };
+    byServiceType: {
+        [k in ServiceType]: number;
+    };
 }

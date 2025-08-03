@@ -1,10 +1,19 @@
-import { StatusBlock } from "@/components/blocks/status-block";
-import ModernDemandeTable from "@/components/demande/demande-list/modern-table";
-import { Clock, CheckCircle2, XCircle, Archive } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { DemandeStatsGrid } from "@/features/demande/components/demande-stats-grid";
+import { prefetchGlobalDemandeStatsQuery } from "@/features/demande/queries/demande-stats.query";
+import { DemandeList } from "@/features/demande/components/demande-view-list";
+import { prefetchDemandesFilteredListQuery } from "@/features/demande/queries/demande-list.query";
 
-export default async function UserLispage() {
+export default async function DemandePage() {
   const t = await getTranslations("gestionDemande");
+
+  await Promise.all([
+    prefetchGlobalDemandeStatsQuery(),
+    prefetchDemandesFilteredListQuery({
+      page: 1,
+      limit: 10,
+    }),
+  ]);
 
   return (
     <div className="container">
@@ -12,40 +21,11 @@ export default async function UserLispage() {
         <div className="col-span-12">
           <h1 className="text-2xl font-bold">{t("title")}</h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
-            <StatusBlock
-              title={t("pending")}
-              total="0"
-              iconWrapperClass="bg-warning/10"
-              chartColor="#fbbf24"
-              icon={<Clock className="w-5 h-5 text-warning" />}
-            />
-            <StatusBlock
-              title={t("approved")}
-              total="0"
-              iconWrapperClass="bg-success/10"
-              chartColor="#10b981"
-              icon={<CheckCircle2 className="w-5 h-5 text-success" />}
-            />
-            <StatusBlock
-              title={t("rejected")}
-              total="0"
-              icon={<XCircle className="w-5 h-5 text-destructive" />}
-              iconWrapperClass="bg-destructive/10"
-              chartColor="#ef4444"
-            />
-            <StatusBlock
-              title={t("archived")}
-              total="0"
-              icon={<Archive className="w-5 h-5 text-muted-foreground" />}
-              iconWrapperClass="bg-muted/10"
-              chartColor="#9ca3af"
-            />
-          </div>
+          <DemandeStatsGrid />
         </div>
 
         <div className="col-span-12">
-          <ModernDemandeTable />
+          <DemandeList />
         </div>
       </div>
     </div>

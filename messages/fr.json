@@ -108,52 +108,6 @@
     "sign_in": "Se connecter",
     "signing_in": "Connexion..."
   },
-  "gestionDemande": {
-    "title": "Gestion des Demandes",
-    "pending": "En attente",
-    "approved": "Approuvées",
-    "rejected": "Rejetées",
-    "archived": "Archivées",
-    "searchPlaceholder": "Rechercher par nom, email, ticket...",
-    "status": "Statut",
-    "service": "Service",
-    "export": "Exporter",
-    "refresh": "Actualiser",
-    "noResults": "Aucune demande trouvée",
-    "error": "Erreur lors du chargement des données",
-    "retry": "Réessayer",
-    "dataRefreshed": "Données actualisées",
-    "exportDevelopment": "Fonctionnalité d'export en développement",
-    "first": "Premier",
-    "previous": "Précédent",
-    "next": "Suivant",
-    "last": "Dernier",
-    "page": "Page",
-    "of": "sur",
-    "showing": "Affichage",
-    "to": "à",
-    "results": "résultats",
-    "selected": "sélectionnés",
-    "on": "sur",
-    "statuses": {
-      "new": "Nouveau",
-      "inReviewDocs": "Révision docs",
-      "approvedByAgent": "Approuvé agent",
-      "rejected": "Rejeté",
-      "delivered": "Livré",
-      "archived": "Archivé"
-    },
-    "services": {
-      "visa": "Visa",
-      "birthActApplication": "Acte de Naissance",
-      "consularCard": "Carte Consulaire",
-      "laissezPasser": "Laissez-Passer"
-    },
-    "filters": {
-      "allStatuses": "Tous les statuts",
-      "allServices": "Tous les services"
-    }
-  },
   "EcommerceDashboard": {
     "widget_title": "Bonsoir",
     "widget_desc": "Bienvenue sur Dashcode",
