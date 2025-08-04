@@ -64,15 +64,8 @@ export function UtilisateurUpdateModal({
 
   const onSubmit = useCallback(
     async (data: UtilisateurRoleDTO) => {
-      try {
-        await modifierRoleMutation({ id: utilisateur?.id || "", data });
-        handleClose();
-      } catch (error) {
-        toast.error("Erreur : ", {
-          description:
-            error instanceof Error ? error.message : "Erreur inconnue",
-        });
-      }
+      await modifierRoleMutation({ id: utilisateur?.id || "", data });
+      handleClose();
     },
     [modifierRoleMutation, handleClose, utilisateur]
   );

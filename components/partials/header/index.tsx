@@ -17,10 +17,10 @@ const DashCodeHeader = async () => {
           <HeaderLogo />
         </div>
         <div className="nav-tools flex items-center  md:gap-4 gap-3">
-          <LocalSwitcher />
-          <ThemeSwitcher />
-          <Messages />
-          <Notifications />
+          {/* <LocalSwitcher /> */}
+          {/* <ThemeSwitcher /> */}
+          {/* <Messages /> */}
+          {/* <Notifications /> */}
           <ProfileInfo />
           <SheetMenu />
         </div>

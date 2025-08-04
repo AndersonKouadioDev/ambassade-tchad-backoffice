@@ -18,8 +18,6 @@ const SidebarContent = ({ children }: { children: React.ReactNode }) => {
 
             <aside className={cn('fixed  z-50    h-full  xl:flex hidden', sidebarTheme, {
 
-
-
             })}>
                 <div className=" relative  flex   h-full  ">
                     {children}

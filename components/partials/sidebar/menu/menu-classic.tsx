@@ -74,7 +74,7 @@ export function MenuClassic({}) {
               "text-center": collapsed || !hovered,
             })}
           >
-            <SearchBar />
+            {/* <SearchBar /> */}
           </div>
         )}
 

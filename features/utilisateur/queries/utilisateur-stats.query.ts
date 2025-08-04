@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
     useQuery,
 } from '@tanstack/react-query';
@@ -13,22 +15,32 @@ export const utilisateurStatsQueryOption = ({ type }: { type: "personnel" | "dem
     return {
         queryKey: utilisateurKeyQuery("stats", type),
         queryFn: async () => {
-            return await obtenirStatsUtilisateursAction(type);
+            const result = await obtenirStatsUtilisateursAction(type);
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la récupération des stats utilisateurs");
+            }
+            return result.data!;
         },
 
-        keepPreviousData: true,
+        placeholderData: (previousData: any) => previousData,
         staleTime: 5 * 60 * 1000,
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération des stats utilisateurs:", {
-                description: error.message,
-            });
-        },
     };
 };
 
 //2- Hook pour récupérer les stats utilisateurs
 export const useUtilisateurStatsQuery = ({ type }: { type: "personnel" | "demandeur" }) => {
-    return useQuery(utilisateurStatsQueryOption({ type }));
+    const query = useQuery(utilisateurStatsQueryOption({ type }));
+
+    // Gestion des erreurs dans le hook
+    React.useEffect(() => {
+        if (query.isError && query.error) {
+            toast.error("Erreur lors de la récupération des stats utilisateurs:", {
+                description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
+            });
+        }
+    }, [query]);
+
+    return query;
 };
 
 //3- Fonction pour précharger les stats utilisateurs

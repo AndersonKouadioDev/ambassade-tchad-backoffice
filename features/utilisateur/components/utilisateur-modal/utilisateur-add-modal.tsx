@@ -61,18 +61,11 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
 
   const onSubmit = useCallback(
     async (formdata: UtilisateurAddDTO) => {
-      try {
-        // Ajout de l'utilisateur
-        await ajouterUtilisateurMutation(formdata);
+      // Ajout de l'utilisateur
+      await ajouterUtilisateurMutation(formdata);
 
-        // Fermeture de la modal
-        handleClose();
-      } catch (error) {
-        toast.error("Erreur : ", {
-          description:
-            error instanceof Error ? error.message : "Erreur inconnue",
-        });
-      }
+      // Fermeture de la modal
+      handleClose();
     },
     [ajouterUtilisateurMutation, handleClose]
   );

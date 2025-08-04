@@ -51,19 +51,13 @@ export function UtilisateurLockUnlockModal({
     : "Cet utilisateur ne pourra plus se connecter";
 
   const handleLockUnlock = useCallback(async () => {
-    try {
-      if (isLocked) {
-        await activerMutation(utilisateur?.id || "");
-      } else {
-        await desactiverMutation(utilisateur?.id || "");
-      }
-
-      handleClose();
-    } catch (error) {
-      toast.error("Erreur : ", {
-        description: error instanceof Error ? error.message : "Erreur inconnue",
-      });
+    if (isLocked) {
+      await activerMutation(utilisateur?.id || "");
+    } else {
+      await desactiverMutation(utilisateur?.id || "");
     }
+
+    handleClose();
   }, [utilisateur, isLocked, activerMutation, desactiverMutation, handleClose]);
 
   return (

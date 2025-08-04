@@ -18,6 +18,6 @@ export const api = new Api({
     }
   },// Récupération du token
   signOut: logout, // Déconnexion automatique si la requête échoue avec un code 401
-  debug: process.env.NODE_ENV === "development", // Debug activé en mode développement
+  debug: true, // Debug activé en mode développement
 });
 0

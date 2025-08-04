@@ -34,14 +34,8 @@ export function UtilisateurDeleteModal({
   }, [isPending, setIsOpen]);
 
   const handleDelete = useCallback(async () => {
-    try {
-      await supprimerUtilisateurMutation(utilisateur?.id || "");
-      handleClose();
-    } catch (error) {
-      toast.error("Erreur : ", {
-        description: error instanceof Error ? error.message : "Erreur inconnue",
-      });
-    }
+    await supprimerUtilisateurMutation(utilisateur?.id || "");
+    handleClose();
   }, [supprimerUtilisateurMutation, handleClose, utilisateur]);
 
   return (

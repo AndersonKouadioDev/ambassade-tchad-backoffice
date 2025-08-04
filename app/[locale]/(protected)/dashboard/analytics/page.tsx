@@ -9,13 +9,15 @@ import TeamTable from "@/components/project/team-table";
 import { teamData } from "../project/data";
 import RecentActivity from "./components/recent-activity";
 import { useTranslations } from "next-intl";
+import { DemandeStatsGrid } from "@/features/demande/components/demande-stats-grid";
 
 const DashboardPage = () => {
   const t = useTranslations("AnalyticsDashboard");
   const tm = useTranslations("ProjectDashboard");
   return (
     <div className="container">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
+      <DemandeStatsGrid />
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
         <StatusBlock
           title={t("revenue_chart_title")}
           total="$3,564"
@@ -44,7 +46,7 @@ const DashboardPage = () => {
           chartColor="#6366F1"
           icon={<LineChart className="w-5 h-5 text-muted-foreground" />}
         />
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-12 gap-5 mt-10">
         <div className="lg:col-span-8 col-span-12">

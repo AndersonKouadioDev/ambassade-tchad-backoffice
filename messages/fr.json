@@ -807,10 +807,10 @@
     "utilisateur_banni": "Utilisateurs bannis"
   },
   "gestionDemandeur": {
-    "title": "Gestion des demandeurs",
-    "total_demandeur": "Total des demandeurs",
-    "demandeur_actif": "Demandeurs actifs",
-    "demandeur_inactif": "Demandeurs inactifs",
-    "demandeur_banni": "Demandeurs bannis"
+    "title": "Gestion des citoyens",
+    "total_demandeur": "Total des citoyens",
+    "demandeur_actif": "Citoyens actifs",
+    "demandeur_inactif": "Citoyens inactifs",
+    "demandeur_banni": "Citoyens bannis"
   }
 }

@@ -53,29 +53,29 @@ export function getMenuList(pathname: string, t: any): Group[] {
           icon: "heroicons-outline:clipboard-document",
           submenus: [],
         },
-        {
-          id: "finance",
-          href: "/finance",
-          label: "Gestion financière",
-          active: pathname.startsWith("/finance"),
-          icon: "heroicons-outline:clipboard-document",
-          submenus: [
-            {
-              href: "/finance/rapport",
-              label: "Rapport financière",
-              active: pathname === "/finance/rapport",
-              icon: "",
-              children: [],
-            },
-            {
-              href: "/finance/depenses",
-              label: "Gestion des dépenses",
-              active: pathname === "/finance/depenses",
-              icon: "",
-              children: [],
-            }
-          ],
-        },
+        // {
+        //   id: "finance",
+        //   href: "/finance",
+        //   label: "Gestion financière",
+        //   active: pathname.startsWith("/finance"),
+        //   icon: "heroicons-outline:clipboard-document",
+        //   submenus: [
+        //     {
+        //       href: "/finance/rapport",
+        //       label: "Rapport financière",
+        //       active: pathname === "/finance/rapport",
+        //       icon: "",
+        //       children: [],
+        //     },
+        //     {
+        //       href: "/finance/depenses",
+        //       label: "Gestion des dépenses",
+        //       active: pathname === "/finance/depenses",
+        //       icon: "",
+        //       children: [],
+        //     }
+        //   ],
+        // },
         {
           id: "contenu",
           href: "/contenu",
@@ -104,20 +104,20 @@ export function getMenuList(pathname: string, t: any): Group[] {
               icon: "",
               children: [],
             },
-            {
-              href: "/contenu/galerie-video",
-              label: "Galerie vidéos",
-              active: pathname === "/contenu/galerie-video",
-              icon: "",
-              children: [],
-            },
-            {
-              href: "/contenu/services",
-              label: "Services",
-              active: pathname === "/contenu/services",
-              icon: "",
-              children: [],
-            },
+            // {
+            //   href: "/contenu/galerie-video",
+            //   label: "Galerie vidéos",
+            //   active: pathname === "/contenu/galerie-video",
+            //   icon: "",
+            //   children: [],
+            // },
+            // {
+            //   href: "/contenu/services",
+            //   label: "Services",
+            //   active: pathname === "/contenu/services",
+            //   icon: "",
+            //   children: [],
+            // },
           ],
         },
         {
@@ -136,14 +136,14 @@ export function getMenuList(pathname: string, t: any): Group[] {
           icon: "heroicons-outline:user-group",
           submenus: [],
         },
-        {
-          id: "settings",
-          href: "/settings",
-          label: "Paramètres",
-          active: pathname.startsWith("/settings"),
-          icon: "heroicons-outline:cog-6-tooth",
-          submenus: [],
-        },
+        // {
+        //   id: "settings",
+        //   href: "/settings",
+        //   label: "Paramètres",
+        //   active: pathname.startsWith("/settings"),
+        //   icon: "heroicons-outline:cog-6-tooth",
+        //   submenus: [],
+        // },
       ],
     },
   ];

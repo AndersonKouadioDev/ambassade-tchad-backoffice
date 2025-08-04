@@ -1,3 +1,5 @@
+"use client";
+
 import {
     useMutation,
 } from '@tanstack/react-query';
@@ -21,16 +23,22 @@ export const useAjouterUtilisateurMutation = () => {
     return useMutation({
         mutationFn: async (data: UtilisateurAddDTO) => {
             // Validation des données
-            const result = processAndValidateFormData(UtilisateurAddSchema, data,
+            const validation = processAndValidateFormData(UtilisateurAddSchema, data,
                 {
                     outputFormat: "object"
 
                 })
-            if (!result.success) {
-                throw new Error(result.errorsInString || "Une erreur est survenue lors de la validation des données.");
+            if (!validation.success) {
+                throw new Error(validation.errorsInString || "Une erreur est survenue lors de la validation des données.");
             }
 
-            return ajouterUtilisateurAction(result.data as UtilisateurAddDTO)
+            const result = await ajouterUtilisateurAction(validation.data as UtilisateurAddDTO);
+
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de l'ajout de l'utilisateur");
+            }
+
+            return result.data!;
         },
         onSuccess: async () => {
             await invalidateUtilisateurQuery();
@@ -38,6 +46,7 @@ export const useAjouterUtilisateurMutation = () => {
         },
 
         onError: async (error) => {
+            console.log("error query", error)
             toast.error("Erreur lors de l'ajout de l'utilisateur:", {
                 description: error.message,
             });
@@ -50,16 +59,20 @@ export const useModifierProfilMutation = () => {
     return useMutation({
         mutationFn: async (data: UtilisateurUpdateDTO) => {
             // Validation des données
-            const result = processAndValidateFormData(UtilisateurUpdateSchema, data,
+            const validation = processAndValidateFormData(UtilisateurUpdateSchema, data,
                 {
                     outputFormat: "object"
 
                 })
-            if (!result.success) {
-                throw new Error(result.errorsInString || "Une erreur est survenue lors de la validation des données.");
+            if (!validation.success) {
+                throw new Error(validation.errorsInString || "Une erreur est survenue lors de la validation des données.");
             }
 
-            return modifierProfilAction(result.data as UtilisateurUpdateDTO)
+            const result = await modifierProfilAction(validation.data as UtilisateurUpdateDTO)
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la modification de l'utilisateur");
+            }
+            return result.data!;
         },
         onSuccess: async () => {
             await invalidateUtilisateurQuery();
@@ -78,16 +91,20 @@ export const useModifierRoleMutation = () => {
     return useMutation({
         mutationFn: async ({ id, data }: { id: string, data: UtilisateurRoleDTO }) => {
             // Validation des données
-            const result = processAndValidateFormData(UtilisateurUpdateSchema, data,
+            const validation = processAndValidateFormData(UtilisateurUpdateSchema, data,
                 {
                     outputFormat: "object"
 
                 })
-            if (!result.success) {
-                throw new Error(result.errorsInString || "Une erreur est survenue lors de la validation des données.");
+            if (!validation.success) {
+                throw new Error(validation.errorsInString || "Une erreur est survenue lors de la validation des données.");
             }
 
-            return modifierRoleAction(id, result.data as UtilisateurRoleDTO)
+            const result = await modifierRoleAction(id, validation.data as UtilisateurRoleDTO)
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la modification du role");
+            }
+            return result.data!;
         },
         onSuccess: async () => {
             await invalidateUtilisateurQuery();
@@ -108,7 +125,11 @@ export const useActiverUtilisateurMutation = () => {
             if (!id) {
                 throw new Error("L'identifiant de l'utilisateur est requis.");
             }
-            return activerUtilisateurAction(id)
+            const result = await activerUtilisateurAction(id)
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de l'activation de l'utilisateur");
+            }
+            return result.data!;
         },
         onSuccess: async () => {
             await invalidateUtilisateurQuery();
@@ -129,7 +150,11 @@ export const useDesactiverUtilisateurMutation = () => {
             if (!id) {
                 throw new Error("L'identifiant de l'utilisateur est requis.");
             }
-            return desactiverUtilisateurAction(id)
+            const result = await desactiverUtilisateurAction(id)
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la desactivation de l'utilisateur");
+            }
+            return result.data!;
         },
         onSuccess: async () => {
             await invalidateUtilisateurQuery();
@@ -150,7 +175,11 @@ export const useSupprimerUtilisateurMutation = () => {
             if (!id) {
                 throw new Error("L'identifiant de l'utilisateur est requis.");
             }
-            return supprimerUtilisateurAction(id)
+            const result = await supprimerUtilisateurAction(id)
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la suppression de l'utilisateur");
+            }
+            return result.data!;
         },
         onSuccess: async () => {
             await invalidateUtilisateurQuery();
