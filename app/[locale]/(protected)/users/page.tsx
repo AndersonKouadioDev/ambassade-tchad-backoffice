@@ -33,8 +33,8 @@ export default async function UserListPage() {
           </div>
         </div>
       </div>
-      <UtilisateursStatsGrid type="demandeur" />
-      <UserList type="demandeur" />
+      <UtilisateursStatsGrid type="personnel" />
+      <UserList type="personnel" />
     </div>
   );
 }

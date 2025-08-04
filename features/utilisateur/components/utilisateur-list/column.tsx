@@ -122,13 +122,15 @@ export const columns: ColumnDef<DataProps>[] = [
     header: "Actions",
     enableHiding: false,
     cell: ({ row, table }) => {
-      const user = row.original as DataProps; // Ensure user is of type DataProps (IUtilisateur)
+      const user = row.original as DataProps;
+      
       const meta = table.options.meta as {
         onView: (user: DataProps) => void;
         onEdit: (user: DataProps) => void;
         onDelete: (user: DataProps) => void;
         onLockUnlock: (user: DataProps) => void;
       };
+
       if (user.status === UtilisateurStatus.DELETED) {
         return (
           <div className="flex gap-2">
@@ -211,6 +213,7 @@ export const columns: ColumnDef<DataProps>[] = [
     },
   },
 ];
+
 export const columnsdemandeur: ColumnDef<DataProps>[] = [
   {
     accessorKey: "firstName", // Changed to firstName as per IUtilisateur
