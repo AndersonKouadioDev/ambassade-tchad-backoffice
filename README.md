@@ -751,3 +751,8 @@ La Vue est la couche responsable de l'affichage de l'interface utilisateur.
 
 * **Emplacement** : `src/features/[nom-du-module]/tests/`
 * **Description** : Tests unitaires et d'intégration du module.
+
+
+## Références
+- https://www.milanjovanovic.tech/blog/vertical-slice-architecture
+- https://builtin.com/software-engineering-perspectives/mvvm-architecture
