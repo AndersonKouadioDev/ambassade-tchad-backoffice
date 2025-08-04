@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,20 +21,26 @@ import { useSession } from "next-auth/react";
 
 const ProfileInfo = () => {
   const session = useSession();
+  const [user, setUser] = useState(session?.data?.user);
+
+  useEffect(() => {
+    setUser(session?.data?.user);
+  }, [session]);
+
   return (
     <div className="md:block hidden">
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <div className="flex items-center gap-3 text-embassy-blue-800 hover:bg-embassy-blue-50  bg-embassy-blue-50 rounded-lg px-2 py-1 transition-all duration-200 dark:text-embassy-blue-200 dark:hover:bg-embassy-blue-800/30">
             <Image
-              src="/images/all-img/user3.png"
-              alt={session?.data?.user?.name?.charAt(0) || "User"}
+              src={user?.image || "/images/all-img/user3.png"}
+              alt={user?.name?.charAt(0) || "User"}
               width={36}
               height={36}
               className="rounded-full border-2 border-embassy-blue-200 dark:border-embassy-blue-600"
             />
             <div className="text-sm font-semibold capitalize lg:block hidden">
-              {session?.data?.user?.name}
+              {user?.name}
             </div>
             <span className="text-base me-2.5 lg:inline-block hidden text-white dark:text-embassy-blue-400">
               <Icon icon="heroicons-outline:chevron-down"></Icon>
@@ -46,21 +53,21 @@ const ProfileInfo = () => {
         >
           <DropdownMenuLabel className="flex gap-3 items-center mb-1 p-4 border-b border-embassy-blue-100 dark:border-embassy-blue-700/30">
             <Image
-              src={session?.data?.user?.image || "/images/all-img/user3.png"}
-              alt={session?.data?.user?.name?.charAt(0) || "User"}
+              src={user?.image || "/images/all-img/user3.png"}
+              alt={user?.name?.charAt(0) || "User"}
               width={40}
               height={40}
               className="rounded-full border-2 border-embassy-blue-200 dark:border-embassy-blue-600"
             />
             <div>
               <div className="text-sm font-semibold text-embassy-blue-800 capitalize dark:text-embassy-blue-200">
-                {session?.data?.user?.name}
+                {user?.name}
               </div>
               <Link
                 href="/dashboard"
                 className="text-xs text-embassy-blue-600 hover:text-embassy-blue-800 transition-colors dark:text-embassy-blue-400 dark:hover:text-embassy-blue-300"
               >
-                {session?.data?.user?.email}
+                {user?.email}
               </Link>
             </div>
           </DropdownMenuLabel>

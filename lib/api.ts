@@ -20,4 +20,3 @@ export const api = new Api({
   signOut: logout, // Déconnexion automatique si la requête échoue avec un code 401
   debug: true, // Debug activé en mode développement
 });
-0
