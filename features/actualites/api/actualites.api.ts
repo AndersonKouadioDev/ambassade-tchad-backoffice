@@ -2,6 +2,7 @@ import { PaginatedResponse } from "@/types";
 import { api } from "@/lib/api";
 import { IActualiteRechercheParams, IActualite, IActualiteStats } from "../types/actualites.type";
 import { SearchParams } from "ak-api-http";
+
 export interface IActualiteAPI {
     getAll: (params: IActualiteRechercheParams) => Promise<PaginatedResponse<IActualite>>;
     getById: (id: string) => Promise<IActualite>;
@@ -18,7 +19,7 @@ export const actualiteAPI: IActualiteAPI = {
             method: "GET",
             searchParams: {
                 ...params as unknown as SearchParams,
-                include: "author" // Inclure les données de l'auteur
+                include: "author"
             },
         });
     },
@@ -28,7 +29,7 @@ export const actualiteAPI: IActualiteAPI = {
             endpoint: `/news/${id}`,
             method: "GET",
             searchParams: {
-                include: "author" // Inclure les données de l'auteur
+                include: "author"
             },
         });
     },
@@ -41,7 +42,6 @@ export const actualiteAPI: IActualiteAPI = {
     },
 
     create(formData: FormData): Promise<IActualite> {
-        console.log('actualiteAPI.create - FormData reçu:', formData);
 
         return api.request<IActualite>({
             endpoint: `/news`,
@@ -57,9 +57,6 @@ export const actualiteAPI: IActualiteAPI = {
     },
 
     update(id: string, formData: FormData): Promise<IActualite> {
-        console.log('actualiteAPI.update - Données reçues:', formData);
-        console.log('actualiteAPI.update - FormData reçu:', formData);
-
         return api.request<IActualite>({
             endpoint: `/news/${id}`,
             method: "PUT",
