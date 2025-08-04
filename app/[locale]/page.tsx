@@ -4,14 +4,9 @@ import LoginForm from "@/features/auth/components/auth-form/login-form";
 import Image from "next/image";
 import { InfoIcon, MailIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useSession } from "next-auth/react";
-import { baseURL } from "@/config";
 
 export default function HomePage() {
   const t = useTranslations("LoginPage");
-  const session = useSession();
-  console.log({ session });
-  console.log({ baseURL });
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Background pour la partie droite avec support dark mode */}
