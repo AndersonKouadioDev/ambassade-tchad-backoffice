@@ -20,7 +20,7 @@ import { UtilisateurAddModal } from "../utilisateur-modal/utilisateur-add-modal"
 import { UtilisateurDeleteModal } from "../utilisateur-modal/utilisateur-delete-modal";
 import { UtilisateurLockUnlockModal } from "../utilisateur-modal/utilisateur-lock-unlock-modal";
 
-export function UserList({ type }: { type: "personnel" | "demandeur" }) {
+export function UtilisateurList({ type }: { type: "personnel" | "demandeur" }) {
   const columns = getColumns({ type });
   const {
     table,

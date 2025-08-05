@@ -6,9 +6,10 @@ import { JWT } from "next-auth/jwt";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
-    maxAge: 7 * 24 * 60 * 60, // 7 jours (refresh token)
+    maxAge: 30 * 24 * 60 * 60, // 30 jours (refresh token)
   },
   debug: process.env.NODE_ENV === "development",
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -63,8 +64,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           isPasswordChangeRequired: user.isPasswordChangeRequired,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
-          accessTokenExpires: Date.now() + 1000 * 60 * 60 * 24, // 1 jour 
-          refreshTokenExpires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 jour 
+          accessTokenExpires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 jour 
+          refreshTokenExpires: Date.now() + 1000 * 60 * 60 * 24 * 30, // 30 jour 
         } as JWT;
       }
       if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
@@ -104,7 +105,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
     return {
       ...token,
       accessToken: response.accessToken,
-      accessTokenExpires: Date.now() + 1000 * 60 * 60 * 24, // 1 jour
+      accessTokenExpires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 jour 
     };
   } catch (error) {
     console.error("Erreur lors du rafraîchissement du jeton d'accès :", error);

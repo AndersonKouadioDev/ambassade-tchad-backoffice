@@ -2,7 +2,7 @@ import React from "react";
 import { BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { ButtonGoLink } from "@/components/blocks/button-goLink";
-import { ActualiteForm } from "@/features/actualites/components/actualite-form/actualite-form";
+import { ActualiteAddUpdateForm } from "@/features/actualites/components/actualite-form/actualite-add-update-form";
 
 export default function CreateActualitePage() {
   const t = getTranslations("contenu.gestionActualite");
@@ -27,7 +27,7 @@ export default function CreateActualitePage() {
 
       {/* Formulaire */}
       <div className="bg-white dark:bg-default-100 rounded-xl shadow-sm border border-default-200/50 p-6">
-        <ActualiteForm />
+        <ActualiteAddUpdateForm />
       </div>
     </div>
   );

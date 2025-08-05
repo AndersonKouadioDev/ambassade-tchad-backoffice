@@ -26,12 +26,14 @@ export const utilisateurAPI: IUtilisateurAPI = {
             searchParams: params as SearchParams,
         });
     },
+
     obtenirUtilisateur(id: string): Promise<IUtilisateur> {
         return api.request<IUtilisateur>({
             endpoint: `/users/${id}/profile`,
             method: "GET",
         });
     },
+
     obtenirStatsUtilisateurs(type: "personnel" | "demandeur"): Promise<IUtilisateurStatsResponse> {
         return api.request<IUtilisateurStatsResponse>({
             endpoint: `/users/stats/${type}`,

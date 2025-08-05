@@ -51,6 +51,7 @@ export interface IUtilisateur {
   notificationSetting?: IParametreNotification;
   notifications?: INotification[];
 }
+
 export interface IUtilisateursParams {
   type?: UtilisateurType;
   status?: UtilisateurStatus;

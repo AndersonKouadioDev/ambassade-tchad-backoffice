@@ -19,11 +19,9 @@ export interface PaginatedResponse<T> {
     }
 }
 
-export interface ApiResponse<T> {
+export interface ActionResponse<T> {
     success: boolean;
     data?: T;
     message?: string;
     error?: string;
 }
-
-export interface ApiPaginatedResponse<T> extends ApiResponse<PaginatedResponse<T>> { }

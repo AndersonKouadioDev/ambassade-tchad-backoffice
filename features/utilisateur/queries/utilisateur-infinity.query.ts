@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
     useInfiniteQuery,
 } from '@tanstack/react-query';
@@ -16,11 +18,18 @@ export const utilisateursInfinityQueryOption = (utilisateursParamsDTO: IUtilisat
     return {
         queryKey: utilisateurKeyQuery("list", utilisateursParamsDTO),
         queryFn: async ({ pageParam = 1 }) => {
-            const data = await obtenirTousUtilisateursAction({
+
+            const result = await obtenirTousUtilisateursAction({
                 ...utilisateursParamsDTO,
                 page: pageParam,
             });
-            return data;
+
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la récupération des utilisateurs");
+            }
+
+            return result.data!;
+
         },
 
         initialPageParam: 1,
@@ -29,11 +38,6 @@ export const utilisateursInfinityQueryOption = (utilisateursParamsDTO: IUtilisat
             const hasNextPage = lastPage.meta.totalPages > lastPage.meta.page;
             return hasNextPage ? lastPage.meta.page + 1 : undefined;
         },
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération des utilisateurs:", {
-                description: error.message,
-            });
-        },
     };
 };
 
@@ -41,7 +45,18 @@ export const utilisateursInfinityQueryOption = (utilisateursParamsDTO: IUtilisat
 export const useUtilisateursInfinityQuery = (
     utilisateursParamsDTO: IUtilisateursParams
 ) => {
-    return useInfiniteQuery(utilisateursInfinityQueryOption(utilisateursParamsDTO));
+    const query = useInfiniteQuery(utilisateursInfinityQueryOption(utilisateursParamsDTO));
+
+    // Gestion des erreurs dans le hook
+    React.useEffect(() => {
+        if (query.isError && query.error) {
+            toast.error("Erreur lors de la récupération des utilisateurs:", {
+                description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
+            });
+        }
+    }, [query]);
+
+    return query;
 };
 
 //3- Fonction pour précharger les utilisateurs

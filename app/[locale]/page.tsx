@@ -1,11 +1,12 @@
+"use client";
 import { Link } from "@/i18n/routing";
 import LoginForm from "@/features/auth/components/auth-form/login-form";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
 import { InfoIcon, MailIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-export default async function HomePage() {
-  const t = await getTranslations("LoginPage");
+export default function HomePage() {
+  const t = useTranslations("LoginPage");
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Background pour la partie droite avec support dark mode */}

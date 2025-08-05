@@ -4,11 +4,11 @@ export interface IActualite {
     id: string;
     title: string;
     content: string;
-    imageUrls?: string[]; // Images uploadées via fichiers
+    imageUrls?: string[];
     published: boolean;
     authorId: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt?: string;
+    updatedAt?: string;
 
     author?: IUtilisateur;
 }
@@ -20,9 +20,11 @@ export interface IActualiteRechercheParams {
     authorId?: string;
     page?: number;
     limit?: number;
+    toDate?: string;
+    fromDate?: string;
 }
 
-export interface IActualiteStats {
+export interface IActualiteStatsResponse {
     total: number;
     published: number;
     unpublished: number;

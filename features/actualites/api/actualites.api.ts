@@ -1,11 +1,12 @@
 import { PaginatedResponse } from "@/types";
 import { api } from "@/lib/api";
-import { IActualiteRechercheParams, IActualite, IActualiteStats } from "../types/actualites.type";
+import { IActualiteRechercheParams, IActualite, IActualiteStatsResponse } from "../types/actualites.type";
 import { SearchParams } from "ak-api-http";
+
 export interface IActualiteAPI {
     getAll: (params: IActualiteRechercheParams) => Promise<PaginatedResponse<IActualite>>;
     getById: (id: string) => Promise<IActualite>;
-    getStats: () => Promise<IActualiteStats>;
+    getStats: () => Promise<IActualiteStatsResponse>;
     create: (data: FormData) => Promise<IActualite>;
     update: (id: string, formData: FormData) => Promise<IActualite>;
     delete: (id: string) => Promise<void>;
@@ -16,10 +17,7 @@ export const actualiteAPI: IActualiteAPI = {
         return api.request<PaginatedResponse<IActualite>>({
             endpoint: `/news`,
             method: "GET",
-            searchParams: {
-                ...params as unknown as SearchParams,
-                include: "author" // Inclure les données de l'auteur
-            },
+            searchParams: params as SearchParams,
         });
     },
 
@@ -27,21 +25,17 @@ export const actualiteAPI: IActualiteAPI = {
         return api.request<IActualite>({
             endpoint: `/news/${id}`,
             method: "GET",
-            searchParams: {
-                include: "author" // Inclure les données de l'auteur
-            },
         });
     },
 
-    getStats(): Promise<IActualiteStats> {
-        return api.request<IActualiteStats>({
+    getStats(): Promise<IActualiteStatsResponse> {
+        return api.request<IActualiteStatsResponse>({
             endpoint: `/news/stats`,
             method: "GET",
         });
     },
 
     create(formData: FormData): Promise<IActualite> {
-        console.log('actualiteAPI.create - FormData reçu:', formData);
 
         return api.request<IActualite>({
             endpoint: `/news`,
@@ -57,9 +51,6 @@ export const actualiteAPI: IActualiteAPI = {
     },
 
     update(id: string, formData: FormData): Promise<IActualite> {
-        console.log('actualiteAPI.update - Données reçues:', formData);
-        console.log('actualiteAPI.update - FormData reçu:', formData);
-
         return api.request<IActualite>({
             endpoint: `/news/${id}`,
             method: "PUT",

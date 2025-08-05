@@ -1,10 +1,9 @@
-
-import { ActualiteList } from "@/features/actualites/components/actualite-list";
 import { ActualiteStats } from "@/features/actualites/components/actualite-stats/actualite-stats";
 import { prefetchActualitesList } from "@/features/actualites/queries/actualite-list.query";
 import { prefetchActualiteStats } from "@/features/actualites/queries/actualite-stats.query";
 import { BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { ActualiteListTable } from "@/features/actualites/components/actualite-list-table";
 
 export default async function ActualiteListPage() {
   const t = await getTranslations("contenu.gestionActualite");
@@ -40,7 +39,7 @@ export default async function ActualiteListPage() {
 
       {/* Composant principal des actualités */}
       <div className="bg-white dark:bg-default-100 rounded-xl shadow-sm border border-default-200/50 p-6">
-        <ActualiteList />
+        <ActualiteListTable />
       </div>
     </div>
   );

@@ -27,7 +27,6 @@ import { getEnumValues } from "@/utils/getEnumValues";
 import { Button } from "@heroui/react";
 import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
 import { useAjouterUtilisateurMutation } from "../../queries/utilisateur.mutation";
-import { toast } from "sonner";
 
 type Props = {
   isOpen: boolean;
@@ -61,18 +60,11 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
 
   const onSubmit = useCallback(
     async (formdata: UtilisateurAddDTO) => {
-      try {
-        // Ajout de l'utilisateur
-        await ajouterUtilisateurMutation(formdata);
+      // Ajout de l'utilisateur
+      await ajouterUtilisateurMutation(formdata);
 
-        // Fermeture de la modal
-        handleClose();
-      } catch (error) {
-        toast.error("Erreur : ", {
-          description:
-            error instanceof Error ? error.message : "Erreur inconnue",
-        });
-      }
+      // Fermeture de la modal
+      handleClose();
     },
     [ajouterUtilisateurMutation, handleClose]
   );

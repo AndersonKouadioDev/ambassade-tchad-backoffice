@@ -15,7 +15,7 @@ Nous combinons plusieurs patrons d'architecture modernes, particulièrement adap
 
   * **MVVM (Model-View-ViewModel)** : Ce patron est implémenté naturellement dans nos applications React/Next.js :
 
-      * Le **Modèle** : Représenté par les définitions de données (types, schemas), les interfaces avec le backend (api) et les logiques serveur encapsulées (actions).
+      * Le **Modèle** : Représenté par les définitions de données (types, schemas), les interfaces avec le backend (apis) et les logiques serveur encapsulées (actions).
       * La **Vue** : Correspond aux composants React (**components**) et aux pages (`app/[locale]/[module]`) qui affichent l'interface utilisateur.
       * Le **ViewModel** : Géré par les **hooks** personnalisés (hooks) et les hooks de gestion de données (**queries** via TanStack Query). Il contient la logique de présentation et d'état de l'interface utilisateur, agissant comme un intermédiaire entre le Modèle et la Vue.
 
@@ -44,7 +44,7 @@ start/
 ├── features/             # **LE CŒUR** : Toutes les fonctionnalités métier, organisées en tranches verticales
 │   └── [module_name]/    # Chaque dossier représente une fonctionnalité ou un domaine (ex: products, users, auth)
 │       ├── actions/      # Actions serveur (Server Actions)
-│       ├── api/          # Fonctions API brutes
+│       ├── apis/         # Fonctions API brutes
 │       ├── components/   # Composants spécifiques à ce module
 │       ├── filters/      # Définitions des filtres pour Nuqs
 │       ├── hooks/        # Hooks personnalisés (le ViewModel du module)
@@ -93,46 +93,64 @@ Chaque module est une unité autonome et contient tout ce dont il a besoin.
 #### `actions/` (Server Actions) :
 
   * **Fichiers** : `[actionName].action.ts` (ex: `createProduct.action.ts`, `utilisateur.action.ts`)
-  * **Contenu** : Fonctions de **Server Actions Next.js** ("use server"). Elles encapsulent les appels aux fonctions de `features/[module]/api/` et sont destinées à être appelées depuis le côté client (form submit, etc.) ou serveur.
-  * **Objectif** : Protéger les informations sensibles du backend en ne les exposant pas côté client et centraliser la logique de mutation serveur.
-  * **Convention** : Elles doivent appeler les fonctions API de `features/[module]/api/`.
-  * **À ne pas faire** : **NE JAMAIS** appeler directement les API routes (de `features/[module]/api/`) dans les `queries/` côté client. Utilisez toujours les Server Actions pour cela.
+  * **Contenu** : Fonctions de **Server Actions Next.js** ("use server"). Elles encapsulent les appels aux fonctions de `features/[module]/apis/` et retournent un type `ActionResponse<T>` standardisé pour une gestion cohérente des succès/erreurs.
+  * **Objectif** : Protéger les informations sensibles du backend en ne les exposant pas côté client et centraliser la logique de mutation serveur avec une gestion d'erreur robuste.
+  * **Convention** : Elles doivent appeler les fonctions API de `features/[module]/apis/` et utiliser `handleServerActionError` pour la gestion d'erreur.
+  * **À ne pas faire** : **NE JAMAIS** appeler directement les API routes (de `features/[module]/apis/`) dans les `queries/` côté client. Utilisez toujours les Server Actions pour cela.
 
 <!-- end list -->
 
 ```typescript
 // src/features/utilisateur/actions/utilisateur.action.ts (Extrait)
 "use server"
-import { utilisateurAPI } from "../api/utilisateur.api";
-import { UtilisateurAddDTO, UtilisateurAddSchema } from "../schema/utilisateur.schema";
-import { processAndValidateFormData } from "ak-zod-form-kit"; // Utilitaire de validation basé sur Zod
+import { ActionResponse, PaginatedResponse } from "@/types";
+import { utilisateurAPI } from "../apis/utilisateur.api";
+import { UtilisateurAddDTO, UtilisateurRoleDTO, UtilisateurUpdateDTO } from "../schema/utilisateur.schema";
+import { IUtilisateur, IUtilisateurActiveDesactiveDeleteResponse, IUtilisateursParams, IUtilisateurStatsResponse } from "../types/utilisateur.type";
+import { handleServerActionError } from "@/utils/handleServerActionError";
 
-export const obtenirTousUtilisateursAction = (params: IUtilisateursParams) => {
-    return utilisateurAPI.obtenirTousUtilisateurs(params);
-}
-
-export const ajouterUtilisateurAction = async (data: UtilisateurAddDTO) => {
-    const result = processAndValidateFormData(UtilisateurAddSchema, data, { outputFormat: "object" });
-    if (!result.success) {
-        throw new Error(result.errorsInString || "Une erreur est survenue lors de la validation des données.");
+export const obtenirTousUtilisateursAction = async (params: IUtilisateursParams): Promise<ActionResponse<PaginatedResponse<IUtilisateur>>> => {
+    try {
+        const data = await utilisateurAPI.obtenirTousUtilisateurs(params);
+        return {
+            success: true,
+            data: data,
+            message: "Utilisateurs obtenus avec succès",
+        }
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération des utilisateurs");
     }
-    return await utilisateurAPI.ajouterUtilisateur(data);
 }
+
+export const ajouterUtilisateurAction = async (formdata: UtilisateurAddDTO): Promise<ActionResponse<IUtilisateur>> => {
+    try {
+        const data = await utilisateurAPI.ajouterUtilisateur(formdata);
+        return {
+            success: true,
+            data: data,
+            message: "Utilisateur ajoute avec succès",
+        }
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de l'ajout de l'utilisateur");
+    }
+}
+
 // ... autres actions (modifier, supprimer, activer/désactiver)
 ```
 
-#### `api/` (API Routes Brutes) :
+#### `apis/` (API Routes Brutes) :
 
   * **Fichiers** : `[moduleName].api.ts` (ex: `products.api.ts`, `utilisateur.api.ts`)
   * **Contenu** : Fonctions asynchrones qui encapsulent les appels HTTP bruts via le client `api` configuré dans `lib/api.ts`.
   * **Objectif** : Représenter l'interface directe avec le backend. Elles sont la première couche d'interaction avec l'API externe.
   * **Gestion d'erreur** : En cas d'échec (statut HTTP non 2xx), une exception doit être levée automatiquement par la configuration de `lib/api.ts` pour une gestion centralisée.
   * Elles ne connaissent **PAS** TanStack Query ni les Server Actions.
+  * **Note** : Le dossier `apis/` remplace l'ancien `api/` pour plus de clarté.
 
 <!-- end list -->
 
 ```typescript
-// src/features/utilisateur/api/utilisateur.api.ts (Extrait)
+// src/features/utilisateur/apis/utilisateur.api.ts (Extrait)
 import { api } from "@/lib/api"; // Client HTTP centralisé (basé sur axios)
 import { IUtilisateur, IUtilisateursParams, IUtilisateurAddUpdateResponse } from "../types/utilisateur.type";
 import { PaginatedResponse } from "@/types";
@@ -146,8 +164,8 @@ export const utilisateurAPI = {
             searchParams: params,
         });
     },
-    ajouterUtilisateur(data: UtilisateurAddDTO): Promise<IUtilisateurAddUpdateResponse> {
-        return api.request<IUtilisateurAddUpdateResponse>({
+    ajouterUtilisateur(data: UtilisateurAddDTO): Promise<IUtilisateur> {
+        return api.request<IUtilisateur>({
             endpoint: `/users`,
             method: "POST",
             data,
@@ -289,37 +307,60 @@ export function useUtilisateurListTable({ columns, type }: IUtilisateurListTable
 #### `queries/` (TanStack Query) :
 
   * **Fichiers** : `[queryName].query.ts` (ex: `getAllProducts.query.ts`, `utilisateur-list.query.ts`), `[mutationName].mutation.ts` (ex: `createProduct.mutation.ts`, `utilisateur.mutation.ts`), `index.query.ts` (pour les clés de cache et l'invalidation).
-  * **Contenu** : Hooks `useQuery` et `useMutation` de TanStack Query.
+  * **Contenu** : Hooks `useQuery`, `useInfiniteQuery` et `useMutation` de TanStack Query avec gestion d'erreur intégrée.
   * **Objectif** : Gérer le cache, les re-fetches, les chargements, les erreurs pour les opérations de lecture et de mutation.
-  * **Convention** : Ces hooks **DOIVENT** appeler les Server Actions de `features/[module]/actions/` pour interagir avec le backend, et non directement les fonctions de `api/`.
+  * **Convention** : Ces hooks **DOIVENT** appeler les Server Actions de `features/[module]/actions/` pour interagir avec le backend, et non directement les fonctions de `apis/`.
+  * **Gestion d'erreur** : Chaque hook inclut une gestion automatique des erreurs avec `toast.error`.
 
 <!-- end list -->
 
 ```typescript
 // src/features/utilisateur/queries/utilisateur-list.query.ts (Extrait)
-// Hook pour récupérer la liste des utilisateurs avec pagination et filtres
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
 import { obtenirTousUtilisateursAction } from '../actions/utilisateur.action';
 import { IUtilisateursParams } from '../types/utilisateur.type';
 import { utilisateurKeyQuery } from './index.query';
+import { toast } from 'sonner';
 
 const queryClient = getQueryClient();
 
+//1- Option de requête optimisée
 export const utilisateursListQueryOption = (utilisateursParamsDTO: IUtilisateursParams) => {
     return {
         queryKey: utilisateurKeyQuery("list", utilisateursParamsDTO),
         queryFn: async () => {
-            return obtenirTousUtilisateursAction(utilisateursParamsDTO);
+            const result = await obtenirTousUtilisateursAction(utilisateursParamsDTO);
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la récupération des utilisateurs");
+            }
+            return result.data!;
         },
-        keepPreviousData: true, staleTime: 30 * 1000, refetchOnWindowFocus: false,
+        placeholderData: (previousData: any) => previousData,
+        staleTime: 30 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
     };
 };
 
+//2- Hook pour récupérer les utilisateurs
 export const useUtilisateursListQuery = (utilisateursParamsDTO: IUtilisateursParams) => {
-    return useQuery(utilisateursListQueryOption(utilisateursParamsDTO));
+    const query = useQuery(utilisateursListQueryOption(utilisateursParamsDTO));
+
+    // Gestion des erreurs dans le hook
+    React.useEffect(() => {
+        if (query.isError && query.error) {
+            toast.error("Erreur lors de la récupération des utilisateurs:", {
+                description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
+            });
+        }
+    }, [query]);
+
+    return query;
 };
 
+//3- Fonction pour précharger les utilisateurs
 export const prefetchUtilisateursListQuery = (utilisateursParamsDTO: IUtilisateursParams) => {
     return queryClient.prefetchQuery(utilisateursListQueryOption(utilisateursParamsDTO));
 }
@@ -327,23 +368,44 @@ export const prefetchUtilisateursListQuery = (utilisateursParamsDTO: IUtilisateu
 
 ```typescript
 // src/features/utilisateur/queries/utilisateur.mutation.ts (Extrait)
-// Hooks de mutation pour les opérations CRUD sur les utilisateurs
+"use client";
 import { useMutation } from '@tanstack/react-query';
 import { ajouterUtilisateurAction } from '../actions/utilisateur.action';
 import { useInvalidateUtilisateurQuery } from './index.query';
 import { UtilisateurAddDTO } from '../schema/utilisateur.schema';
 import { toast } from "sonner";
+import { processAndValidateFormData } from "ak-zod-form-kit";
+import { UtilisateurAddSchema } from "../schema/utilisateur.schema";
 
 export const useAjouterUtilisateurMutation = () => {
     const invalidateUtilisateurQuery = useInvalidateUtilisateurQuery()
+
     return useMutation({
-        mutationFn: async (data: UtilisateurAddDTO) => ajouterUtilisateurAction(data),
+        mutationFn: async (data: UtilisateurAddDTO) => {
+            // Validation des données côté client
+            const validation = processAndValidateFormData(UtilisateurAddSchema, data, {
+                outputFormat: "object"
+            })
+            if (!validation.success) {
+                throw new Error(validation.errorsInString || "Une erreur est survenue lors de la validation des données.");
+            }
+
+            const result = await ajouterUtilisateurAction(validation.data as UtilisateurAddDTO);
+
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de l'ajout de l'utilisateur");
+            }
+
+            return result.data!;
+        },
         onSuccess: async () => {
             await invalidateUtilisateurQuery();
             toast.success("Utilisateur ajouté avec succès");
         },
         onError: async (error) => {
-            toast.error("Erreur lors de l'ajout de l'utilisateur:", { description: error.message });
+            toast.error("Erreur lors de l'ajout de l'utilisateur:", {
+                description: error.message,
+            });
         },
     });
 };
@@ -689,3 +751,8 @@ La Vue est la couche responsable de l'affichage de l'interface utilisateur.
 
 * **Emplacement** : `src/features/[nom-du-module]/tests/`
 * **Description** : Tests unitaires et d'intégration du module.
+
+
+## Références
+- https://www.milanjovanovic.tech/blog/vertical-slice-architecture
+- https://builtin.com/software-engineering-perspectives/mvvm-architecture

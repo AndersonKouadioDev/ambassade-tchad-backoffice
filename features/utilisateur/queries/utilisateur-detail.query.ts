@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
     useQuery,
 } from '@tanstack/react-query';
@@ -5,6 +7,7 @@ import getQueryClient from '@/lib/get-query-client';
 import { obtenirUnUtilisateurAction } from '../actions/utilisateur.action';
 import { utilisateurKeyQuery } from './index.query';
 import { toast } from 'sonner';
+import { useEffect } from 'react';
 
 const queryClient = getQueryClient();
 
@@ -15,20 +18,33 @@ export const utilisateurQueryOption = (id: string) => {
         queryKey: utilisateurKeyQuery("detail", id),
         queryFn: async () => {
             if (!id) throw new Error("L'identifiant utilisateur est requis");
-            return obtenirUnUtilisateurAction(id);
+
+            const result = await obtenirUnUtilisateurAction(id);
+
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+
+            return result.data;
         },
         enabled: !!id,
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération de l'utilisateur:", {
-                description: error.message,
-            });
-        },
     };
 };
 
 //2- Hook pour récupérer un utilisateur
 export const useUtilisateurQuery = (id: string) => {
-    return useQuery(utilisateurQueryOption(id));
+    const query = useQuery(utilisateurQueryOption(id));
+
+    // Gestion des erreurs dans le hook
+    React.useEffect(() => {
+        if (query.isError && query.error) {
+            toast.error("Erreur lors de la récupération de l'utilisateur:", {
+                description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
+            });
+        }
+    }, [query.isError, query.error]);
+
+    return query;
 };
 
 //3- Fonction pour précharger un utilisateur

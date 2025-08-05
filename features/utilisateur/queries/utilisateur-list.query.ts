@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
     useQuery,
 } from '@tanstack/react-query';
@@ -14,18 +16,16 @@ export const utilisateursListQueryOption = (utilisateursParamsDTO: IUtilisateurs
     return {
         queryKey: utilisateurKeyQuery("list", utilisateursParamsDTO),
         queryFn: async () => {
-            return obtenirTousUtilisateursAction(utilisateursParamsDTO);
+            const result = await obtenirTousUtilisateursAction(utilisateursParamsDTO);
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la récupération des utilisateurs");
+            }
+            return result.data!;
         },
-        keepPreviousData: true,
         placeholderData: (previousData: any) => previousData,
-        staleTime: 30 * 1000,
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération des utilisateurs:", {
-                description: error.message,
-            });
-        },
+        staleTime: 30 * 1000,//30 secondes
+        refetchOnWindowFocus: false,//Ne pas refetch lors du focus de la fenetre
+        refetchOnMount: true,//Refetch lors du mount
     };
 };
 
@@ -33,10 +33,21 @@ export const utilisateursListQueryOption = (utilisateursParamsDTO: IUtilisateurs
 export const useUtilisateursListQuery = (
     utilisateursParamsDTO: IUtilisateursParams
 ) => {
-    return useQuery(utilisateursListQueryOption(utilisateursParamsDTO));
+    const query = useQuery(utilisateursListQueryOption(utilisateursParamsDTO));
+
+    // Gestion des erreurs dans le hook
+    React.useEffect(() => {
+        if (query.isError && query.error) {
+            toast.error("Erreur lors de la récupération des utilisateurs:", {
+                description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
+            });
+        }
+    }, [query]);
+
+    return query;
 };
 
-//3- Fonction pour précharger les utilisateurs
+//3- Fonction pour précharger les utilisateurs appelée dans les pages
 export const prefetchUtilisateursListQuery = (
     utilisateursParamsDTO: IUtilisateursParams
 ) => {
