@@ -27,7 +27,6 @@ import { getEnumValues } from "@/utils/getEnumValues";
 import { Button } from "@heroui/react";
 import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
 import { useAjouterUtilisateurMutation } from "../../queries/utilisateur.mutation";
-import { toast } from "sonner";
 
 type Props = {
   isOpen: boolean;

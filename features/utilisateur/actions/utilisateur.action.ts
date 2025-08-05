@@ -1,4 +1,5 @@
-"use server"
+"use server";
+
 import { ActionResponse, PaginatedResponse } from "@/types";
 import { utilisateurAPI } from "../apis/utilisateur.api";
 import { UtilisateurAddDTO, UtilisateurRoleDTO, UtilisateurUpdateDTO } from "../schema/utilisateur.schema";

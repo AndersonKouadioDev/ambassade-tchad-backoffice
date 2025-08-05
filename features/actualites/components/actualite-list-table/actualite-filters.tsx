@@ -11,26 +11,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
 
 interface ActualiteFiltersProps {
   filters: {
     title: string;
-    published: 'true' | 'false' | 'all' | null;
-    status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'all' | null;
+    published: "true" | "false" | "all" | null;
   };
-  onTextFilterChange: (filterName: 'title' | 'description' | 'authorId', value: string) => void;
+  onTextFilterChange: (
+    filterName: "title" | "description" | "authorId",
+    value: string
+  ) => void;
   onPublishedFilterChange: (value: string) => void;
-  onStatusFilterChange: (value: string) => void;
-  onCreate: () => void;
 }
 
 export const ActualiteFilters: React.FC<ActualiteFiltersProps> = ({
   filters,
   onTextFilterChange,
   onPublishedFilterChange,
-  onStatusFilterChange,
-  onCreate,
 }) => {
+  const router = useRouter();
   return (
     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
@@ -43,7 +43,7 @@ export const ActualiteFilters: React.FC<ActualiteFiltersProps> = ({
             className="pl-10 w-full sm:w-64"
           />
         </div>
-        
+
         <Select
           value={filters.published || "all"}
           onValueChange={onPublishedFilterChange}
@@ -57,27 +57,15 @@ export const ActualiteFilters: React.FC<ActualiteFiltersProps> = ({
             <SelectItem value="false">Brouillon</SelectItem>
           </SelectContent>
         </Select>
-
-        <Select
-          value={filters.status || "all"}
-          onValueChange={onStatusFilterChange}
-        >
-          <SelectTrigger className="w-full sm:w-48">
-            <SelectValue placeholder="Statut" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tous les statuts</SelectItem>
-            <SelectItem value="DRAFT">Brouillon</SelectItem>
-            <SelectItem value="PUBLISHED">Publié</SelectItem>
-            <SelectItem value="ARCHIVED">Archivé</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
-      <Button onClick={onCreate} className="w-full sm:w-auto">
+      <Button
+        onClick={() => router.push("/contenu/actualite/create")}
+        className="w-full sm:w-auto"
+      >
         <Plus className="w-4 h-4 mr-2" />
         Créer une actualité
       </Button>
     </div>
   );
-}; 
+};

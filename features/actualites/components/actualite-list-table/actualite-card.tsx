@@ -25,20 +25,19 @@ import { cn } from "@/lib/utils";
 import { IActualite } from "../../types/actualites.type";
 import { formatImageUrl } from "../../utils/image-utils";
 import { Button } from "@heroui/react";
-
+import { useRouter } from "next/navigation";
 interface ActualiteCardProps {
   actualite: IActualite;
   onView: (actualite: IActualite) => void;
-  onEdit: (actualite: IActualite) => void;
   onDelete: (actualite: IActualite) => void;
 }
 
 export const ActualiteCard: React.FC<ActualiteCardProps> = ({
   actualite,
   onView,
-  onEdit,
   onDelete,
 }) => {
+  const router = useRouter();
   const [imageError, setImageError] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
@@ -93,7 +92,9 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
                 variant="ghost"
                 size="sm"
                 color="secondary"
-                onPress={() => onEdit(actualite)}
+                onPress={() =>
+                  router.push(`/contenu/actualite/edit/${actualite.id}`)
+                }
                 title="Modifier"
                 isIconOnly
               >
@@ -166,9 +167,7 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
               <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
                 Créé le{" "}
-                {actualite.createdAt instanceof Date
-                  ? actualite.createdAt.toLocaleDateString("fr-FR")
-                  : actualite.createdAt
+                {actualite.createdAt
                   ? new Date(actualite.createdAt).toLocaleDateString("fr-FR")
                   : "Date inconnue"}
               </span>
@@ -209,15 +208,7 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
               <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                 <Clock className="w-3 h-3" />
                 <span>
-                  {actualite.createdAt instanceof Date
-                    ? actualite.createdAt.toLocaleDateString("fr-FR", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    : actualite.createdAt
+                  {actualite.createdAt
                     ? new Date(actualite.createdAt).toLocaleDateString(
                         "fr-FR",
                         {
@@ -280,8 +271,8 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
                         Attention
                       </p>
                       <p className="text-red-700 dark:text-red-300">
-                        Cette action supprimera définitivement l&apos;actualité et
-                        toutes ses données associées. Cette opération ne peut
+                        Cette action supprimera définitivement l&apos;actualité
+                        et toutes ses données associées. Cette opération ne peut
                         pas être annulée.
                       </p>
                     </div>

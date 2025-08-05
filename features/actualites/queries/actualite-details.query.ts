@@ -1,40 +1,42 @@
+import React from "react";
 import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
-import { actualiteAPI } from "../api/actualites.api";
 import { getActualiteDetailAction } from "../actions/actualites.action";
+import { actualiteKeyQuery } from "./index.query";
+import { toast } from "sonner";
 const queryClient = getQueryClient();
 
-// la clé de cache
-const actualiteQueryKey = (id: string) => ['actualite', 'detail', id];
 // Option de requête
 export const actualiteQueryOption = (id: string) => {
     return {
-        queryKey: actualiteQueryKey(id),
-        queryFn: async () => {    
-           
-            const data = await getActualiteDetailAction(id);
-            return data;
+        queryKey: actualiteKeyQuery("detail", id),
+        queryFn: async () => {
+
+            const result = await getActualiteDetailAction(id);
+
+            if (!result.success) {
+                throw new Error(result.error || "Une erreur est survenue lors de la récupération de l'actualité");
+            }
+
+            return result.data!;
         },
         enabled: !!id,
     };
 }
 // Hook pour récupérer un actualite
-export const useActualite = (id: string) => {
-    return useQuery(actualiteQueryOption(id));
+export const useActualiteDetailQuery = (id: string) => {
+    const query = useQuery(actualiteQueryOption(id));
+
+    React.useEffect(() => {
+        if (query.isError || query.error) {
+            toast.error(query.error?.message);
+        }
+    }, [query]);
+
+    return query;
 };
+
 // Hook pour précharger un actualite
-export const prefetchActualite = (id: string) => {
+export const prefetchActualiteDetailQuery = (id: string) => {
     return queryClient.prefetchQuery(actualiteQueryOption(id));
-}
-// Fonction pour invalider le cache
-export const invalidateActualite = (id: string) => {
-    return queryClient.invalidateQueries({
-        queryKey: actualiteQueryKey(id),
-    });
-}
-// Fonction pour invalider tous les actualites
-export const invalidateAllActualites = () => {
-    return queryClient.invalidateQueries({  
-        queryKey: ['actualite'],
-    });
 }

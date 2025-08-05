@@ -23,7 +23,7 @@ export const utilisateurStatsQueryOption = ({ type }: { type: "personnel" | "dem
         },
 
         placeholderData: (previousData: any) => previousData,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 5 * 60 * 1000,//5 minutes
     };
 };
 

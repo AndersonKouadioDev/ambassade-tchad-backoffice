@@ -23,9 +23,9 @@ export const utilisateursListQueryOption = (utilisateursParamsDTO: IUtilisateurs
             return result.data!;
         },
         placeholderData: (previousData: any) => previousData,
-        staleTime: 30 * 1000,
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
+        staleTime: 30 * 1000,//30 secondes
+        refetchOnWindowFocus: false,//Ne pas refetch lors du focus de la fenetre
+        refetchOnMount: true,//Refetch lors du mount
     };
 };
 
@@ -47,7 +47,7 @@ export const useUtilisateursListQuery = (
     return query;
 };
 
-//3- Fonction pour précharger les utilisateurs
+//3- Fonction pour précharger les utilisateurs appelée dans les pages
 export const prefetchUtilisateursListQuery = (
     utilisateursParamsDTO: IUtilisateursParams
 ) => {

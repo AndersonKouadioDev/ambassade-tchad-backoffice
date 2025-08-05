@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { UtilisateursStatsGrid } from "@/features/utilisateur/components/utilisateurs-stats-grid";
 import { prefetchUtilisateurStatsQuery } from "@/features/utilisateur/queries/utilisateur-stats.query";
-import { UserList } from "@/features/utilisateur/components/utilisateur-list";
+import { UtilisateurList } from "@/features/utilisateur/components/utilisateur-list";
 import { prefetchUtilisateursListQuery } from "@/features/utilisateur/queries/utilisateur-list.query";
 import { BookOpen } from "lucide-react";
 
@@ -34,7 +34,7 @@ export default async function UserListPage() {
         </div>
       </div>
       <UtilisateursStatsGrid type="personnel" />
-      <UserList type="personnel" />
+      <UtilisateurList type="personnel" />
     </div>
   );
 }

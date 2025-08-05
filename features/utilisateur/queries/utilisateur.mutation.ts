@@ -25,13 +25,20 @@ export const useAjouterUtilisateurMutation = () => {
             // Validation des données
             const validation = processAndValidateFormData(UtilisateurAddSchema, data,
                 {
-                    outputFormat: "object"
-
+                    outputFormat: "object",
+                    transformations: {
+                        firstName: (value) => value.trim(),
+                        lastName: (value) => value.trim(),
+                        email: (value) => value.trim().toLowerCase(),
+                        phoneNumber: (value) => value.trim(),
+                    },
                 })
+
             if (!validation.success) {
                 throw new Error(validation.errorsInString || "Une erreur est survenue lors de la validation des données.");
             }
 
+            // Appel de l'API avec l'action
             const result = await ajouterUtilisateurAction(validation.data as UtilisateurAddDTO);
 
             if (!result.success) {

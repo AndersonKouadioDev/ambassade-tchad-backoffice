@@ -13,12 +13,12 @@ import {
 } from "lucide-react";
 import { StatusBlock } from "@/components/blocks/status-block";
 import { useTranslations } from "next-intl";
-import { useActualiteStats } from "../../queries/actualite-stats.query";
+import { useActualiteStatsQuery } from "../../queries/actualite-stats.query";
 
 export function ActualiteStats() {
   const t = useTranslations("contenu.gestionActualite");
 
-  const { data: stats, isLoading } = useActualiteStats();
+  const { data: stats, isLoading } = useActualiteStatsQuery();
 
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat("fr-FR").format(num);
@@ -88,9 +88,7 @@ export function ActualiteStats() {
           <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            {formatNumber(stats.total)}
-          </div>
+          <div className="text-2xl font-bold">{formatNumber(stats.total)}</div>
           <p className="text-xs text-muted-foreground">
             Toutes les actualités confondues
           </p>
