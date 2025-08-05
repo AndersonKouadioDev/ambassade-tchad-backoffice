@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
 import {
@@ -53,14 +53,12 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
     setShowDeleteAlert(true);
   };
 
-  const handleConfirmDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleConfirmDelete = () => {
     onDelete(evenement);
     setShowDeleteAlert(false);
   };
 
-  const handleCancelDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleCancelDelete = () => {
     setShowDeleteAlert(false);
   };
 
@@ -70,7 +68,6 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
         className="group hover:shadow-2xl transition-all duration-500 cursor-pointer border-0 shadow-lg backdrop-blur-sm overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800"
         onClick={() => onView(evenement)}
       >
-        {/* Header avec gradient et boutons */}
         <CardHeader className="pb-3 px-4 pt-4 text-black bg-blue-50">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
@@ -105,7 +102,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                 variant="ghost"
                 size="sm"
                 color="danger"
-                onPress={(e) => handleDeleteClick()}
+                onPress={handleDeleteClick}
                 title="Supprimer"
                 isIconOnly
               >
@@ -115,7 +112,6 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
           </div>
         </CardHeader>
 
-        {/* Image principale (première image seulement) */}
         <CardContent className="p-0">
           {evenement.imageUrl &&
           evenement.imageUrl.length > 0 &&
@@ -134,9 +130,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                   variant="ghost"
                   size="sm"
                   className="absolute top-3 right-3"
-                  onPress={(e) => {
-                    onView(evenement);
-                  }}
+                  onPress={() => onView(evenement)}
                   title="Voir toutes les images"
                   isIconOnly
                 >
@@ -154,72 +148,53 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
           )}
         </CardContent>
 
-        {/* Contenu principal */}
         <CardContent className="p-4 space-y-4">
-          {/* Description */}
           <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
             {evenement.description}
           </p>
-          {/* date de l'evenement */}
+
           {evenement.eventDate && (
             <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                Date de l'événement:{" "}
-                {evenement.eventDate instanceof Date
-                  ? evenement.eventDate.toLocaleDateString("fr-FR")
-                  : evenement.eventDate
-                  ? new Date(evenement.eventDate).toLocaleDateString("fr-FR")
-                  : "Date inconnue"}
+                Date de l&apos;événement :{" "}
+                {new Date(evenement.eventDate).toLocaleDateString("fr-FR")}
               </span>
             </div>
           )}
 
-          {/* Lieu de l'événement */}
           {evenement.location && (
             <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800/20 rounded-lg">
               <MapPin className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Lieu: {evenement.location}
+                Lieu : {evenement.location}
               </span>
             </div>
           )}
-          {/* Informations clés */}
+
           <div className="space-y-3">
-            {/* Date de création */}
             <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
                 Créé le{" "}
-                {evenement.createdAt instanceof Date
-                  ? evenement.createdAt.toLocaleDateString("fr-FR")
-                  : evenement.createdAt
-                  ? new Date(evenement.createdAt).toLocaleDateString("fr-FR")
-                  : "Date inconnue"}
+                {new Date(evenement.createdAt).toLocaleDateString("fr-FR")}
               </span>
             </div>
 
-            {/* Auteur */}
             <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800/20 rounded-lg">
               <User className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Auteur:{" "}
+                Auteur :{" "}
                 {evenement.author?.firstName && evenement.author?.lastName
                   ? `${evenement.author.firstName} ${evenement.author.lastName}`
-                  : evenement.author?.firstName
-                  ? evenement.author.firstName
-                  : evenement.author?.lastName
-                  ? evenement.author.lastName
                   : evenement.author?.email
                   ? evenement.author.email
                   : `Auteur (${evenement.authorId.slice(0, 8)}...)`}
               </span>
             </div>
-            
           </div>
         </CardContent>
 
-        {/* Footer avec auteur */}
         <CardFooter className="pt-3 px-4 pb-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
           <div className="flex items-center gap-3 w-full">
             <Avatar className="w-8 h-8 ring-2 ring-white dark:ring-gray-700">
@@ -240,10 +215,6 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                 <span className="font-medium">
                   {evenement.author?.firstName && evenement.author?.lastName
                     ? `${evenement.author.firstName} ${evenement.author.lastName}`
-                    : evenement.author?.firstName
-                    ? evenement.author.firstName
-                    : evenement.author?.lastName
-                    ? evenement.author.lastName
                     : evenement.author?.email
                     ? evenement.author.email
                     : `Auteur (${evenement.authorId.slice(0, 8)}...)`}
@@ -252,26 +223,13 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
               <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                 <Clock className="w-3 h-3" />
                 <span>
-                  {evenement.createdAt instanceof Date
-                    ? evenement.createdAt.toLocaleDateString("fr-FR", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    : evenement.createdAt
-                    ? new Date(evenement.createdAt).toLocaleDateString(
-                        "fr-FR",
-                        {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        }
-                      )
-                    : "Date inconnue"}
+                  {new Date(evenement.createdAt).toLocaleDateString("fr-FR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </span>
               </div>
             </div>
@@ -279,11 +237,10 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
         </CardFooter>
       </Card>
 
-      {/* Alerte de suppression professionnelle */}
+      {/* Modal de suppression */}
       {showDeleteAlert && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-100">
-            {/* Header de l'alerte */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full">
@@ -302,17 +259,16 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                onClick={handleCancelDelete}
+                onPress={handleCancelDelete}
               >
                 <X className="w-4 h-4" />
               </Button>
             </div>
 
-            {/* Contenu de l'alerte */}
             <div className="p-6">
               <div className="mb-6">
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Êtes-vous sûr de vouloir supprimer l'evenement{" "}
+                  Êtes-vous sûr de vouloir supprimer l&apos;événement{" "}
                   <strong>"{evenement.title}"</strong> ?
                 </p>
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
@@ -323,8 +279,8 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                         Attention
                       </p>
                       <p className="text-red-700 dark:text-red-300">
-                        Cette action supprimera définitivement l'evenement et
-                        toutes ses données associées. Cette opération ne peut
+                        Cette action supprimera définitivement l&apos;événement
+                        et toutes ses données associées. Cette opération ne peut
                         pas être annulée.
                       </p>
                     </div>
@@ -332,18 +288,17 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                 </div>
               </div>
 
-              {/* Boutons d'action */}
               <div className="flex gap-3">
                 <Button
                   variant="bordered"
                   className="flex-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                  onClick={handleCancelDelete}
+                  onPress={handleCancelDelete}
                 >
                   Annuler
                 </Button>
                 <Button
                   className="flex-1 bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700"
-                  onClick={handleConfirmDelete}
+                  onPress={handleConfirmDelete}
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Supprimer
