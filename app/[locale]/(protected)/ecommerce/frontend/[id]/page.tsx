@@ -14,11 +14,17 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import ThumbSliderCom from "./thumb-slider";
 import ProductCounterButton from "@/components/ecommarce/product-counter-button";
 
-const ProductDetails = async ({
-  params: { id },
-}: {
-  params: { id: string };
-}) => {
+const ProductDetails = async (
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const product = await getProductById(id);
 
   if (!product)
