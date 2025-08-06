@@ -7,7 +7,6 @@ import getQueryClient from '@/lib/get-query-client';
 import { obtenirUnUtilisateurAction } from '../actions/utilisateur.action';
 import { utilisateurKeyQuery } from './index.query';
 import { toast } from 'sonner';
-import { useEffect } from 'react';
 
 const queryClient = getQueryClient();
 

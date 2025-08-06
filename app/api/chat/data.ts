@@ -14,7 +14,7 @@ import avatar8 from "@/public/images/users/user-2.jpg";
 import avatar9 from "@/public/images/users/user-3.jpg";
 import avatar10 from "@/public/images/users/user-4.jpg";
 import avatar11 from "@/public/images/users/user-5.jpg";
-import { faker } from "@faker-js/faker";
+
 export const profileUser = {
   id: "e2c1a571-5f7e-4f56-9020-13f98b0eaba2",
   avatar: avatar1,
@@ -265,13 +265,13 @@ export const getContacts = async () => {
 
 // get chats by contact id
 export const getChatsByContactId = async (contactId: string) => {
-  
-   const chat = chats.find(chat => chat.id === contactId)
- const contact =   contacts.find(contact => contact.id === contactId)
-    return {
-        chat,
-        contact
-    }
+
+  const chat = chats.find(chat => chat.id === contactId)
+  const contact = contacts.find(contact => contact.id === contactId)
+  return {
+    chat,
+    contact
+  }
 }
 // get contact by id 
 export const getContactById = async (contactId: string) => {

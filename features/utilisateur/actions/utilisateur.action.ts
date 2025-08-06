@@ -14,6 +14,7 @@ export const obtenirTousUtilisateursAction = async (params: IUtilisateursParams)
             data: data,
             message: "Utilisateurs obtenus avec succès",
         }
+
     } catch (error) {
         return handleServerActionError(error, "Erreur lors de la récupération des utilisateurs");
     }

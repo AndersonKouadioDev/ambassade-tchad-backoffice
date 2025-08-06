@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     useQuery,
 } from '@tanstack/react-query';
@@ -14,18 +15,18 @@ export const demandesFilteredListQueryOption = (params: IDemandeRechercheParams)
     return {
         queryKey: demandeKeyQuery("list-filtered", params),
         queryFn: async () => {
-            return getAllFilteredDemandRequestsAction(params);
+            const result = await getAllFilteredDemandRequestsAction(params);
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            return result.data!;
         },
         keepPreviousData: true,
         placeholderData: (previousData: any) => previousData,
         staleTime: 30 * 1000,
         refetchOnWindowFocus: false,
         refetchOnMount: true,
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération des demandes filtrées:", {
-                description: error.message,
-            });
-        },
+      
     };
 };
 
@@ -33,7 +34,15 @@ export const demandesFilteredListQueryOption = (params: IDemandeRechercheParams)
 export const useDemandesFilteredListQuery = (
     params: IDemandeRechercheParams
 ) => {
-    return useQuery(demandesFilteredListQueryOption(params));
+    const query = useQuery(demandesFilteredListQueryOption(params));
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error("Erreur de récupération des demandes filtrées:", {
+                description: query.error?.message,
+            });
+        }
+    }, [query]);
+    return query;
 };
 
 //3- Fonction pour précharger toutes les demandes filtrées
@@ -50,18 +59,17 @@ export const myDemandesListQueryOption = (params: Omit<IDemandeRechercheParams, 
     return {
         queryKey: demandeKeyQuery("my-list", params),
         queryFn: async () => {
-            return getMyRequestsAction(params);
+            const result = await getMyRequestsAction(params);
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            return result.data!;
         },
         keepPreviousData: true,
         placeholderData: (previousData: any) => previousData,
         staleTime: 30 * 1000,
         refetchOnWindowFocus: false,
         refetchOnMount: true,
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération de mes demandes:", {
-                description: error.message,
-            });
-        },
     };
 };
 
@@ -69,7 +77,15 @@ export const myDemandesListQueryOption = (params: Omit<IDemandeRechercheParams, 
 export const useMyDemandesListQuery = (
     params: Omit<IDemandeRechercheParams, 'userId'>
 ) => {
-    return useQuery(myDemandesListQueryOption(params));
+    const query = useQuery(myDemandesListQueryOption(params));
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error("Erreur de récupération des demandes:", {
+                description: query.error?.message,
+            });
+        }
+    }, [query]);
+    return query;
 };
 
 //3- Fonction pour précharger mes demandes
