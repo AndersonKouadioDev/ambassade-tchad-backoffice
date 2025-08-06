@@ -1,9 +1,3 @@
-export interface BaseEntity {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
 export enum SortOrder {
     ASC = 'asc',
     DESC = 'desc'

@@ -80,7 +80,7 @@ export async function logout() {
 
 export async function getTokenInfo(): Promise<JWT | null> {
   try {
-    const headersList = headers()
+    const headersList = await headers()
     const cookie = headersList.get('cookie')
 
     const req = {
