@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     useQuery,
 } from '@tanstack/react-query';
@@ -13,21 +14,28 @@ export const globalDemandeStatsQueryOption = () => {
     return {
         queryKey: demandeKeyQuery("global-stats"),
         queryFn: async () => {
-            return await getGlobalStatsAction();
+            const result = await getGlobalStatsAction();
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            return result.data!;
         },
         keepPreviousData: true,
         staleTime: 5 * 60 * 1000,
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération des statistiques globales des demandes:", {
-                description: error.message,
-            });
-        },
     };
 };
 
 //2- Hook pour récupérer les statistiques globales des demandes
 export const useGlobalDemandeStatsQuery = () => {
-    return useQuery(globalDemandeStatsQueryOption());
+    const query = useQuery(globalDemandeStatsQueryOption());
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error("Erreur de récupération des statistiques globales des demandes:", {
+                description: query.error?.message,
+            });
+        }
+    }, [query]);
+    return query;
 };
 
 //3- Fonction pour précharger les statistiques globales des demandes
@@ -42,21 +50,28 @@ export const userDemandeStatsQueryOption = () => {
     return {
         queryKey: demandeKeyQuery("user-stats"),
         queryFn: async () => {
-            return await getUserStatsAction();
+            const result = await getUserStatsAction();
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            return result.data!;
         },
         keepPreviousData: true,
         staleTime: 5 * 60 * 1000,
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération des statistiques des demandes de l'utilisateur:", {
-                description: error.message,
-            });
-        },
     };
 };
 
 //2- Hook pour récupérer les statistiques des demandes de l'utilisateur
 export const useUserDemandeStatsQuery = () => {
-    return useQuery(userDemandeStatsQueryOption());
+    const query = useQuery(userDemandeStatsQueryOption());
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error("Erreur de récupération des statistiques des demandes de l'utilisateur:", {
+                description: query.error?.message,
+            });
+        }
+    }, [query]);
+    return query;
 };
 
 //3- Fonction pour précharger les statistiques des demandes de l'utilisateur

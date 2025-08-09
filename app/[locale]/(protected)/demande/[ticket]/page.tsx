@@ -2,11 +2,12 @@ import { prefetchGetDemandeByTicketAdminQuery } from "@/features/demande/queries
 import { DemandeDetail } from "@/features/demande/components/demande-detail";
 
 interface Props {
-  params: {
+  params: Promise<{
     ticket: Promise<string>;
-  };
+  }>;
 }
-export default async function DemandeDetailPage({ params }: Props) {
+export default async function DemandeDetailPage(props: Props) {
+  const params = await props.params;
   const ticket = await params.ticket;
 
   await prefetchGetDemandeByTicketAdminQuery(ticket);

@@ -8,6 +8,7 @@ import { getAllFilteredDemandRequestsAction, getMyRequestsAction } from '../acti
 import { IDemandeRechercheParams } from '../types/demande.type';
 import { demandeKeyQuery } from './index.query';
 import { toast } from 'sonner';
+import React from 'react';
 
 const queryClient = getQueryClient();
 
@@ -16,21 +17,19 @@ export const demandesFilteredInfinityQueryOption = (params: IDemandeRecherchePar
     return {
         queryKey: demandeKeyQuery("list-filtered", params),
         queryFn: async ({ pageParam = 1 }) => {
-            const data = await getAllFilteredDemandRequestsAction({
+            const result = await getAllFilteredDemandRequestsAction({
                 ...params,
                 page: pageParam,
             });
-            return data;
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            return result.data!;
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage: PaginatedResponse<IDemande>) => {
             const hasNextPage = lastPage.meta.totalPages > lastPage.meta.page;
             return hasNextPage ? lastPage.meta.page + 1 : undefined;
-        },
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération des demandes filtrées:", {
-                description: error.message,
-            });
         },
     };
 };
@@ -39,7 +38,15 @@ export const demandesFilteredInfinityQueryOption = (params: IDemandeRecherchePar
 export const useDemandesFilteredInfinityQuery = (
     params: IDemandeRechercheParams
 ) => {
-    return useInfiniteQuery(demandesFilteredInfinityQueryOption(params));
+    const query = useInfiniteQuery(demandesFilteredInfinityQueryOption(params));
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error("Erreur de récupération des demandes filtrées:", {
+                description: query.error?.message,
+            });
+        }
+    }, [query]);
+    return query;
 };
 
 //3- Fonction pour précharger toutes les demandes filtrées
@@ -56,21 +63,19 @@ export const myDemandesInfinityQueryOption = (params: Omit<IDemandeRecherchePara
     return {
         queryKey: demandeKeyQuery("my-list", params),
         queryFn: async ({ pageParam = 1 }) => {
-            const data = await getMyRequestsAction({
+            const result = await getMyRequestsAction({
                 ...params,
                 page: pageParam,
             });
-            return data;
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            return result.data!;
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage: PaginatedResponse<IDemande>) => {
             const hasNextPage = lastPage.meta.totalPages > lastPage.meta.page;
             return hasNextPage ? lastPage.meta.page + 1 : undefined;
-        },
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération de mes demandes:", {
-                description: error.message,
-            });
         },
     };
 };
@@ -79,7 +84,15 @@ export const myDemandesInfinityQueryOption = (params: Omit<IDemandeRecherchePara
 export const useMyDemandesInfinityQuery = (
     params: Omit<IDemandeRechercheParams, 'userId'>
 ) => {
-    return useInfiniteQuery(myDemandesInfinityQueryOption(params));
+    const query = useInfiniteQuery(myDemandesInfinityQueryOption(params));
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error("Erreur de récupération des demandes:", {
+                description: query.error?.message,
+            });
+        }
+    }, [query]);
+    return query;
 };
 
 //3- Fonction pour précharger mes demandes (infinity scroll)

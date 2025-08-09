@@ -15,13 +15,13 @@ import {
 } from "../../schemas/actualites.schema";
 import { useRouter } from "next/navigation";
 import { Button } from "@heroui/react";
-import { ImageDragDrop, ImageFile } from "@/components/blocks/image-drap-drop";
 import {
   useActualiteCreateMutation,
   useActualiteUpdateMutation,
 } from "../../queries/actualite.mutation";
 import { useActualiteDetailQuery } from "../../queries/actualite-details.query";
 import { getFullUrlFile } from "@/utils/getFullUrlFile";
+import { ImageFile } from "@/components/blocks/image-drap-drop";
 
 interface ActualiteFormProps {
   id?: string;
@@ -35,6 +35,7 @@ export interface ExistingImageFile extends Omit<ImageFile, "file"> {
 }
 
 export interface NewImageFile extends ImageFile {
+  file: any;
   isExisting: false;
 }
 

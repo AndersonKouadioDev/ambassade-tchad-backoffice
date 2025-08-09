@@ -4,21 +4,21 @@ import {
     useQuery,
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
-import { obtenirUnUtilisateurAction } from '../actions/utilisateur.action';
-import { utilisateurKeyQuery } from './index.query';
 import { toast } from 'sonner';
+import { depenseKeyQuery } from './index.query';
+import { obtenirUneDepenseAction } from '../actions/depense.action';
 
 const queryClient = getQueryClient();
 
 
 //1- Option de requête
-export const utilisateurQueryOption = (id: string) => {
+export const depenseQueryOption = (id: string) => {
     return {
-        queryKey: utilisateurKeyQuery("detail", id),
+        queryKey: depenseKeyQuery("detail", id),
         queryFn: async () => {
-            if (!id) throw new Error("L'identifiant utilisateur est requis");
+            if (!id) throw new Error("L'identifiant dépense est requis");
 
-            const result = await obtenirUnUtilisateurAction(id);
+            const result = await obtenirUneDepenseAction(id);
 
             if (!result.success) {
                 throw new Error(result.error);
@@ -31,13 +31,13 @@ export const utilisateurQueryOption = (id: string) => {
 };
 
 //2- Hook pour récupérer un utilisateur
-export const useUtilisateurQuery = (id: string) => {
-    const query = useQuery(utilisateurQueryOption(id));
+export const useDepenseQuery = (id: string  ) => {
+    const query = useQuery(depenseQueryOption(id));
 
     // Gestion des erreurs dans le hook
     React.useEffect(() => {
         if (query.isError && query.error) {
-            toast.error("Erreur lors de la récupération de l'utilisateur:", {
+            toast.error("Erreur lors de la récupération de la dépense:", {
                 description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
             });
         }
@@ -47,8 +47,8 @@ export const useUtilisateurQuery = (id: string) => {
 };
 
 //3- Fonction pour précharger un utilisateur
-export const prefetchUtilisateurQuery = (
+export const prefetchDepenseQuery = (
     id: string
 ) => {
-    return queryClient.prefetchQuery(utilisateurQueryOption(id));
+    return queryClient.prefetchQuery(depenseQueryOption(id));
 }

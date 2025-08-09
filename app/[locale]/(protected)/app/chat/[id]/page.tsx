@@ -34,8 +34,13 @@ const socials = [
     },
 ];
 
-const ChatPageSingle = async ({ params: { id } }: { params: { id: string }; }) => {
- 
+const ChatPageSingle = async (props: { params: Promise<{ id: string }>; }) => {
+    const params = await props.params;
+
+    const {
+        id
+    } = params;
+
     const { chat, contact } = await getChatsByContactId(id)
     const profile = await getProfileUser()
 
@@ -235,7 +240,6 @@ const ChatPageSingle = async ({ params: { id } }: { params: { id: string }; }) =
             </InfoWrapper>
         </>
     )
-
 }
 
 export default ChatPageSingle

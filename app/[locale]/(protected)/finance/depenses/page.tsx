@@ -1,53 +1,40 @@
-import { StatusBlock } from "@/components/blocks/status-block";
-import DepenseList from "@/components/finance/depense-list";
-import { DollarSign, CalendarDays, BarChart2, Clock3 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { DepensesStatsGrid } from "@/features/depense/components/depense-stats-grid";
+import { prefetchDepenseStatsQuery } from "@/features/depense/queries/depense-stats.query";
+import { DepenseList } from "@/features/depense/components/depense-list";
+import { prefetchDepensesListQuery } from "@/features/depense/queries/depense-list.query";
+import { BookOpen } from "lucide-react";
 
-export default function DepenseListPage() {
-  const t = useTranslations("finance.depenses");
+export default async function DepenseListPage() {
+  const t = await getTranslations("gestionDepense");
+
+  // Précharger les données
+  await Promise.all([
+    prefetchDepenseStatsQuery(),
+    prefetchDepensesListQuery({
+      page: 1,
+      limit: 10,
+    }),
+  ]); 
 
   return (
-    <div className="container">
-      <div className="grid grid-cols-12 gap-6 mt-6">
-        <div className="col-span-12">
-          <h1 className="text-2xl font-bold">{t("title")}</h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
-            <StatusBlock
-              title={t("total_depense")}
-              total="500000"
-              iconWrapperClass="bg-primary/10"
-              chartColor="#0ea5e9"
-              icon={<DollarSign className="w-5 h-5 text-primary" />}
-            />
-            <StatusBlock
-              title={t("depenses_mensuelles")}
-              total="5100"
-              iconWrapperClass="bg-info/10"
-              chartColor="#00EBFF"
-              icon={<CalendarDays className="w-5 h-5 text-info" />}
-            />
-            <StatusBlock
-              title={t("depenses_annuelles")}
-              total="45800"
-              iconWrapperClass="bg-success/10"
-              chartColor="#10b981"
-              icon={<BarChart2 className="w-5 h-5 text-success" />}
-            />
-            <StatusBlock
-              title={t("depenses_hebdomadaires")}
-              total="7000"
-              iconWrapperClass="bg-warning/10"
-              chartColor="#facc15"
-              icon={<Clock3 className="w-5 h-5 text-warning" />}
-            />
+    <div className="space-y-8">
+      <div className="bg-gradient-to-r from-embassy-blue-600 to-embassy-blue-700 dark:from-embassy-blue-800 dark:to-embassy-blue-900 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-white/20 dark:bg-white/10 rounded-lg backdrop-blur-sm">
+            <BookOpen className="w-8 h-8" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
+            <p className="text-embassy-blue-100 dark:text-embassy-blue-200 mt-2">
+              Gérez et organisez vos dépenses avec une interface moderne et
+              intuitive
+            </p>
           </div>
         </div>
-
-        <div className="col-span-12">
-          <DepenseList />
-        </div>
       </div>
+      <DepensesStatsGrid/>
+      <DepenseList/>
     </div>
   );
 }

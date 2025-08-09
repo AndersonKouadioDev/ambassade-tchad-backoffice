@@ -16,7 +16,13 @@ import NotesCalendar from "@/components/project/notes-calendar";
 import { getProjectById } from "../data";
 import { Alert } from "@/components/ui/alert";
 
-const SinglePage = async ({ params: { id } }: { params: { id: string }; }) => {
+const SinglePage = async (props: { params: Promise<{ id: string }>; }) => {
+    const params = await props.params;
+
+    const {
+        id
+    } = params;
+
     const project = await getProjectById(id)
     if (!project) return <Alert color="destructive"> project id is not valid</Alert>
     return (

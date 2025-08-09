@@ -9,7 +9,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     maxAge: 30 * 24 * 60 * 60, // 30 jours (refresh token)
   },
   debug: process.env.NODE_ENV === "development",
-  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Credentials",

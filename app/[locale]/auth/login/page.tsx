@@ -4,7 +4,13 @@ import Image from "next/image";
 import Social from "@/components/auth/social";
 import Copyright from "@/components/auth/copyright";
 import Logo from "@/components/auth/logo";
-const Login = ({ params: { locale } }: { params: { locale: string } }) => {
+const Login = async (props: { params: Promise<{ locale: string }> }) => {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   return (
     <>
       <div className="flex w-full items-center overflow-hidden min-h-dvh h-dvh basis-full">
