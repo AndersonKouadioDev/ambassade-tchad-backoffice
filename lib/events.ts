@@ -1,5 +1,9 @@
-import va from "@vercel/analytics"
-import { z } from "zod"
+"use client";
+
+import va from "@vercel/analytics";
+import { z } from "zod";
+
+type AllowedPropertyValues = string | number | boolean | null;
 
 const eventSchema = z.object({
   name: z.enum([
@@ -16,16 +20,19 @@ const eventSchema = z.object({
     "copy_chart_data",
     "copy_color",
   ]),
-  properties: z
-    .record(z.union([z.string(), z.number(), z.boolean(), z.null()]))
-    .optional(),
-})
+  properties: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null()])).optional(),
+});
 
-export type Event = z.infer<typeof eventSchema>
+export type Event = z.infer<typeof eventSchema>;
 
 export function trackEvent(input: Event): void {
-  const event = eventSchema.parse(input)
-  if (event) {
-    va.track(event.name, event.properties)
+  const result = eventSchema.safeParse(input);
+
+  if (result.success) {
+    const event = result.data;
+    const properties = event.properties ?? {};
+    va.track(event.name, properties as Record<string, AllowedPropertyValues>);
+  } else {
+    console.error("Erreur de validation de l'événement:", result.error);
   }
 }
