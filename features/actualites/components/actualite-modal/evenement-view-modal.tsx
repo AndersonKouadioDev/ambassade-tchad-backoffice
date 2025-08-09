@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ViewModal } from "@/components/ui/view-modal";
+import { ViewModal } from "@/components/blocks/view-modal";
 import { IActualite } from "../../types/actualites.type";
 
 interface ActualiteViewModalProps {
@@ -29,7 +29,7 @@ export const ActualiteViewModal: React.FC<ActualiteViewModalProps> = ({
         /* ESPACE RÉSERVÉ POUR LES IMAGES */
         images: (
           <div className="p-4 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-center">
-            <p className="text-gray-500">Espace réservé pour l'affichage des images</p>
+            <p className="text-gray-500">Espace réservé pour l&apos;affichage des images</p>
             <button 
               onClick={onOpenImageGallery}
               className="mt-2 text-sm text-blue-600 hover:underline"

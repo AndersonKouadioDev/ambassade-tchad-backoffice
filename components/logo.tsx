@@ -1,38 +1,40 @@
-'use client'
+"use client";
 import React from "react";
 import DashCodeLogo from "./dascode-logo";
-import { Link } from '@/i18n/routing';
+import { Link } from "@/i18n/navigation";
 import { useConfig } from "@/hooks/use-config";
 import { useMenuHoverConfig } from "@/hooks/use-menu-hover";
 import { useMediaQuery } from "@/hooks/use-media-query";
-
-
+import { siteConfig } from "@/config/site";
 
 const Logo = () => {
-    const [config] = useConfig()
-    const [hoverConfig] = useMenuHoverConfig();
-    const { hovered } = hoverConfig
-    const isDesktop = useMediaQuery('(min-width: 1280px)');
+  const [config] = useConfig();
+  const [hoverConfig] = useMenuHoverConfig();
+  const { hovered } = hoverConfig;
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
 
-    if (config.sidebar === 'compact') {
-        return <Link href="/dashboard/analytics" className="flex gap-2 items-center   justify-center    ">
-            <DashCodeLogo className="text-default-900 h-8 w-8 [&>path:nth-child(3)]:text-background [&>path:nth-child(2)]:text-background" />
-
-        </Link>
-    }
-    if (config.sidebar === 'two-column' || !isDesktop) return null
-
+  if (config.sidebar === "compact") {
     return (
-        <Link href="/dashboard/analytics" className="flex gap-2 items-center    ">
-            <DashCodeLogo className="text-default-900 h-8 w-8 [&>path:nth-child(3)]:text-background [&>path:nth-child(2)]:text-background" />
-            {(!config?.collapsed || hovered) && (
-                <h1 className="text-sm font-semibold text-white">
-                    Ambassade du Tchad
-                </h1>
-            )}
-        </Link>
-
+      <Link
+        href="/dashboard/analytics"
+        className="flex gap-2 items-center justify-center"
+      >
+        <DashCodeLogo className="text-primary h-8 w-8 [&>path:nth-child(3)]:text-background [&>path:nth-child(2)]:text-background" />
+      </Link>
     );
+  }
+  if (config.sidebar === "two-column" || !isDesktop) return null;
+
+  return (
+    <Link href="/dashboard/analytics" className="flex gap-2 items-center">
+      <DashCodeLogo className="text-primary h-8 w-8 [&>path:nth-child(3)]:text-background [&>path:nth-child(2)]:text-background" />
+      {(!config?.collapsed || hovered) && (
+        <h1 className="text-sm font-semibold text-primary">
+          {siteConfig.name}
+        </h1>
+      )}
+    </Link>
+  );
 };
 
 export default Logo;

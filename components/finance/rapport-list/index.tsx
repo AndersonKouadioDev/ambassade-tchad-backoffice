@@ -129,9 +129,7 @@ const DepenseList = () => {
       <Button
         color="destructive"
         onClick={() => setEditOpen(true)}
-        size="md"
         className="ml-3"
-        shadow="md"
       >
         Ajouter une depense
       </Button>

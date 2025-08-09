@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "./theme.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import MountedProvider from "@/providers/mounted.provider";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
+
 // language
 import { getLangDir } from "rtl-detect";
 import { NextIntlClientProvider } from "next-intl";
@@ -13,14 +14,14 @@ import { getMessages } from "next-intl/server";
 import DirectionProvider from "@/providers/direction-provider";
 import AuthProvider from "@/providers/auth.provider";
 import QueryProvider from "@/providers/query-provider";
-import { SessionManager } from "@/components/session-manager";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Dashboard Ambassade de tchad",
-  description: "Back-office de l'ambassade du tchad en côte d'ivoire",
+  title: siteConfig.name,
+  description: "created by codeshaper",
 };
 
 export default async function RootLayout(
@@ -31,13 +32,9 @@ export default async function RootLayout(
 ) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const messages = await getMessages();
   const direction = getLangDir(locale);
@@ -54,19 +51,13 @@ export default async function RootLayout(
             <HydrationBoundary state={dehydrate(queryClient)}>
               <NuqsAdapter>
                 <AuthProvider>
-                  <ThemeProvider
-                    locale={locale}
-                    attribute="class"
-                    defaultTheme="light"
-                  >
+                  <ThemeProvider attribute="class" defaultTheme="light">
                     <MountedProvider>
                       <DirectionProvider direction={direction}>
-                        <SessionManager />
                         {children}
                       </DirectionProvider>
                     </MountedProvider>
                     <Toaster />
-                    <SonnerToaster />
                   </ThemeProvider>
                 </AuthProvider>
               </NuqsAdapter>

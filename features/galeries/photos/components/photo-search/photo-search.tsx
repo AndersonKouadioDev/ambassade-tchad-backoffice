@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Search, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@heroui/react";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -13,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IPhotoRechercheParams } from "../../types/photo.type";
+import { Button } from "@/components/ui/button";
 
 interface PhotoSearchProps {
   onSearch: (params: IPhotoRechercheParams) => void;
@@ -47,19 +47,18 @@ export const PhotoSearch: React.FC<PhotoSearchProps> = ({
     onSearch(resetParams);
   };
 
-  const handleInputChange = (field: keyof IPhotoRechercheParams, value: any) => {
-    setSearchParams(prev => ({
+  const handleInputChange = (
+    field: keyof IPhotoRechercheParams,
+    value: any
+  ) => {
+    setSearchParams((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
   const hasActiveFilters = () => {
-    return (
-      searchParams.title ||
-      searchParams.description ||
-      searchParams.title
-    );
+    return searchParams.title || searchParams.description || searchParams.title;
   };
 
   return (
@@ -81,7 +80,7 @@ export const PhotoSearch: React.FC<PhotoSearchProps> = ({
           />
         </div>
         <Button
-          variant="bordered"
+          variant="outline"
           onClick={() => setShowFilters(!showFilters)}
           className="flex items-center gap-2"
         >
@@ -89,7 +88,10 @@ export const PhotoSearch: React.FC<PhotoSearchProps> = ({
           Filtres
           {hasActiveFilters() && (
             <Badge className="ml-1 bg-blue-500 text-white">
-              {Object.values(searchParams).filter(v => v && v !== "all").length}
+              {
+                Object.values(searchParams).filter((v) => v && v !== "all")
+                  .length
+              }
             </Badge>
           )}
         </Button>
@@ -117,39 +119,53 @@ export const PhotoSearch: React.FC<PhotoSearchProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Statut de publication */}
             <div className="space-y-2">
-                <label className="text-sm font-medium">Rechercher par description</label>
+              <label className="text-sm font-medium">
+                Rechercher par description
+              </label>
               <Select
-                value={searchParams.description !== undefined ? searchParams.description.toString() : "all"}
-                onValueChange={(value) => handleInputChange("description", value === "all" ? undefined : value)}
-              >   
+                value={
+                  searchParams.description !== undefined
+                    ? searchParams.description.toString()
+                    : "all"
+                }
+                onValueChange={(value) =>
+                  handleInputChange(
+                    "description",
+                    value === "all" ? undefined : value
+                  )
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous</SelectItem>
-                 
                 </SelectContent>
               </Select>
             </div>
 
             {/* Contenu */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Rechercher par titre</label>
+              <label className="text-sm font-medium">
+                Rechercher par titre
+              </label>
               <Input
                 placeholder="Rechercher par titre..."
                 value={searchParams.description || ""}
-                onChange={(e) => handleInputChange("description", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("description", e.target.value)
+                }
               />
             </div>
-
-
 
             {/* Limite par page */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Par page</label>
               <Select
                 value={searchParams.limit?.toString() || "10"}
-                onValueChange={(value) => handleInputChange("limit", parseInt(value))}
+                onValueChange={(value) =>
+                  handleInputChange("limit", parseInt(value))
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -166,11 +182,15 @@ export const PhotoSearch: React.FC<PhotoSearchProps> = ({
 
           {/* Boutons d'action */}
           <div className="flex gap-2 pt-2">
-            <Button onClick={handleSearch} disabled={isLoading} className="flex-1">
+            <Button
+              onClick={handleSearch}
+              disabled={isLoading}
+              className="flex-1"
+            >
               {isLoading ? "Recherche..." : "Appliquer les filtres"}
             </Button>
             <Button
-              variant="bordered"
+              variant="outline"
               onClick={handleReset}
               disabled={isLoading}
             >

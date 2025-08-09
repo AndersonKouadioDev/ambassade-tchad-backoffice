@@ -1,5 +1,5 @@
-import Lock from "@/components/auth/lock";
-import { Link } from '@/i18n/routing';
+import Lock from "@/components/partials/auth/lock";
+import { Link } from '@/i18n/navigation';
 import Image from "next/image";
 import Logo from "@/components/logo";
 

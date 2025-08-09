@@ -1,10 +1,10 @@
 
-import Logo from "@/components/auth/logo";
+import Logo from "@/components/partials/auth/logo";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { Link } from '@/i18n/routing';
+import { Link } from '@/i18n/navigation';
 
 const ComingSoonPage = () => {
   return (
@@ -23,7 +23,7 @@ const ComingSoonPage = () => {
         <div className="flex justify-between flex-wrap items-center min-h-screen">
           <div className="max-w-[500px] space-y-4 flex-1">
             <div className="relative flex space-x-3 items-center text-2xl text-default-900 ">
-              <span className="inline-block w-[25px] bg-default-500 h-[1px]"></span>
+              <span className="inline-block w-[25px] bg-default-500 h-px"></span>
               <span>Coming soon</span>
             </div>
             <div className="xl:text-[70px] xl:leading-[70px] text-4xl font-semibold text-default-900 ">
@@ -37,7 +37,7 @@ const ComingSoonPage = () => {
               <Input
                 type="text"
                 placeholder="Enter your email"
-                className="flex-1 bg-transparent h-full block w-full py-6 placeholder:text-secondary-500 focus:border-0 text-base focus:outline-none focus:ring-0 border-none"
+                className="flex-1 bg-transparent h-full block w-full py-6 placeholder-secondary-500 focus:border-0 text-base focus:outline-none focus:ring-0 border-none"
               />
               <div className="flex-none">
                 <Button type="button" className=" px-6">

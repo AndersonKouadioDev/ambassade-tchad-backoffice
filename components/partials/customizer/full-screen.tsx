@@ -1,8 +1,7 @@
-'use client'
+"use client";
 import { FC, MouseEventHandler } from "react";
 import { Button } from "@/components/ui/button";
 import { Maximize } from "lucide-react";
-
 
 type CustomDocument = Document & {
   mozCancelFullScreen?: () => void;
@@ -40,10 +39,9 @@ const FullScreenToggle: FC = () => {
       onClick={toggleFullScreen}
       variant="outline"
       color="secondary"
-      className="border-default-600 "
-      fullWidth
+      className="border-default-600 w-full "
     >
-      Fullscreen Mode
+      Mode plein ecran
       <Maximize className="ms-2 h-4 w-4" />
     </Button>
   );

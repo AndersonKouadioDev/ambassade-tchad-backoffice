@@ -1,15 +1,15 @@
-import { Link } from '@/i18n/routing';
-import Lock from "@/components/auth/lock";
-import Copyright from "@/components/auth/copyright";
+import { Link } from '@/i18n/navigation';
+import Lock from "@/components/partials/auth/lock";
+import Copyright from "@/components/partials/auth/copyright";
 import Image from "next/image";
-import Logo from "@/components/auth/logo";
+import Logo from "@/components/partials/auth/logo";
 const LockScreen = () => {
   return (
     <div className="flex w-full items-center overflow-hidden min-h-dvh h-dvh basis-full">
       <div className="overflow-y-auto flex flex-wrap w-full h-dvh">
         <div
           className="lg:block hidden flex-1 overflow-hidden text-[40px] leading-[48px] text-default-600 
- relative z-[1] bg-default-50 "
+ relative z-1 bg-default-50 "
         >
           <div className="max-w-[520px] pt-20 ps-20">
             <Link href="/" className="mb-6 inline-block">
@@ -72,7 +72,7 @@ const LockScreen = () => {
                 </Link>
               </div>
             </div>
-            <div className="text-xs font-normal text-default-500 z-[999] pb-10 text-center">
+            <div className="text-xs font-normal text-default-500 z-999 pb-10 text-center">
               <Copyright />
             </div>
           </div>

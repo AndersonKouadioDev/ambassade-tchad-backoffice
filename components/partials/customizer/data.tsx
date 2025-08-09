@@ -9,7 +9,10 @@ export const verticalLayoutSvg = (
       d="M0 4C0 1.79086 1.79086 0 4 0H9V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"
     />
-    <path d="M11 0H28V72H11V0Z" className="fill-default-200 dark:fill-default-300" />
+    <path
+      d="M11 0H28V72H11V0Z"
+      className="fill-default-200 dark:fill-default-300"
+    />
     <rect
       x="32"
       y="4"
@@ -131,88 +134,331 @@ export const verticalLayoutSvg = (
       rx="1.5"
       className="fill-default-300  dark:text-default-400"
     />
-    <circle cx="38" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <circle
+      cx="38"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const horizontalLayoutSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect x="5" y="4" width="102" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="5" y="16" width="39" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="48" y="16" width="59" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="5" y="37" width="102" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="5" y="64" width="102" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <circle cx="11" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect
+      x="5"
+      y="4"
+      width="102"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="5"
+      y="16"
+      width="39"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="48"
+      y="16"
+      width="59"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="5"
+      y="37"
+      width="102"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="5"
+      y="64"
+      width="102"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <circle
+      cx="11"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const semiBoxLayoutSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M4 8C4 5.79086 5.79086 4 8 4H26V68H8C5.79086 68 4 66.2091 4 64V8Z"
       className="fill-default-200 dark:fill-default-300"
     />
-    <rect x="30" y="4" width="77" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="16" width="25" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="37" width="77" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="64" width="77" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="10" y="10" width="10" height="9" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="28" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="36" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="44" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="52" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <circle cx="36" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <rect
+      x="30"
+      y="4"
+      width="77"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="16"
+      width="25"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="37"
+      width="77"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="64"
+      width="77"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="10"
+      y="10"
+      width="10"
+      height="9"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="28"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="36"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="44"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="52"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="36"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const compactLayoutSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect x="18" y="4" width="89" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="18" y="16" width="30" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="52" y="16" width="55" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="18" y="37" width="89" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="18" y="64" width="89" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="4" y="4" width="10" height="64" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="7" y="10" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="7" y="22" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="7" y="30" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="7" y="38" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="7" y="46" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="24" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect
+      x="18"
+      y="4"
+      width="89"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="18"
+      y="16"
+      width="30"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="52"
+      y="16"
+      width="55"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="18"
+      y="37"
+      width="89"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="18"
+      y="64"
+      width="89"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="4"
+      y="4"
+      width="10"
+      height="64"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="7"
+      y="10"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="7"
+      y="22"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="7"
+      y="30"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="7"
+      y="38"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="7"
+      y="46"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="24"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const classicSidebarSvg = (
   <svg
     width="107"
-
     viewBox="0 0 107 72"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -221,30 +467,114 @@ export const classicSidebarSvg = (
       d="M0 4C0 1.79086 1.79086 0 4 0H26V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"
     />
-    <rect x="30" y="4" width="77" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="16" width="25" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="37" width="77" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="64" width="77" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="8" y="8" width="10" height="10" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="28" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="36" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="44" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="52" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <circle cx="36" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <rect
+      x="30"
+      y="4"
+      width="77"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="16"
+      width="25"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="37"
+      width="77"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="64"
+      width="77"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="8"
+      y="8"
+      width="10"
+      height="10"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="28"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="36"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="44"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="52"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="36"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const draggableSidebarSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H26V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"
@@ -333,90 +663,394 @@ export const draggableSidebarSvg = (
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <rect x="30" y="4" width="77" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="16" width="25" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="37" width="77" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="64" width="77" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="8" y="6" width="10" height="10" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="8" y="22" width="16" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="8" y="30" width="16" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="42" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="50" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="58" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <circle cx="36" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <rect
+      x="30"
+      y="4"
+      width="77"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="16"
+      width="25"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="37"
+      width="77"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="64"
+      width="77"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="8"
+      y="6"
+      width="10"
+      height="10"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="8"
+      y="22"
+      width="16"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="8"
+      y="30"
+      width="16"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="42"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="50"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="58"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="36"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const twoColumnSidebarSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H9V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"
     />
-    <path d="M11 0H28V72H11V0Z" className="fill-default-200 dark:fill-default-300" />
-    <rect x="32" y="4" width="75" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="32" y="16" width="24" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="32" y="37" width="75" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="32" y="64" width="75" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="3" y="6" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="6" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="18" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="12" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="26" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="18" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="34" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="24" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="42" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="30" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <circle cx="38" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <path
+      d="M11 0H28V72H11V0Z"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="32"
+      y="4"
+      width="75"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="32"
+      y="16"
+      width="24"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="32"
+      y="37"
+      width="75"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="32"
+      y="64"
+      width="75"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="3"
+      y="6"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="6"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="18"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="12"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="26"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="18"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="34"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="24"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="42"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="30"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="38"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const compactSidebarSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect x="18" y="4" width="89" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="18" y="16" width="30" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="52" y="16" width="55" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="18" y="37" width="89" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="18" y="64" width="89" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="4" y="4" width="10" height="64" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="7" y="10" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="7" y="22" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="7" y="30" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="7" y="38" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="7" y="46" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="24" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect
+      x="18"
+      y="4"
+      width="89"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="18"
+      y="16"
+      width="30"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="52"
+      y="16"
+      width="55"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="18"
+      y="37"
+      width="89"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="18"
+      y="64"
+      width="89"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="4"
+      y="4"
+      width="10"
+      height="64"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="7"
+      y="10"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="7"
+      y="22"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="7"
+      y="30"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="7"
+      y="38"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="7"
+      y="46"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="24"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const pinnedSidebarSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H26V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"
@@ -453,21 +1087,118 @@ export const pinnedSidebarSvg = (
         strokeLinejoin="round"
       />
     </g>
-    <rect x="30" y="4" width="77" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="16" width="25" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="37" width="77" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="64" width="77" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="8" y="6" width="10" height="10" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="22" width="16" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="30" width="16" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="42" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="50" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="58" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <circle cx="36" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <rect
+      x="30"
+      y="4"
+      width="77"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="16"
+      width="25"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="37"
+      width="77"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="64"
+      width="77"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="8"
+      y="6"
+      width="10"
+      height="10"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="22"
+      width="16"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="30"
+      width="16"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="42"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="50"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="58"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="36"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
     <defs>
       <clipPath id="clip0_4857_21246">
         <rect width="4" height="4" fill="white" transform="translate(20 22)" />
@@ -479,58 +1210,187 @@ export const pinnedSidebarSvg = (
   </svg>
 );
 export const wideContentWidthSvg = (
-  <svg
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect x="8" y="4" width="96" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="8" y="16" width="29" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="41" y="16" width="63" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="8" y="37" width="96" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="8" y="64" width="96" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <circle cx="14" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="85" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="91" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="97" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect
+      x="8"
+      y="4"
+      width="96"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="8"
+      y="16"
+      width="29"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="41"
+      y="16"
+      width="63"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="8"
+      y="37"
+      width="96"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="8"
+      y="64"
+      width="96"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <circle
+      cx="14"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="85"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="91"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="97"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const boxedContentWidthSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M4 8C4 5.79086 5.79086 4 8 4H26V68H8C5.79086 68 4 66.2091 4 64V8Z"
       className="fill-default-200 dark:fill-default-300"
     />
-    <rect x="30" y="4" width="77" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="16" width="25" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="37" width="77" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="64" width="77" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="10" y="10" width="10" height="9" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="28" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="36" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="44" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="52" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <circle cx="36" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <rect
+      x="30"
+      y="4"
+      width="77"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="16"
+      width="25"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="37"
+      width="77"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="64"
+      width="77"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="10"
+      y="10"
+      width="10"
+      height="9"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="28"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="36"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="44"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="52"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="36"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const defaultSkinSvg = (
-  <svg
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H26V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"
@@ -594,12 +1454,7 @@ export const defaultSkinSvg = (
   </svg>
 );
 export const borderedSkinSvg = (
-  <svg
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M4.25 8C4.25 5.92893 5.92893 4.25 8 4.25H25.75V67.75H8C5.92893 67.75 4.25 66.0711 4.25 64V8Z"
       stroke="#CBD5E1"
@@ -650,53 +1505,186 @@ export const borderedSkinSvg = (
       stroke="#CBD5E1"
       strokeWidth="0.5"
     />
-    <rect x="10" y="8" width="10" height="10" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="28" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="36" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="44" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="6" y="52" width="18" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <circle cx="36" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <rect
+      x="10"
+      y="8"
+      width="10"
+      height="10"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="28"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="36"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="44"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="6"
+      y="52"
+      width="18"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="36"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const defaultSidebarColorSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H26V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"
     />
-    <rect x="30" y="4" width="77" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="16" width="25" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="37" width="77" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="64" width="77" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="8" y="8" width="10" height="10" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="28" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="36" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="44" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="52" width="21" height="4" rx="1" className="fill-default-300  dark:text-default-400" />
-    <circle cx="36" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <rect
+      x="30"
+      y="4"
+      width="77"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="16"
+      width="25"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="37"
+      width="77"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="64"
+      width="77"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="8"
+      y="8"
+      width="10"
+      height="10"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="28"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="36"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="44"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="52"
+      width="21"
+      height="4"
+      rx="1"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="36"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const colorSidebarColorSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H26V72H4C1.79086 72 0 70.2091 0 68V4Z"
       fill="#405189"
@@ -765,22 +1753,51 @@ export const colorSidebarColorSvg = (
   </svg>
 );
 export const gradientSidebarColorSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H26V72H4C1.79086 72 0 70.2091 0 68V4Z"
       fill="url(#paint0_linear_4857_21630)"
     />
-    <rect x="30" y="4" width="77" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="16" width="25" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="37" width="77" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="30" y="64" width="77" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
+    <rect
+      x="30"
+      y="4"
+      width="77"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="16"
+      width="25"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="37"
+      width="77"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="30"
+      y="64"
+      width="77"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
     <rect
       x="8"
       y="8"
@@ -826,10 +1843,30 @@ export const gradientSidebarColorSvg = (
       fill="white"
       fill-opacity="0.2"
     />
-    <circle cx="36" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <circle
+      cx="36"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
     <defs>
       <linearGradient
         id="paint0_linear_4857_21630"
@@ -846,47 +1883,163 @@ export const gradientSidebarColorSvg = (
   </svg>
 );
 export const lightTopbarColorSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H9V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"
     />
-    <path d="M11 0H28V72H11V0Z" className="fill-default-200 dark:fill-default-300" />
-    <rect x="32" y="4" width="75" height="8" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="32" y="16" width="24" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="59" y="16" width="48" height="17" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="32" y="37" width="75" height="23" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="32" y="64" width="75" height="4" rx="1" className="fill-default-200 dark:fill-default-300" />
-    <rect x="3" y="6" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="6" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="18" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="12" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="26" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="18" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="34" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="24" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <rect x="3" y="42" width="4" height="4" rx="2" className="fill-default-300  dark:text-default-400" />
-    <rect x="13" y="30" width="13" height="3" rx="1.5" className="fill-default-300  dark:text-default-400" />
-    <circle cx="38" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="89" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="95" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
-    <circle cx="101" cy="8" r="2" className="fill-default-300  dark:text-default-400" />
+    <path
+      d="M11 0H28V72H11V0Z"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="32"
+      y="4"
+      width="75"
+      height="8"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="32"
+      y="16"
+      width="24"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="59"
+      y="16"
+      width="48"
+      height="17"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="32"
+      y="37"
+      width="75"
+      height="23"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="32"
+      y="64"
+      width="75"
+      height="4"
+      rx="1"
+      className="fill-default-200 dark:fill-default-300"
+    />
+    <rect
+      x="3"
+      y="6"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="6"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="18"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="12"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="26"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="18"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="34"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="24"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="3"
+      y="42"
+      width="4"
+      height="4"
+      rx="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <rect
+      x="13"
+      y="30"
+      width="13"
+      height="3"
+      rx="1.5"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="38"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="89"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="95"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
+    <circle
+      cx="101"
+      cy="8"
+      r="2"
+      className="fill-default-300  dark:text-default-400"
+    />
   </svg>
 );
 export const colorTopbarColorSvg = (
-  <svg
-
-
-    viewBox="0 0 112 72"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 112 72" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0 4C0 1.79086 1.79086 0 4 0H26V72H4C1.79086 72 0 70.2091 0 68V4Z"
       className="fill-default-200 dark:fill-default-300"

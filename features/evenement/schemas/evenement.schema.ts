@@ -5,7 +5,7 @@ export const evenementSchema = z.object({
     description: z.string({ message: "Description requise" }).min(1, { message: "La description ne peut pas être vide" }),
     eventDate: z.string({ message: "Date de l'événement requise" }).min(1, { message: "La date de l'événement ne peut pas être vide" }),
     location: z.string().optional(),
-    published: z.boolean().default(false),
+    published: z.boolean(),
     images: z
         .array(
             z.instanceof(File)

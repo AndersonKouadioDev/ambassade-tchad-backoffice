@@ -33,9 +33,8 @@ const HeaderContent = ({ children }: { children: React.ReactNode }) => {
       'has-sticky-header sticky top-6  px-6 ': config.navbar === 'floating',
       'top-10 has-sticky-header': config.layout === 'compact',
       'has-sticky-header': config.layout === 'semi-box' && config.navbar !== 'floating',
-      'top-0 px-0': config.layout === 'semi-box' && config.navbar === 'floating',
-      
-    })} >
+      'top-0 px-0': config.layout === 'semi-box' && config.navbar === 'floating'
+    })}>
       <div className={cn('flex-none    bg-header backdrop-blur-lg md:px-6 px-[15px] py-3    xl:ms-[248px]  flex items-center justify-between relative', headerTheme, {
         'xl:ms-[72px]': config.collapsed,
         'border-b': config.skin === 'bordered' && config.layout !== 'semi-box',

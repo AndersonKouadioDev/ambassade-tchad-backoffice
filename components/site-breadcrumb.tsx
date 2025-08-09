@@ -1,6 +1,6 @@
 'use client';
 import React from 'react'
-import { Link, usePathname, useRouter } from "@/components/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import {
     Breadcrumb,
     BreadcrumbEllipsis,

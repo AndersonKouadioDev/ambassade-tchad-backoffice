@@ -1,10 +1,10 @@
-'use client'
-import React from 'react'
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { useConfig } from '@/hooks/use-config'
-import { Icon } from "@/components/ui/icon"
-import { Check } from 'lucide-react';
+"use client";
+import React from "react";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { useConfig } from "@/hooks/use-config";
+import { Icon } from "@/components/ui/icon";
+import { Check } from "lucide-react";
 import {
   defaultSidebarColorSvg,
   colorSidebarColorSvg,
@@ -15,19 +15,19 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 const SidebarColor = () => {
-  const [config, setConfig] = useConfig()
+  const [config, setConfig] = useConfig();
   const [show, setShow] = React.useState<boolean>(
-    config.sidebarTheme !== 'light'
-  )
+    config.sidebarTheme !== "light"
+  );
 
   return (
     <div className="p-6 -mx-6">
       <div className="text-muted-foreground font-normal text-xs mb-4 uppercase">
-        Sidebar Color
+        Couleur de la barre latérale
       </div>
-      <div className=" grid grid-cols-3 gap-3 mb-4">
+      <div className="grid grid-cols-3 gap-3 mb-4">
         <div>
           <button
             type="button"
@@ -37,7 +37,7 @@ const SidebarColor = () => {
             }}
             disabled={config.sidebarTheme === "light"}
             className={cn(
-              " border  block  border-default-300 rounded relative h-[72px] w-full disabled:cursor-not-allowed duration-150 overflow-hidden",
+              " border block  border-default-300 rounded relative h-[72px] w-full disabled:cursor-not-allowed duration-150 overflow-hidden",
               {
                 "text-default  border-default-700 dark:border-default-600":
                   config.sidebarTheme === "light",
@@ -57,7 +57,7 @@ const SidebarColor = () => {
             {defaultSidebarColorSvg}
           </button>
           <Label className=" text-muted-foreground font-normal block mt-2.5">
-            Default
+            Defaut
           </Label>
         </div>
         <div>
@@ -88,7 +88,7 @@ const SidebarColor = () => {
             {colorSidebarColorSvg}
           </button>
           <Label className=" text-muted-foreground font-normal block mt-2.5">
-            color
+            Couleur
           </Label>
         </div>
       </div>
@@ -97,7 +97,6 @@ const SidebarColor = () => {
         <div className="flex gap-1 flex-wrap bg-default-200 p-3 rounded-md">
           {[
             "dark",
-            "embassy",
             "rose",
             "steel-blue",
             "purple",
@@ -105,7 +104,6 @@ const SidebarColor = () => {
             "green",
             "ocean-blue",
             "gray",
-
           ].map((color) => (
             <div key={color}>
               <TooltipProvider>
@@ -113,13 +111,14 @@ const SidebarColor = () => {
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      onClick={() => setConfig({ ...config, sidebarTheme: color })}
+                      onClick={() =>
+                        setConfig({ ...config, sidebarTheme: color })
+                      }
                       disabled={config.sidebarTheme === color}
                       className={cn(
-                        " border    border-default-300  inline-flex justify-center rounded-md items-center relative h-8 w-8  disabled:cursor-not-allowed duration-150",
+                        " border border-default-300 inline-flex justify-center rounded-md items-center relative h-8 w-8  disabled:cursor-not-allowed duration-150",
                         {
                           "bg-default": color === "dark",
-                          "bg-[#003399]": color === "embassy",
                           "bg-[#343A40]": color === "gray",
                           "bg-[#B52755]": color === "rose",
                           "bg-[#405189]": color === "steel-blue",
@@ -131,11 +130,13 @@ const SidebarColor = () => {
                       )}
                     >
                       <Check
-                        className={cn(" text-white h-4 w-4  duration-100 scale-0", {
-                          " scale-100": config.sidebarTheme === color,
-                        })}
+                        className={cn(
+                          "text-white h-4 w-4 duration-100 scale-0",
+                          {
+                            "scale-100": config.sidebarTheme === color,
+                          }
+                        )}
                       />
-
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -143,13 +144,12 @@ const SidebarColor = () => {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-
             </div>
           ))}
         </div>
       )}
     </div>
   );
-}
+};
 
-export default SidebarColor
+export default SidebarColor;

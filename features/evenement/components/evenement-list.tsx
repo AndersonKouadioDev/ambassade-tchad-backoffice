@@ -67,7 +67,7 @@ export const EvenementList: React.FC = () => {
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">Erreur lors du chargement</h3>
           <p className="text-muted-foreground">
-            Une erreur s'est produite lors du chargement des evenements.
+            Une erreur s&apos;est produite lors du chargement des evenements.
           </p>
         </div>
       </div>
@@ -111,9 +111,9 @@ export const EvenementList: React.FC = () => {
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold mb-2">Aucune actualité trouvée</h3>
+          <h3 className="text-lg font-semibold mb-2">Aucun evenement trouvée</h3>
           <p className="text-muted-foreground">
-            Aucune actualité ne correspond à vos critères de recherche.
+            Aucun evenement ne correspond à vos critères de recherche.
           </p>
         </div>
       ) : (

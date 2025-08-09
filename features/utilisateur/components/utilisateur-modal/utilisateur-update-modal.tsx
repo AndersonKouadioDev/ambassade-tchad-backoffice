@@ -1,13 +1,14 @@
 "use client";
 
-import { Fragment, useEffect, useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
   Dialog,
-  Transition,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
-  DialogPanel,
-  TransitionChild,
-} from "@headlessui/react";
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -21,12 +22,14 @@ import { toast } from "sonner";
 import {
   UtilisateurUpdateSchema,
   UtilisateurRoleDTO,
+  UtilisateurRoleSchema,
 } from "../../schema/utilisateur.schema";
 import { IUtilisateur, UtilisateurRole } from "../../types/utilisateur.type";
 import { getEnumValues } from "@/utils/getEnumValues";
-import { Button } from "@heroui/react";
+import { Button } from "@/components/ui/button";
 import { useModifierRoleMutation } from "../../queries/utilisateur.mutation";
 import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
+import { Label } from "@/components/ui/label";
 
 type Props = {
   isOpen: boolean;
@@ -51,7 +54,7 @@ export function UtilisateurUpdateModal({
     reset,
     watch,
   } = useForm<UtilisateurRoleDTO>({
-    resolver: zodResolver(UtilisateurUpdateSchema),
+    resolver: zodResolver(UtilisateurRoleSchema),
     mode: "onChange",
   });
 
@@ -64,24 +67,26 @@ export function UtilisateurUpdateModal({
 
   const onSubmit = useCallback(
     async (data: UtilisateurRoleDTO) => {
-      await modifierRoleMutation({ id: utilisateur?.id || "", data });
-      handleClose();
+      try {
+        await modifierRoleMutation({ id: utilisateur?.id || "", data });
+        handleClose();
+        toast.success("Rôle de l'utilisateur modifié avec succès.");
+      } catch (error) {
+        toast.error("Erreur lors de la modification du rôle", {
+          description:
+            error instanceof Error ? error.message : "Une erreur est survenue",
+        });
+      }
     },
     [modifierRoleMutation, handleClose, utilisateur]
   );
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !utilisateur) return;
 
-    const formValues = utilisateur
-      ? {
-          role: utilisateur.role,
-        }
-      : {
-          role: undefined,
-        };
-
-    reset(formValues);
+    reset({
+      role: utilisateur.role,
+    });
   }, [isOpen, utilisateur, reset]);
 
   const handleRoleChange = useCallback(
@@ -95,89 +100,56 @@ export function UtilisateurUpdateModal({
   );
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={handleClose}>
-        <TransitionChild
-          as={Fragment}
-          enter="ease-out duration-200"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black/25 backdrop-blur-sm" />
-        </TransitionChild>
-
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <TransitionChild
-              as={Fragment}
-              enter="ease-out duration-200"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-150"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>
+            {`Modifier le rôle de ${utilisateur?.firstName} ${utilisateur?.lastName}`}
+          </DialogTitle>
+          <DialogDescription>
+            Rôle actuel : {getUtilisateurRole(utilisateur?.role!)}
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="grid gap-2">
+            <Label htmlFor="role">Nouveau rôle</Label>
+            <Select
+              value={watch("role")?.toString() || ""}
+              onValueChange={handleRoleChange}
+              disabled={isPending}
             >
-              <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <DialogTitle className="text-lg font-medium text-gray-900 mb-4">
-                  {`Modifier ${utilisateur?.firstName} ${utilisateur?.lastName}`}
-                </DialogTitle>
-
-                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                  <div>
-                    <Select
-                      value={watch("role")?.toString() || ""}
-                      onValueChange={handleRoleChange}
-                      disabled={isPending}
-                    >
-                      <SelectTrigger
-                        className={`w-full ${
-                          errors.role ? "border-red-500" : ""
-                        }`}
-                      >
-                        <SelectValue placeholder="Choisir un rôle" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {roleOptions.map((role) => (
-                          <SelectItem key={role} value={role.toString()}>
-                            {getUtilisateurRole(role)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.role && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.role.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex justify-end gap-3 pt-4">
-                    <Button
-                      type="button"
-                      variant="bordered"
-                      onPress={handleClose}
-                      disabled={isPending}
-                      className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      Annuler
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isPending || !isValid}
-                      className="px-4 py-2 text-sm text-white bg-primary rounded-md hover:bg-primary/90 disabled:opacity-50"
-                    >
-                      {isPending ? "Modification..." : "Modifier"}
-                    </Button>
-                  </div>
-                </form>
-              </DialogPanel>
-            </TransitionChild>
+              <SelectTrigger
+                className={`w-full ${errors.role ? "border-red-500" : ""}`}
+              >
+                <SelectValue placeholder="Choisir un rôle" />
+              </SelectTrigger>
+              <SelectContent>
+                {roleOptions.map((role) => (
+                  <SelectItem key={role} value={role.toString()}>
+                    {getUtilisateurRole(role)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.role && (
+              <p className="text-sm text-red-500">{errors.role.message}</p>
+            )}
           </div>
-        </div>
-      </Dialog>
-    </Transition>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isPending}
+            >
+              Annuler
+            </Button>
+            <Button type="submit" disabled={isPending || !isValid}>
+              {isPending ? "Modification..." : "Modifier"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

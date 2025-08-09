@@ -1,8 +1,8 @@
-import { Link } from '@/i18n/routing';
-import ForgotPass from "@/components/auth/forgot-pass";
+import { Link } from '@/i18n/navigation';
+import ForgotPass from "@/components/partials/auth/forgot-pass";
 import Image from "next/image";
-import Copyright from "@/components/auth/copyright";
-import Logo from "@/components/auth/logo";
+import Copyright from "@/components/partials/auth/copyright";
+import Logo from "@/components/partials/auth/logo";
 
 const ForgotPassPage = () => {
   return (
@@ -10,7 +10,7 @@ const ForgotPassPage = () => {
       <div className="overflow-y-auto flex flex-wrap w-full h-dvh">
         <div
           className="lg:block hidden flex-1 overflow-hidden text-[40px] leading-[48px] text-default-600 
- relative z-[1] bg-default-50"
+ relative z-1 bg-default-50"
         >
           <div className="max-w-[520px] pt-20 ps-20">
             <Link href="/" className="mb-6 inline-block">
@@ -64,7 +64,7 @@ const ForgotPassPage = () => {
                 to The Sign In
               </div>
             </div>
-            <div className="text-xs font-normal text-default-500  z-[999] pb-10 text-center">
+            <div className="text-xs font-normal text-default-500  z-999 pb-10 text-center">
               <Copyright />
             </div>
           </div>

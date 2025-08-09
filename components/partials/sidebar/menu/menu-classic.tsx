@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Ellipsis } from "lucide-react";
-import { usePathname } from "@/components/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { getMenuList } from "@/lib/menus";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -16,7 +16,9 @@ import { useConfig } from "@/hooks/use-config";
 import MenuLabel from "../common/menu-label";
 import MenuItem from "../common/menu-item";
 import { CollapseMenuButton } from "../common/collapse-menu-button";
+import MenuWidget from "../common/menu-widget";
 import SearchBar from "@/components/partials/sidebar/common/search-bar";
+import TeamSwitcher from "../common/team-switcher";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { getLangDir } from "rtl-detect";
@@ -66,7 +68,7 @@ export function MenuClassic({}) {
         </div>
       )}
 
-      <ScrollArea className="[&>div>div[style]]:!block" dir={direction}>
+      <ScrollArea className="[&>div>div[style]]:block!" dir={direction}>
         {isDesktop && (
           <div
             className={cn(" space-y-3 mt-6 ", {
@@ -74,12 +76,13 @@ export function MenuClassic({}) {
               "text-center": collapsed || !hovered,
             })}
           >
-            {/* <SearchBar /> */}
+            <TeamSwitcher />
+            <SearchBar />
           </div>
         )}
 
         <nav className="mt-8 h-full w-full">
-          <ul className="h-full flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-4">
+          <ul className=" h-full flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-4">
             {menuList?.map(({ groupLabel, menus }, index) => (
               <li className={cn("w-full", groupLabel ? "" : "")} key={index}>
                 {((!collapsed || hovered) && groupLabel) ||
@@ -89,6 +92,7 @@ export function MenuClassic({}) {
                   !hovered &&
                   !collapsed !== undefined &&
                   groupLabel ? (
+                  // Grand titre quand le menu est collé
                   <TooltipProvider>
                     <Tooltip delayDuration={100}>
                       <TooltipTrigger className="w-full">
@@ -144,6 +148,11 @@ export function MenuClassic({}) {
                 )}
               </li>
             ))}
+            {/* {!collapsed && (
+              <li className="w-full grow flex items-end">
+                <MenuWidget />
+              </li>
+            )} */}
           </ul>
         </nav>
       </ScrollArea>

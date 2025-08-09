@@ -1,13 +1,15 @@
 "use client";
 
-import { Fragment, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
-  Transition,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
-  DialogPanel,
-  TransitionChild,
-} from "@headlessui/react";
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -16,17 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 import {
   UtilisateurAddDTO,
   UtilisateurAddSchema,
 } from "../../schema/utilisateur.schema";
 import { UtilisateurRole } from "../../types/utilisateur.type";
 import { getEnumValues } from "@/utils/getEnumValues";
-import { Button } from "@heroui/react";
 import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
 import { useAjouterUtilisateurMutation } from "../../queries/utilisateur.mutation";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 type Props = {
   isOpen: boolean;
@@ -54,17 +56,32 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
   const handleClose = useCallback(() => {
     if (!isPending) {
       setIsOpen(false);
-      setTimeout(() => reset({ role: undefined }), 200);
+      setTimeout(
+        () =>
+          reset({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            role: undefined,
+          }),
+        200
+      );
     }
   }, [isPending, setIsOpen, reset]);
 
   const onSubmit = useCallback(
     async (formdata: UtilisateurAddDTO) => {
-      // Ajout de l'utilisateur
-      await ajouterUtilisateurMutation(formdata);
-
-      // Fermeture de la modal
-      handleClose();
+      try {
+        await ajouterUtilisateurMutation(formdata);
+        toast.success("Utilisateur ajouté avec succès.");
+        handleClose();
+      } catch (error) {
+        toast.error("Erreur lors de l'ajout de l'utilisateur", {
+          description:
+            error instanceof Error ? error.message : "Une erreur est survenue",
+        });
+      }
     },
     [ajouterUtilisateurMutation, handleClose]
   );
@@ -80,138 +97,99 @@ export function UtilisateurAddModal({ isOpen, setIsOpen }: Props) {
   );
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={handleClose}>
-        <TransitionChild
-          as={Fragment}
-          enter="ease-out duration-200"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black/25 backdrop-blur-sm" />
-        </TransitionChild>
-
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <TransitionChild
-              as={Fragment}
-              enter="ease-out duration-200"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-150"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <DialogTitle className="text-lg font-medium text-gray-900 mb-4">
-                  Ajouter un utilisateur
-                </DialogTitle>
-
-                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                  <div>
-                    <Input
-                      {...register("firstName")}
-                      placeholder="Prénom"
-                      type="text"
-                    />
-                    {errors.firstName && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.firstName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Input
-                      {...register("lastName")}
-                      placeholder="Nom"
-                      type="text"
-                    />
-                    {errors.lastName && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.lastName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Input
-                      {...register("email")}
-                      placeholder="Email"
-                      type="email"
-                    />
-                    {errors.email && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Input
-                      {...register("phoneNumber")}
-                      placeholder="Téléphone"
-                      type="tel"
-                    />
-                    {errors.phoneNumber && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.phoneNumber.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <Select
-                      value={watch("role")?.toString() || ""}
-                      onValueChange={handleRoleChange}
-                      disabled={isPending}
-                    >
-                      <SelectTrigger
-                        className={`w-full ${
-                          errors.role ? "border-red-500" : ""
-                        }`}
-                      >
-                        <SelectValue placeholder="Choisir un rôle" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {roleOptions.map((role) => (
-                          <SelectItem key={role} value={role.toString()}>
-                            {getUtilisateurRole(role)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.role && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.role.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex justify-end gap-3 pt-4">
-                    <Button
-                      type="button"
-                      variant="bordered"
-                      onPress={handleClose}
-                      disabled={isPending}
-                      className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      Annuler
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isPending || !isValid}
-                      className="px-4 py-2 text-sm text-white bg-primary rounded-md hover:bg-primary/90 disabled:opacity-50"
-                    >
-                      {isPending ? "Ajout..." : "Ajouter"}
-                    </Button>
-                  </div>
-                </form>
-              </DialogPanel>
-            </TransitionChild>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Ajouter un utilisateur</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="grid gap-2">
+            <Label htmlFor="firstName">Prénom</Label>
+            <Input
+              id="firstName"
+              {...register("firstName")}
+              placeholder="Prénom"
+            />
+            {errors.firstName && (
+              <p className="text-sm text-red-500">{errors.firstName.message}</p>
+            )}
           </div>
-        </div>
-      </Dialog>
-    </Transition>
+          <div className="grid gap-2">
+            <Label htmlFor="lastName">Nom</Label>
+            <Input
+              id="lastName"
+              {...register("lastName")}
+              placeholder="Nom"
+            />
+            {errors.lastName && (
+              <p className="text-sm text-red-500">{errors.lastName.message}</p>
+            )}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              {...register("email")}
+              placeholder="Email"
+              type="email"
+            />
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="phoneNumber">Téléphone</Label>
+            <Input
+              id="phoneNumber"
+              {...register("phoneNumber")}
+              placeholder="Téléphone"
+              type="tel"
+            />
+            {errors.phoneNumber && (
+              <p className="text-sm text-red-500">
+                {errors.phoneNumber.message}
+              </p>
+            )}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="role">Rôle</Label>
+            <Select
+              value={watch("role")?.toString() || ""}
+              onValueChange={handleRoleChange}
+              disabled={isPending}
+            >
+              <SelectTrigger
+                className={`w-full ${errors.role ? "border-red-500" : ""}`}
+              >
+                <SelectValue placeholder="Choisir un rôle" />
+              </SelectTrigger>
+              <SelectContent>
+                {roleOptions.map((role) => (
+                  <SelectItem key={role} value={role.toString()}>
+                    {getUtilisateurRole(role)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.role && (
+              <p className="text-sm text-red-500">{errors.role.message}</p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isPending}
+            >
+              Annuler
+            </Button>
+            <Button type="submit" disabled={isPending || !isValid}>
+              {isPending ? "Ajout..." : "Ajouter"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

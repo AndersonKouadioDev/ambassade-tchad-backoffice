@@ -4,8 +4,8 @@ import React, { useRef } from "react";
 import { Upload, X, Trash2, Eye, ExternalLink } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { Button } from "@heroui/react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "../ui/button";
 export interface ImageFile {
   id: string;
   file: File;
@@ -167,7 +167,7 @@ export const ImageDragDrop: React.FC<ImageDragDropProps> = ({
               type="button"
               variant="ghost"
               size="sm"
-              onPress={handleClearAll}
+              onClick={handleClearAll}
               className="text-red-600 hover:text-red-700"
             >
               <Trash2 className="w-4 h-4 mr-2" />

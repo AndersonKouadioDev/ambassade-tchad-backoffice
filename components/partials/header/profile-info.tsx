@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
 import Image from "next/image";
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { LogoutButton } from "./logout-button";
 import { useSession } from "next-auth/react";
+import { getFullUrlFile } from "@/utils/getFullUrlFile";
 
 const ProfileInfo = () => {
   const session = useSession();
@@ -33,7 +34,11 @@ const ProfileInfo = () => {
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <div className="flex items-center gap-3 text-embassy-blue-800 hover:bg-embassy-blue-50  bg-embassy-blue-50 rounded-lg px-2 py-1 transition-all duration-200 dark:text-embassy-blue-200 dark:hover:bg-embassy-blue-800/30">
             <Image
-              src={user?.image || "/images/all-img/user3.png"}
+              src={
+                user?.image
+                  ? getFullUrlFile(user?.image)
+                  : "/images/all-img/user3.png"
+              }
               alt={user?.name?.charAt(0) || "User"}
               width={36}
               height={36}

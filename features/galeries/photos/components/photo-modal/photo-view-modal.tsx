@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { ViewModal } from "@/components/ui/view-modal";
+import { ViewModal } from "@/components/blocks/view-modal";
 import Image from "next/image";
-import { Button } from "@heroui/react";
+import { Button } from "@/components/ui/button";
 import { Eye, Image as ImageIcon } from "lucide-react";
 import { IPhoto } from "../../types/photo.type";
 

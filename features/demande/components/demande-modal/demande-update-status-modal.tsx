@@ -1,13 +1,17 @@
 "use client";
 
-import { Fragment, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import {
   Dialog,
-  Transition,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
-  DialogPanel,
-  TransitionChild,
-} from "@headlessui/react";
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -15,11 +19,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+
 import { getEnumValues } from "@/utils/getEnumValues";
-import { Button } from "@heroui/react";
 import { DemandeStatus, IDemande } from "../../types/demande.type";
 import { useUpdateDemandStatusMutation } from "../../queries/demande.mutation";
 import {
@@ -27,7 +30,6 @@ import {
   DemandUpdateSchema,
 } from "../../schema/demande.schema";
 import { getDemandeStatusLabel } from "../../utils/getDemandeStatusLabel";
-import { Textarea } from "@/components/ui/textarea";
 import { areShowReasonObservation } from "../../utils/areShowReasonObservation";
 
 type Props = {
@@ -84,6 +86,7 @@ export function DemandeUpdateStatusModal({
       try {
         await updateDemandStatusMutation({ id: demande?.id || "", data });
         handleClose();
+        toast.success("Statut de la demande modifié avec succès.");
       } catch (error) {
         toast.error("Erreur : ", {
           description:
@@ -110,97 +113,61 @@ export function DemandeUpdateStatusModal({
   );
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={handleClose}>
-        <TransitionChild
-          as={Fragment}
-          enter="ease-out duration-200"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black/25 backdrop-blur-sm" />
-        </TransitionChild>
-
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <TransitionChild
-              as={Fragment}
-              enter="ease-out duration-200"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-150"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Modifier le statut de la demande</DialogTitle>
+          <DialogDescription>
+            {`Statut actuel : ${getDemandeStatusLabel(demande?.status!).label}`}
+          </DialogDescription>
+        </DialogHeader>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <Select
+              onValueChange={handleStatusChange}
+              disabled={isPending}
+              value={watch("status")}
             >
-              <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <DialogTitle className="text-lg font-medium text-gray-900 mb-4">
-                  {`Modifier le statut de la demande`}
-                </DialogTitle>
-
-                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                  <div>
-                    <Select
-                      onValueChange={handleStatusChange}
-                      disabled={isPending}
-                    >
-                      <SelectTrigger
-                        className={`w-full ${
-                          errors.status ? "border-red-500" : ""
-                        }`}
-                      >
-                        <SelectValue placeholder="Choisir un statut" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {statusOptions.map((status) => (
-                          <SelectItem key={status} value={status.toString()}>
-                            {getDemandeStatusLabel(status).label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.status && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.status.message}
-                      </p>
-                    )}
-                  </div>
-                  {verifyIfReasonObservationShow.reason && (
-                    <Textarea {...register("reason")} placeholder="La raison" />
-                  )}
-                  {verifyIfReasonObservationShow.observation && (
-                    <Textarea
-                      {...register("observation")}
-                      placeholder="Observation"
-                    />
-                  )}
-
-                  <div className="flex justify-end gap-3 pt-4">
-                    <Button
-                      type="button"
-                      variant="bordered"
-                      onPress={handleClose}
-                      disabled={isPending}
-                      className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      Annuler
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isPending || !isValid}
-                      className="px-4 py-2 text-sm text-white bg-primary rounded-md hover:bg-primary/90 disabled:opacity-50"
-                    >
-                      {isPending ? "Modification..." : "Modifier"}
-                    </Button>
-                  </div>
-                </form>
-              </DialogPanel>
-            </TransitionChild>
+              <SelectTrigger
+                className={`w-full ${errors.status ? "border-red-500" : ""}`}
+              >
+                <SelectValue placeholder="Choisir un statut" />
+              </SelectTrigger>
+              <SelectContent>
+                {statusOptions.map((status) => (
+                  <SelectItem key={status} value={status.toString()}>
+                    {getDemandeStatusLabel(status).label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.status && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.status.message}
+              </p>
+            )}
           </div>
-        </div>
-      </Dialog>
-    </Transition>
+          {verifyIfReasonObservationShow.reason && (
+            <Textarea {...register("reason")} placeholder="La raison" />
+          )}
+          {verifyIfReasonObservationShow.observation && (
+            <Textarea {...register("observation")} placeholder="Observation" />
+          )}
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isPending}
+            >
+              Annuler
+            </Button>
+            <Button type="submit" disabled={isPending || !isValid}>
+              {isPending ? "Modification..." : "Modifier"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

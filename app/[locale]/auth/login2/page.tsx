@@ -1,8 +1,8 @@
-import { Link } from '@/i18n/routing';
-import LoginForm from "@/features/auth/components/auth-form/login-form";
-import Social from "@/components/auth/social";
+import { Link } from '@/i18n/navigation';
+import LoginForm from "@/components/partials/auth/login-form";
+import Social from "@/components/partials/auth/social";
 import Image from "next/image";
-import Copyright from "@/components/auth/copyright";
+import Copyright from "@/components/partials/auth/copyright";
 import Logo from "@/components/logo";
 const Login2 = () => {
   return (
@@ -42,7 +42,7 @@ const Login2 = () => {
                   </Link>
                 </div>
               </div>
-              <div className="text-xs font-normal text-default-500 z-[999] pb-10 text-center">
+              <div className="text-xs font-normal text-default-500 z-999 pb-10 text-center">
                 <Copyright />
               </div>
             </div>

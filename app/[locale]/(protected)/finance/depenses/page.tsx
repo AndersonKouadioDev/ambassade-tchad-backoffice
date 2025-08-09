@@ -1,5 +1,4 @@
 import { StatusBlock } from "@/components/blocks/status-block";
-import DepenseList from "@/components/finance/depense-list";
 import { DollarSign, CalendarDays, BarChart2, Clock3 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -45,7 +44,7 @@ export default function DepenseListPage() {
         </div>
 
         <div className="col-span-12">
-          <DepenseList />
+          {/* <DepenseList /> */}
         </div>
       </div>
     </div>

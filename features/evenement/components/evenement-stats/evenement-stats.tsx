@@ -63,15 +63,15 @@ export function EvenementStats() {
         <StatusBlock
           title={t("total_actualite")}
           total="28"
-          icon={<BookOpen className="w-5 h-5 text-embassy-blue-600" />}
-          iconWrapperClass="bg-embassy-blue-100 dark:bg-embassy-blue-900/30"
+          icon={<BookOpen className="w-5 h-5 text-primary-600" />}
+          iconWrapperClass="bg-primary-100 dark:bg-primary-900/30"
           chartColor="#2563EB"
         />
         <StatusBlock
           title="Vues Total"
           total="3,456"
-          icon={<Users className="w-5 h-5 text-embassy-yellow-600" />}
-          iconWrapperClass="bg-embassy-yellow-100 dark:bg-embassy-yellow-900/30"
+          icon={<Users className="w-5 h-5 text-primary" />}
+          iconWrapperClass="bg-primary/10 dark:bg-primary/30"
           chartColor="#FBBF24"
         />
       </div>

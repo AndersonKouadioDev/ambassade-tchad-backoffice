@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ViewModal } from "@/components/ui/view-modal";
+import { ViewModal } from "@/components/blocks/view-modal";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Eye, Image as ImageIcon } from "lucide-react";

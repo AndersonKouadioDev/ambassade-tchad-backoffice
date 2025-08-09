@@ -1,206 +1,8 @@
-@import "tailwindcss";
-@import "../../styles/video-player.css";
-@config "../../tailwind.config.ts";
-
-@custom-variant dark (&:is(.dark *));
-
-@theme {
-  /* Couleurs de base (dérivées des variables CSS définies dans @layer base) */
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-
-  /* Couleurs de menu et d'en-tête (dérivées des variables CSS) */
-  --color-menu-arrow: hsl(var(--menu-arrow));
-  --color-menu-arrow-active: hsl(var(--menu-arrow-active));
-  --color-menu-menu-foreground: hsl(var(--menu-foreground));
-  --color-sidebar: hsl(var(--sidebar));
-  --color-header: hsl(var(--header));
-
-  /* Nuances de couleurs par défaut */
-  --color-default-50: hsl(var(--default-50));
-  --color-default-100: hsl(var(--default-100));
-  --color-default-200: hsl(var(--default-200));
-  --color-default-300: hsl(var(--default-300));
-  --color-default-400: hsl(var(--default-400));
-  --color-default-500: hsl(var(--default-500));
-  --color-default-600: hsl(var(--default-600));
-  --color-default-700: hsl(var(--default-700));
-  --color-default-800: hsl(var(--default-800));
-  --color-default-900: hsl(var(--default-900));
-  --color-default-950: hsl(var(--default-950));
-  --color-default: hsl(var(--default));
-  --color-default-foreground: hsl(var(--default-foreground));
-
-  /* Nuances de couleurs primaires */
-  --color-primary-50: hsl(var(--primary-50));
-  --color-primary-100: hsl(var(--primary-100));
-  --color-primary-200: hsl(var(--primary-200));
-  --color-primary-300: hsl(var(--primary-300));
-  --color-primary-400: hsl(var(--primary-400));
-  --color-primary-500: hsl(var(--primary-500));
-  --color-primary-600: hsl(var(--primary-600));
-  --color-primary-700: hsl(var(--primary-700));
-  --color-primary-800: hsl(var(--primary-800));
-  --color-primary-900: hsl(var(--primary-900));
-  --color-primary-950: hsl(var(--primary-950));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-
-  /* Autres couleurs de statut/sémantiques */
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-success: hsl(var(--success));
-  --color-success-foreground: hsl(var(--success-foreground));
-  --color-info: hsl(var(--info));
-  --color-info-foreground: hsl(var(--info-foreground));
-  --color-warning: hsl(var(--warning));
-  --color-warning-foreground: hsl(var(--warning-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-
-  /* Rayons de bordure */
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-
-  /* Ombres */
-  --shadow-base: 0px 0px 1px rgba(40, 41, 61, 0.08),
-    0px 0.5px 2px rgba(96, 97, 112, 0.16);
-  --shadow-base2: 0px 2px 4px rgba(40, 41, 61, 0.04),
-    0px 8px 16px rgba(96, 97, 112, 0.16);
-  --shadow-base3: 16px 10px 40px rgba(15, 23, 42, 0.22);
-  --shadow-deep: -2px 0px 8px rgba(0, 0, 0, 0.16);
-  --shadow-dropdown: 0px 4px 8px rgba(0, 0, 0, 0.08);
-  --shadow-testi: 0px 4px 24px rgba(0, 0, 0, 0.06);
-  --shadow-todo: rgba(235 233 241, 0.6) 0px 3px 10px 0px;
-
-  /* Animations */
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-  --animate-zoom: zoom 1s ease-in-out infinite;
-  --animate-tada: tada 1.5s ease-in-out infinite;
-
-  /* Définitions des keyframes */
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
-  }
-  @keyframes zoom {
-    0%,
-    100% {
-      transform: scale(0.5);
-    }
-    50% {
-      transform: scale(1);
-    }
-  }
-  @keyframes tada {
-    0% {
-      transform: scale3d(1, 1, 1);
-    }
-    10%,
-    20% {
-      transform: scale3d(1, 1, 0.95) rotate3d(0, 0, 1, -10deg);
-    }
-    30%,
-    50%,
-    70%,
-    90% {
-      transform: scale3d(1, 1, 1) rotate3d(0, 0, 1, 10deg);
-    }
-    40%,
-    60%,
-    80% {
-      transform: rotate3d(0, 0, 1, -10deg);
-    }
-    100% {
-      transform: scale3d(1, 1, 1);
-    }
-  }
-}
-
-@layer utilities {
-  .container {
-    margin-inline: auto;
-    padding-inline: 2rem;
-    @media (width >= --theme(--breakpoint-sm)) {
-      max-width: none;
-    }
-    @media (width >= 1400px) {
-      max-width: 1400px;
-    }
-  }
-
-  /* vector map */
-  .starter-next-vmap path {
-    @apply fill-[#6794DC];
-  }
-  .starter-next-vmap .svg-map__location[aria-checked="true"] {
-    @apply fill-primary;
-  }
-  .starter-next-codeVmapInfo path {
-    @apply fill-info;
-  }
-  .starter-next-codeVmapInfo path .svg-map__location[aria-checked="true"] {
-    @apply fill-info;
-  }
-  .starter-next-codeVmapWarning path {
-    @apply fill-warning;
-  }
-  .starter-next-codeVmapWarning path .svg-map__location[aria-checked="true"] {
-    @apply fill-warning;
-  }
-  .starter-next-codeVmapSuccess path {
-    @apply fill-success;
-  }
-  .starter-next-codeVmapSuccess path .svg-map__location[aria-checked="true"] {
-    @apply fill-success;
-  }
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
-  /*
-    La couleur de bordure par défaut a changé pour `currentcolor` dans Tailwind CSS v4.
-    Ces styles de compatibilité garantissent que l'apparence reste la même
-    qu'avec Tailwind CSS v3.
-  */
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-
-  body {
-    @apply text-foreground;
-  }
-
-  /* Définitions des variables CSS par défaut pour les thèmes */
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -214,6 +16,8 @@
     --input: 214.3 31.8% 91.4%;
     --secondary: 10 95% 58%;
     --secondary-foreground: 0 0% 100%;
+    --tertiary: 63 100% 50%;
+    --tertiary-foreground: 0 0% 100%;
     --accent: 48 100% 50%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
@@ -254,8 +58,8 @@
     --primary-foreground: 0 0% 100%;
 
     /* Couleurs Tchad - Valeurs spécifiques pour sidebar, header, et menu */
-    --sidebar: 220 100% 30%;
-    --header: 220 100% 30%;
+    --sidebar: 0 0% 100%;
+    --header: 0 0% 100%;
     --menu-arrow: 220 100% 45%;
     --menu-arrow-active: 10 95% 58%;
     --menu-foreground: 0 0% 100%;
@@ -277,6 +81,8 @@
     --primary-foreground: 0 0% 100%;
     --secondary: 10 95% 58%;
     --secondary-foreground: 0 0% 100%;
+    --tertiary: 63 100% 50%;
+    --tertiary-foreground: 0 0% 100%;
     --accent: 48 100% 50%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
@@ -301,112 +107,51 @@
     --default-50: 222.2 84% 4.9%;
     --default: 213.8 100% 96.9%;
     --default-foreground: 222.2 47.4% 11.2%;
+
     --sidebar: 220 100% 20%;
     --header: 220 100% 20%;
     --menu-arrow: 220 100% 45%;
     --menu-arrow-active: 10 95% 58%;
     --menu-foreground: 210 40% 98%;
   }
+}
 
-  /*
-    Thèmes supplémentaires.
-    Appliquez ces classes (ex: <body class="theme-rose">)
-    pour changer les couleurs du thème.
-    Ils surchargent les variables définies dans :root.
-  */
-  .theme-dark {
-    --sidebar: 222.2 84% 4.9%;
-    --header: 222.2 84% 4.9%;
+/* vector map */
+.starter-next-vmap path {
+  @apply fill-[#6794DC];
+}
+
+.starter-next-vmap .svg-map__location[aria-checked="true"] {
+  @apply fill-primary;
+}
+
+.starter-next-codeVmapInfo path {
+  @apply fill-info;
+}
+
+.starter-next-codeVmapInfo path .svg-map__location[aria-checked="true"] {
+  @apply fill-info;
+}
+.starter-next-codeVmapWarning path {
+  @apply fill-warning;
+}
+.starter-next-codeVmapWarning path .svg-map__location[aria-checked="true"] {
+  @apply fill-warning;
+}
+.starter-next-codeVmapSuccess path {
+  @apply fill-success;
+}
+.starter-next-codeVmapSuccess path .svg-map__location[aria-checked="true"] {
+  @apply fill-success;
+}
+
+@layer base {
+  * {
+    @apply border-border;
   }
 
-  .theme-rose {
-    --sidebar: 341, 64%, 43%;
-    --header: 341, 64%, 43%;
-    --secondary: 339, 60%, 51%;
-    --menu-arrow: 339, 60%, 51%;
-    --menu-arrow-active: 336, 67%, 60%;
-  }
-
-  .theme-gray {
-    --sidebar: 210, 10%, 23%;
-    --header: 210, 10%, 23%;
-    --secondary: 207, 14%, 31%;
-    --menu-arrow: 207, 14%, 31%;
-    --menu-arrow-active: 203, 16%, 43%;
-  }
-
-  .theme-steel-blue {
-    --sidebar: 226, 36%, 39%;
-    --header: 226, 36%, 39%;
-    --secondary: 224, 40%, 48%;
-    --menu-arrow: 224, 40%, 48%;
-    --menu-arrow-active: 216, 47%, 60%;
-  }
-
-  .theme-purple {
-    --sidebar: 299, 56%, 19%;
-    --header: 299, 56%, 19%;
-    --secondary: 299, 40%, 28%;
-    --menu-arrow: 299, 40%, 28%;
-    --menu-arrow-active: 298, 44%, 33%;
-  }
-
-  .theme-redwood {
-    --sidebar: 345, 24%, 29%;
-    --header: 345, 24%, 29%;
-    --secondary: 346, 26%, 35%;
-    --menu-arrow: 346, 26%, 35%;
-    --menu-arrow-active: 344, 27%, 42%;
-  }
-
-  .theme-green {
-    --sidebar: 164, 64%, 21%;
-    --header: 164, 64%, 21%;
-    --secondary: 164, 68%, 24%;
-    --menu-arrow: 164, 68%, 24%;
-    --menu-arrow-active: 163, 69%, 30%;
-  }
-
-  .theme-ocean-blue {
-    --sidebar: 206, 92%, 35%;
-    --header: 206, 92%, 35%;
-    --secondary: 205, 94%, 39%;
-    --menu-arrow: 205, 94%, 39%;
-    --menu-arrow-active: 203, 85%, 48%;
-  }
-
-  .theme-transparent {
-    --header: transparent;
-    box-shadow: none;
-  }
-
-  /* Thème Ambassade - Couleurs officielles */
-  .theme-embassy {
-    /* Couleur principale - Bleu #003399 */
-    --primary: 220 100% 30%;
-    --primary-foreground: 0 0% 100%;
-    --sidebar: 220 100% 30%;
-    --header: 220 100% 30%;
-
-    /* Couleur secondaire - Rouge/Orange #fa4c31 */
-    --secondary: 10 95% 58%;
-    --secondary-foreground: 0 0% 100%;
-
-    /* Couleur accent - Jaune/Or #fecb00 */
-    --accent: 48 100% 50%;
-    --accent-foreground: 220 100% 30%;
-
-    /* Couleurs système adaptées */
-    --warning: 48 100% 50%;
-    --warning-foreground: 220 100% 30%;
-    --info: 220 100% 30%;
-    --info-foreground: 0 0% 100%;
-    --ring: 220 100% 30%;
-
-    /* Navigation et menu */
-    --menu-arrow: 220 100% 45%;
-    --menu-arrow-active: 10 95% 58%;
-    --menu-foreground: 0 0% 100%;
+  body {
+    @apply text-foreground;
   }
 
   .input-group :not(:first-child) input {
@@ -438,8 +183,6 @@
   }
 }
 
-/* Styles qui ne sont pas des utilitaires Tailwind ni des réinitialisations de base,
-   mais des classes spécifiques à des composants ou des mises en page. */
 .logo-box-3 {
   @apply flex justify-center items-center min-h-screen;
 }
@@ -662,7 +405,10 @@
   @apply bg-secondary border-none text-primary-foreground text-center px-2 font-medium text-sm;
 }
 
-.starter-next-calendar .danger,
+.starter-next-calendar .danger {
+  @apply bg-destructive border-none text-primary-foreground text-center px-2 font-medium text-sm;
+}
+
 .starter-next-calendar .destructive {
   @apply bg-destructive border-none text-primary-foreground text-center px-2 font-medium text-sm;
 }
@@ -684,6 +430,7 @@
 }
 
 /* react select */
+
 .starter-next .react-select .react-select.is-invalid .select__control {
   border-color: none !important;
 }
@@ -737,11 +484,7 @@
   .react-select
   .react-select__control
   .select__indicator-separator {
-  @apply bg-default-50 text-default-800;
-}
-
-.starter-next .react-select .select__input::placeholder {
-  color: hsl(var(--default-500) / 0.6);
+  @apply bg-default-50 text-default-800 placeholder:text-opacity-60;
 }
 
 .starter-next .react-select .react-select__control .select__indicator svg {
@@ -758,7 +501,7 @@
 }
 
 .starter-next .react-select .select__multi-value__label {
-  @apply text-xs bg-default text-default-foreground rounded-none ltr:rounded-l rtl:rounded-r;
+  @apply text-xs bg-default  text-default-foreground rounded-none ltr:rounded-l rtl:rounded-r;
 }
 
 .starter-next .react-select .select__multi-value__remove {
@@ -789,96 +532,8 @@ html[dir="rtl"] .react-select .select__loading-indicator {
   width: 100%;
 }
 
-/* Embassy Toast Styles */
-.embassy-toast {
-  @apply rounded-xl border border-embassy-blue-200 bg-white/95 backdrop-blur-sm shadow-xl;
-  box-shadow: 0 10px 25px rgba(0, 51, 153, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.embassy-toast-dark {
-  @apply bg-slate-800/95 border-embassy-blue-400/30 text-slate-100;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 51, 153, 0.1);
-}
-
-.embassy-toast-success {
-  @apply border-emerald-200 bg-emerald-50/95 text-emerald-800;
-  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1),
-    0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.embassy-toast-error {
-  @apply border-embassy-red-200 bg-embassy-red-50/95 text-embassy-red-800;
-  box-shadow: 0 10px 25px rgba(250, 76, 49, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.embassy-toast-warning {
-  @apply border-embassy-yellow-200 bg-embassy-yellow-50/95 text-embassy-yellow-800;
-  box-shadow: 0 10px 25px rgba(254, 203, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.embassy-toast-info {
-  @apply border-embassy-blue-200 bg-embassy-blue-50/95 text-embassy-blue-800;
-  box-shadow: 0 10px 25px rgba(0, 51, 153, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-/* Toast animations and transitions */
-@keyframes embassy-toast-slide-in {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
+@media (min-width: 1024px) {
+  .v3-right-column {
+    @apply items-end;
   }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes embassy-toast-slide-out {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-}
-
-.embassy-toast-enter {
-  animation: embassy-toast-slide-in 0.3s ease-out;
-}
-
-.embassy-toast-exit {
-  animation: embassy-toast-slide-out 0.2s ease-in;
-}
-
-/* Custom toaster positioning */
-.embassy-toaster {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 9999;
-  max-width: 420px;
-}
-
-/* Dark mode specific toast styles */
-.dark .embassy-toast {
-  @apply bg-slate-800/95 border-embassy-blue-400/30 text-slate-100;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 51, 153, 0.1);
-}
-
-.dark .embassy-toast-success {
-  @apply bg-emerald-900/90 border-emerald-400/30 text-emerald-100;
-}
-
-.dark .embassy-toast-error {
-  @apply bg-red-900/90 border-red-400/30 text-red-100;
-}
-
-.dark .embassy-toast-warning {
-  @apply bg-yellow-900/90 border-yellow-400/30 text-yellow-100;
-}
-
-.dark .embassy-toast-info {
-  @apply bg-embassy-blue-900/90 border-embassy-blue-400/30 text-embassy-blue-100;
 }

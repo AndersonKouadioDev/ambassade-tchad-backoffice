@@ -9,15 +9,12 @@ import {
   Image as ImageIcon,
   Eye,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 
-import { Button } from "@heroui/react";
 import { IPhoto } from "../../types/photo.type";
 import { formatImageUrl } from "@/features/actualites/utils/image-utils";
+import { Button } from "@/components/ui/button";
 
 interface PhotoCardProps {
   photo: IPhoto;
@@ -25,15 +22,9 @@ interface PhotoCardProps {
   onEdit: (photo: IPhoto) => void;
 }
 
-export const PhotoCard: React.FC<PhotoCardProps> = ({
-  photo,
-  onView,
-
-}) => {
+export const PhotoCard: React.FC<PhotoCardProps> = ({ photo, onView }) => {
   const [imageError, setImageError] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-
- 
 
   const handleDeleteClick = () => {
     setShowDeleteAlert(true);
@@ -57,9 +48,7 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
       >
         {/* Image principale (première image seulement) */}
         <CardContent className="p-0">
-          {photo.imageUrl &&
-          photo.imageUrl.length > 0 &&
-          !imageError ? (
+          {photo.imageUrl && photo.imageUrl.length > 0 && !imageError ? (
             <div className="relative h-56 w-full overflow-hidden">
               <Image
                 src={formatImageUrl(photo.imageUrl[0])}
@@ -72,13 +61,12 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
               {photo.imageUrl.length > 1 && (
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon"
                   className="absolute top-3 right-3"
-                  onPress={(e) => {
+                  onClick={(e) => {
                     onView(photo);
                   }}
                   title="Voir toutes les images"
-                  isIconOnly
                 >
                   <Eye className="w-4 h-4" />
                 </Button>
@@ -98,8 +86,8 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
           {/* Description */}
           <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
             {photo.description}
-          </p>      
-        {/* Informations clés */}
+          </p>
+          {/* Informations clés */}
           <div className="space-y-3">
             {/* Date de création */}
             <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
@@ -113,7 +101,6 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
                   : "Date inconnue"}
               </span>
             </div>
-            
           </div>
         </CardContent>
       </Card>
@@ -173,17 +160,10 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
 
               {/* Boutons d'action */}
               <div className="flex gap-3">
-                <Button
-                  variant="bordered"
-                  className="flex-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                  onClick={handleCancelDelete}
-                >
+                <Button variant="outline" onClick={handleCancelDelete}>
                   Annuler
                 </Button>
-                <Button
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700"
-                  onClick={handleConfirmDelete}
-                >
+                <Button type="button" onClick={handleConfirmDelete}>
                   <Trash2 className="w-4 h-4 mr-2" />
                   Supprimer
                 </Button>

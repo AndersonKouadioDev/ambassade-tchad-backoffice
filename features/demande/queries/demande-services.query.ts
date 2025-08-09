@@ -1,3 +1,5 @@
+
+import React from 'react';
 import {
     useQuery,
 } from '@tanstack/react-query';
@@ -13,20 +15,28 @@ export const servicesPricesQueryOption = () => {
     return {
         queryKey: demandeKeyQuery("services-prices"),
         queryFn: async () => {
-            return await getServicesPricesAction();
+            const result = await getServicesPricesAction();
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+            return result.data!;
         },
         staleTime: Infinity,
-        onError: (error: Error) => {
-            toast.error("Erreur lors de la récupération des prix des services:", {
-                description: error.message,
-            });
-        },
     };
 };
 
 //2- Hook pour récupérer les prix des services
 export const useServicesPricesQuery = () => {
-    return useQuery(servicesPricesQueryOption());
+    const query = useQuery(servicesPricesQueryOption());
+
+    React.useEffect(() => {
+        if (query.error, query.isError) {
+            toast.error("Erreur:", {
+                description: query.error?.message,
+            });
+        }
+    }, [query.error, query.isError]);
+    return query;
 };
 
 //3- Fonction pour précharger les prix des services

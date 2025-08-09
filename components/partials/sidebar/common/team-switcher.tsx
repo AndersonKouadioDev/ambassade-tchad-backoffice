@@ -119,10 +119,9 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                             variant="outline"
                             color="secondary"
                             role="combobox"
-                            fullWidth
                             aria-expanded={open}
                             aria-label="Select a team"
-                            className={cn("  h-14 w-14 mx-auto  p-0 md:p-0  dark:border-secondary ring-offset-sidebar", className)}
+                            className={cn("w-full h-14 w-14 mx-auto  p-0 md:p-0  dark:border-secondary ring-offset-sidebar", className)}
                         >
                             <Avatar className="">
                                 <AvatarImage
@@ -139,10 +138,9 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                             variant="outline"
                             color="secondary"
                             role="combobox"
-                            fullWidth
                             aria-expanded={open}
                             aria-label="Select a team"
-                            className={cn("  h-auto py-3 md:px-3 px-3 justify-start dark:border-secondary ring-offset-sidebar", className)}
+                            className={cn("w-full h-auto py-3 md:px-3 px-3 justify-start dark:border-secondary ring-offset-sidebar", className)}
                         >
                             <div className=" flex  gap-2 flex-1 items-center">
                                 <Avatar className=" flex-none h-[38px] w-[38px]">
@@ -173,7 +171,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                 <PopoverContent className="w-[200px] p-0">
                     <Command>
                         <CommandList>
-                            <CommandInput placeholder="Search team..." className=" placeholder:text-xs" />
+                            <CommandInput placeholder="Search team..." />
                             <CommandEmpty>No team found.</CommandEmpty>
                             {groups.map((group) => (
                                 <CommandGroup key={group.label} heading={group.label}>

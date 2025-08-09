@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@heroui/react";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { formatImageUrl } from "@/features/actualites/utils/image-utils";
 
@@ -51,7 +51,7 @@ export const PhotoImageGalleryModal: React.FC<PhotoImageGalleryModalProps> = ({
         {/* Bouton fermer */}
         <Button
           variant="ghost"
-          size="sm"
+          size="icon"
           onClick={onClose}
           className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white border-0"
         >
@@ -63,7 +63,7 @@ export const PhotoImageGalleryModal: React.FC<PhotoImageGalleryModalProps> = ({
           <>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={handlePrevious}
               className="absolute left-4 z-10 bg-black/50 hover:bg-black/70 text-white border-0"
             >
@@ -71,7 +71,7 @@ export const PhotoImageGalleryModal: React.FC<PhotoImageGalleryModalProps> = ({
             </Button>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={handleNext}
               className="absolute right-4 z-10 bg-black/50 hover:bg-black/70 text-white border-0"
             >

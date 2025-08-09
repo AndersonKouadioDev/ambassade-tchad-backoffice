@@ -1,8 +1,8 @@
-import Logo from "@/components/auth/logo";
+import Logo from "@/components/partials/auth/logo";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import Image from "next/image";
-import { Link } from '@/i18n/routing';
+import { Link } from '@/i18n/navigation';
 
 const UnderMaintenance = () => {
   return (
