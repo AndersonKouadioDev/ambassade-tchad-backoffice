@@ -24,9 +24,9 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-import { Button } from "@heroui/react";
 import { IEvenement } from "../../types/evenement.type";
 import { formatImageUrl } from "@/features/actualites/utils/image-utils";
+import { Button } from "@/components/ui/button";
 
 interface EvenementCardProps {
   evenement: IEvenement;
@@ -93,21 +93,19 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
             <div className="flex gap-1 p-2">
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 color="secondary"
-                onPress={() => onEdit(evenement)}
+                onClick={() => onEdit(evenement)}
                 title="Modifier"
-                isIconOnly
               >
                 <SquarePen className="w-4 h-4" />
               </Button>
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 color="danger"
-                onPress={(e) => handleDeleteClick()}
+                onClick={handleDeleteClick}
                 title="Supprimer"
-                isIconOnly
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -132,13 +130,10 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
               {evenement.imageUrl.length > 1 && (
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon"
                   className="absolute top-3 right-3"
-                  onPress={(e) => {
-                    onView(evenement);
-                  }}
+                  onClick={() => onView(evenement)}
                   title="Voir toutes les images"
-                  isIconOnly
                 >
                   <Eye className="w-4 h-4" />
                 </Button>
@@ -165,7 +160,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
             <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                Date de l'événement:{" "}
+                Date de l&apos;événement:{" "}
                 {evenement.eventDate instanceof Date
                   ? evenement.eventDate.toLocaleDateString("fr-FR")
                   : evenement.eventDate
@@ -180,7 +175,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
             <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800/20 rounded-lg">
               <MapPin className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Lieu: {evenement.location}
+                Lieu de l&apos;événement: {evenement.location}
               </span>
             </div>
           )}
@@ -215,7 +210,6 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                   : `Auteur (${evenement.authorId.slice(0, 8)}...)`}
               </span>
             </div>
-            
           </div>
         </CardContent>
 
@@ -227,7 +221,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                 src={undefined}
                 alt={evenement.author?.firstName || evenement.authorId}
               />
-              <AvatarFallback className="text-xs bg-embassy-blue-100 text-embassy-blue-600 font-medium">
+              <AvatarFallback className="text-xs bg-primary-100 text-primary-600 font-medium">
                 {getInitials(
                   evenement.author?.firstName,
                   evenement.author?.lastName
@@ -312,8 +306,8 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
             <div className="p-6">
               <div className="mb-6">
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Êtes-vous sûr de vouloir supprimer l'evenement{" "}
-                  <strong>"{evenement.title}"</strong> ?
+                  Êtes-vous sûr de vouloir supprimer l&apos;evenement{" "}
+                  <strong>{evenement.title}</strong> ?
                 </p>
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
                   <div className="flex items-start gap-3">
@@ -323,8 +317,8 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                         Attention
                       </p>
                       <p className="text-red-700 dark:text-red-300">
-                        Cette action supprimera définitivement l'evenement et
-                        toutes ses données associées. Cette opération ne peut
+                        Cette action supprimera définitivement l&apos;evenement
+                        et toutes ses données associées. Cette opération ne peut
                         pas être annulée.
                       </p>
                     </div>
@@ -334,17 +328,10 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
 
               {/* Boutons d'action */}
               <div className="flex gap-3">
-                <Button
-                  variant="bordered"
-                  className="flex-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                  onClick={handleCancelDelete}
-                >
+                <Button variant="outline" onClick={handleCancelDelete}>
                   Annuler
                 </Button>
-                <Button
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700"
-                  onClick={handleConfirmDelete}
-                >
+                <Button onClick={handleConfirmDelete}>
                   <Trash2 className="w-4 h-4 mr-2" />
                   Supprimer
                 </Button>

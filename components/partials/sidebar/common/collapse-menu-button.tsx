@@ -1,12 +1,11 @@
 "use client";
 import React, { CSSProperties } from "react";
-import { Link, usePathname } from "@/components/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { useState } from "react";
-import { ChevronDown, Dot, LucideIcon } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import {
@@ -38,13 +37,7 @@ import { Submenu } from "@/lib/menus";
 
 // for dnd
 
-import {
-  useSortable,
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-  horizontalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useConfig } from "@/hooks/use-config";
 import { MultiCollapseMenuButton } from "./classic-multi-collapse-button";
@@ -61,6 +54,7 @@ interface CollapseMenuButtonProps {
   id: string;
 }
 
+// le bouton de collapse ou groupe de menu
 export function CollapseMenuButton({
   icon,
   label,
@@ -105,30 +99,21 @@ export function CollapseMenuButton({
     zIndex: isDragging ? 1 : 0,
     position: "relative",
   };
-
+  // le bouton de compact
   if (config.sidebar === "compact" && isDesktop) {
     return (
       <Collapsible open={isCollapsed} onOpenChange={setIsCollapsed}>
         <CollapsibleTrigger asChild>
           <Button
             variant={active ? "default" : "ghost"}
-            fullWidth
-            color={active ? "default" : "secondary"}
             className={cn(
-              "flex-col h-auto py-1.5 px-3.5 capitalize font-semibold ring-offset-sidebar transition-all duration-200",
+              "w-full flex-col h-auto py-1.5 px-3.5 capitalize font-semibold ring-offset-sidebar",
               {
                 "data-[state=open]:bg-secondary": !active,
-                "text-white hover:text-white hover:bg-embassy-blue-800/30":
-                  !active,
               }
             )}
           >
-            <Icon
-              icon={icon}
-              className={cn("h-6 w-6 mb-1 transition-colors", {
-                "text-white": !active,
-              })}
-            />
+            <Icon icon={icon} className={cn("h-6 w-6 mb-1 ")} />
 
             <p className={cn("max-w-[200px]  text-[11px] truncate ")}>
               {label}
@@ -141,13 +126,11 @@ export function CollapseMenuButton({
               key={index}
               color={active ? "default" : "secondary"}
               variant="ghost"
-              fullWidth
               size="sm"
               className={cn(
-                "w-full justify-center text-center p-0  h-auto hover:bg-transparent hover:text-default capitalize text-xs font-normal mb-2 first:mt-4 last:mb-0 transition-all duration-200",
+                "w-full justify-center text-center p-0  h-auto  hover:bg-transparent hover:text-default capitalize text-xs font-normal mb-2 first:mt-4 last:mb-0",
                 {
                   "font-semibold": active,
-                  "text-white hover:text-white": !active,
                 }
               )}
               asChild
@@ -159,6 +142,7 @@ export function CollapseMenuButton({
       </Collapsible>
     );
   }
+  // Quand le groupe de menu est ouvert ou collé
   return !collapsed || hovered ? (
     <Collapsible open={isCollapsed} onOpenChange={setIsCollapsed}>
       <CollapsibleTrigger className="" asChild>
@@ -167,16 +151,12 @@ export function CollapseMenuButton({
             style={style}
             ref={setNodeRef}
             variant={active ? "default" : "ghost"}
-            color="secondary"
             className={cn(
-              "justify-start capitalize group h-auto py-3 md:px-3 px-3 ring-offset-sidebar group-data-[state=open]:bg-secondary transition-all duration-200",
+              "w-full justify-start capitalize group  h-auto py-3 md:px-3 px-3  ring-offset-sidebar",
               {
                 "hover:md:ps-8": config.sidebar === "draggable" && isDesktop,
-                "text-white hover:text-white hover:bg-embassy-blue-800/30":
-                  !active,
               }
             )}
-            fullWidth
           >
             <div className="w-full items-center flex justify-between">
               <div className="flex items-center">
@@ -185,18 +165,13 @@ export function CollapseMenuButton({
                     {...attributes}
                     {...listeners}
                     className={cn(
-                      "inset-t-0 absolute me-1 h-5 w-5 ltr:-translate-x-6 rtl:translate-x-6 invisible opacity-0 group-hover:opacity-100 transition-all group-hover:visible ltr:group-hover:-translate-x-5 rtl:group-hover:translate-x-5 text-white",
+                      "inset-t-0 absolute me-1 h-5 w-5 ltr:-translate-x-6 rtl:translate-x-6 invisible opacity-0 group-hover:opacity-100 transition-all group-hover:visible ltr:group-hover:-translate-x-5 rtl:group-hover:translate-x-5 ",
                       {}
                     )}
                   />
                 )}
                 <span className="me-4">
-                  <Icon
-                    icon={icon}
-                    className={cn("h-5 w-5 transition-colors", {
-                      "text-white": !active,
-                    })}
-                  />
+                  <Icon icon={icon} className="h-5 w-5" />
                 </span>
                 <p
                   className={cn(
@@ -211,12 +186,12 @@ export function CollapseMenuButton({
               </div>
               <div
                 className={cn(
-                  "whitespace-nowrap inline-flex items-center justify-center rounded-full h-5 w-5 bg-embassy-blue-100 text-embassy-blue-600 group-hover:bg-embassy-blue-200 dark:bg-embassy-blue-800/40 dark:text-white dark:group-hover:bg-embassy-blue-700/60 transition-all duration-300",
+                  "whitespace-nowrap inline-flex items-center justify-center rounded-full h-5 w-5 bg-menu-arrow text-menu-menu-foreground  group-hover:bg-menu-arrow-active transition-all duration-300 ",
                   !collapsed || hovered
                     ? "translate-x-0 opacity-100"
                     : "-translate-x-96 opacity-0",
                   {
-                    "bg-embassy-blue-200 dark:bg-embassy-blue-700/60": active,
+                    "bg-menu-arrow-active": active,
                   }
                 )}
               >
@@ -240,11 +215,10 @@ export function CollapseMenuButton({
               color="secondary"
               variant="ghost"
               className={cn(
-                "w-full justify-start h-auto hover:bg-transparent hover:ring-offset-0 capitalize text-sm font-normal mb-2 last:mb-0 first:mt-3 md:px-5 px-5 transition-all duration-200",
+                "w-full  justify-start h-auto hover:bg-transparent hover:ring-offset-0 capitalize text-sm font-normal mb-2 last:mb-0 first:mt-3 md:px-5 px-5",
                 {
                   "font-medium": active,
-                  // White text for inactive items in both modes
-                  "text-white hover:text-white": !active,
+                  "dark:opacity-80": !active,
                 }
               )}
               asChild
@@ -252,9 +226,9 @@ export function CollapseMenuButton({
               <Link href={href}>
                 <span
                   className={cn(
-                    "h-1.5 w-1.5 me-3 rounded-full transition-all duration-150 ring-1 ring-white",
+                    "h-1.5 w-1.5 me-3 rounded-full  transition-all duration-150 ring-1    ring-default-600 ",
                     {
-                      "ring-4 bg-white ring-opacity-30 ring-white": active,
+                      "ring-4 bg-default ring-opacity-30 ring-default": active,
                     }
                   )}
                 ></span>
@@ -290,34 +264,15 @@ export function CollapseMenuButton({
             <DropdownMenuTrigger asChild>
               <Button
                 variant={active ? "default" : "ghost"}
-                color="secondary"
-                className={cn(
-                  "w-full justify-center transition-all duration-200",
-                  {
-                    "text-white hover:text-white hover:bg-embassy-blue-800/30":
-                      !active,
-                  }
-                )}
+                className="w-full justify-center"
                 size="icon"
               >
-                <Icon
-                  icon={icon}
-                  className={cn("h-5 w-5 transition-colors", {
-                    "text-white": !active,
-                  })}
-                />
+                <Icon icon={icon} className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent
-            side="right"
-            align="start"
-            alignOffset={2}
-            className="bg-white/95 backdrop-blur-sm border-embassy-blue-200 dark:bg-slate-800/95 dark:border-embassy-blue-600/30"
-          >
-            <span className="text-embassy-blue-800 dark:text-white">
-              {label}
-            </span>
+          <TooltipContent side="right" align="start" alignOffset={2}>
+            {label}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -325,44 +280,37 @@ export function CollapseMenuButton({
         side="right"
         sideOffset={20}
         align="start"
-        className={`bg-white/95 backdrop-blur-sm border-embassy-blue-200 dark:bg-slate-800/95 dark:border-embassy-blue-600/30 space-y-1.5 ${sidebarTheme}`}
+        className={`border-sidebar space-y-1.5 ${sidebarTheme}`}
       >
-        <DropdownMenuLabel className="max-w-[190px] truncate text-embassy-blue-800 dark:text-white">
+        <DropdownMenuLabel className="max-w-[190px] truncate">
           {label}
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className="bg-embassy-blue-200 dark:bg-embassy-blue-600/30" />
+        <DropdownMenuSeparator className="bg-default-300" />
         <DropdownMenuGroup>
           {submenus.map(({ href, label, icon, active, children }, index) =>
             children?.length === 0 ? (
               <DropdownMenuItem
                 key={index}
                 asChild
-                className={cn(
-                  "focus:bg-embassy-blue-50 dark:focus:bg-embassy-blue-800/30 text-white",
-                  {
-                    "bg-embassy-blue-100 text-embassy-blue-800 dark:bg-embassy-blue-800/40 dark:text-white":
-                      active,
-                  }
-                )}
+                className={cn("focus:bg-secondary", {
+                  "bg-secondary text-secondary-foreground ": active,
+                })}
               >
                 <Link className="cursor-pointer flex-flex gap-3" href={href}>
-                  {icon && <Icon icon={icon} className="h-4 w-4" />}
+                  {icon && <Icon icon={icon} className=" h-4 w-4" />}
                   <p className="max-w-[180px] truncate">{label} </p>
                 </Link>
               </DropdownMenuItem>
             ) : (
               <DropdownMenuSub key={index}>
-                <DropdownMenuSubTrigger className="text-white">
+                <DropdownMenuSubTrigger>
                   <span>{label}</span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
-                  <DropdownMenuSubContent className="bg-white/95 backdrop-blur-sm border-embassy-blue-200 dark:bg-slate-800/95 dark:border-embassy-blue-600/30">
+                  <DropdownMenuSubContent>
                     <ScrollArea className="h-[200px]">
                       {children?.map(({ href, label, active }, index) => (
-                        <DropdownMenuItem
-                          key={`nested-index-${index}`}
-                          className="text-white"
-                        >
+                        <DropdownMenuItem key={`nested-index-${index}`}>
                           <Link href={href}>{label}</Link>
                         </DropdownMenuItem>
                       ))}

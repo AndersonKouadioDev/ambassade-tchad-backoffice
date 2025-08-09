@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, Search } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-// Remplacer cette ligne
-// Par celle-ci
 import { usePhotoCardList } from "../hooks/usePhotoCardList";
 import { IPhoto } from "../types/photo.type";
 import { PhotoFilters } from "./photo-list/photo-filters";
@@ -25,7 +23,7 @@ export const PhotoList: React.FC = () => {
     handleTextFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
-  } = usePhotoCardList(); // Utiliser le hook des photos à la place
+  } = usePhotoCardList();
 
   const [selectedPhoto, setSelectedPhoto] = useState<IPhoto | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);

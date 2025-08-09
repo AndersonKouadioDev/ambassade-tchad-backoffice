@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Search, Plus } from "lucide-react";
-import { Button } from "@heroui/react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -11,13 +10,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 interface PhotoFiltersProps {
   filters: {
     title: string;
     description: string;
   };
-  onTextFilterChange: (filterName: 'title' | 'description', value: string) => void;
+  onTextFilterChange: (
+    filterName: "title" | "description",
+    value: string
+  ) => void;
   onCreate: () => void;
 }
 
@@ -38,9 +41,9 @@ export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
             className="pl-10 w-full sm:w-64"
           />
         </div>
-        
+
         <Select
-            value={filters.description || "all"}
+          value={filters.description || "all"}
           onValueChange={(value) => onTextFilterChange("description", value)}
         >
           <SelectTrigger className="w-full sm:w-48">
@@ -48,10 +51,8 @@ export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tous</SelectItem>
-           
           </SelectContent>
         </Select>
-
       </div>
 
       <Button onClick={onCreate} className="w-full sm:w-auto">
@@ -60,4 +61,4 @@ export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
       </Button>
     </div>
   );
-}; 
+};

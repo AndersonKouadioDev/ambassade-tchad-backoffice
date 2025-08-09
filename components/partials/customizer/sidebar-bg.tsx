@@ -1,7 +1,7 @@
-'use client'
-import { useConfig } from '@/hooks/use-config';
-import React, { useState } from 'react'
-import { Icon } from "@/components/ui/icon"
+"use client";
+import { useConfig } from "@/hooks/use-config";
+import React, { useState } from "react";
+import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/utils";
 const SidebarBg = () => {
   const [config, setConfig] = useConfig();
@@ -19,12 +19,12 @@ const SidebarBg = () => {
     setConfig({
       ...config,
       sidebarBgImage: undefined,
-    })
+    });
   };
   return (
     <div className="-mx-6 p-6 ">
       <div className="text-muted-foreground font-normal text-xs mb-4 uppercase">
-        Choose a Sidebar Image
+        Choisissez une image de barre latérale
       </div>
       <div className=" grid grid-cols-7 gap-3">
         <button
@@ -68,6 +68,6 @@ const SidebarBg = () => {
       </div>
     </div>
   );
-}
+};
 
-export default SidebarBg
+export default SidebarBg;

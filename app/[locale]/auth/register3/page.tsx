@@ -1,6 +1,6 @@
-import { Link } from '@/i18n/routing';
-import RegForm from "@/components/auth/reg-form";
-import Social from "@/components/auth/social";
+import { Link } from '@/i18n/navigation';
+import RegForm from "@/components/partials/auth/reg-form";
+import Social from "@/components/partials/auth//social";
 import Image from "next/image";
 import Logo from "@/components/logo";
 

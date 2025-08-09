@@ -24,8 +24,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { IActualite } from "../../types/actualites.type";
 import { formatImageUrl } from "../../utils/image-utils";
-import { Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 interface ActualiteCardProps {
   actualite: IActualite;
   onView: (actualite: IActualite) => void;
@@ -90,23 +90,21 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
             <div className="flex gap-1 p-2">
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 color="secondary"
-                onPress={() =>
+                onClick={() =>
                   router.push(`/contenu/actualite/edit/${actualite.id}`)
                 }
                 title="Modifier"
-                isIconOnly
               >
                 <SquarePen className="w-4 h-4" />
               </Button>
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 color="danger"
-                onPress={(e) => handleDeleteClick()}
+                onClick={(e) => handleDeleteClick()}
                 title="Supprimer"
-                isIconOnly
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -131,13 +129,12 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
               {actualite.imageUrls.length > 1 && (
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon"
                   className="absolute top-3 right-3"
-                  onPress={(e) => {
+                  onClick={(e) => {
                     onView(actualite);
                   }}
                   title="Voir toutes les images"
-                  isIconOnly
                 >
                   <Eye className="w-4 h-4" />
                 </Button>
@@ -183,7 +180,7 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
                 src={undefined}
                 alt={actualite.author?.firstName || actualite.authorId}
               />
-              <AvatarFallback className="text-xs bg-embassy-blue-100 text-embassy-blue-600 font-medium">
+              <AvatarFallback className="text-xs bg-primary-100 text-primary-600 font-medium">
                 {getInitials(
                   actualite.author?.firstName,
                   actualite.author?.lastName
@@ -282,17 +279,10 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
 
               {/* Boutons d'action */}
               <div className="flex gap-3">
-                <Button
-                  variant="bordered"
-                  className="flex-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                  onClick={handleCancelDelete}
-                >
+                <Button variant="outline" onClick={handleCancelDelete}>
                   Annuler
                 </Button>
-                <Button
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700"
-                  onClick={handleConfirmDelete}
-                >
+                <Button onClick={handleConfirmDelete}>
                   <Trash2 className="w-4 h-4 mr-2" />
                   Supprimer
                 </Button>

@@ -13,10 +13,10 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { processAndValidateFormData } from "ak-zod-form-kit";
-import { Button } from "@heroui/react";
 import { PhotoDTO, photoSchema } from "../../schemas/photo.schema";
 import { createPhoto, updatePhoto } from "../../actions/photo.action";
 import { IPhoto } from "../../types/photo.type";
+import { Button } from "@/components/ui/button";
 
 //
 
@@ -227,10 +227,9 @@ export const PhotoForm: React.FC<PhotoFormProps> = ({ photo }) => {
                   </h4>
                   <Button
                     type="button"
-                    variant="ghost"
+                    variant="destructive"
                     size="sm"
                     onClick={() => setImageFiles([])}
-                    className="text-red-600 hover:text-red-700"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Tout supprimer
@@ -293,7 +292,7 @@ export const PhotoForm: React.FC<PhotoFormProps> = ({ photo }) => {
          
           {/* Boutons d'action */}
           <div className="flex gap-3 justify-end">
-            <Button type="button" variant="ghost" onClick={handleCancel}>
+            <Button type="button" variant="outline" onClick={handleCancel}>
               Annuler
             </Button>
             <Button type="submit" disabled={isLoading}>

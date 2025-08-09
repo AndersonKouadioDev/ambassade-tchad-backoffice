@@ -11,7 +11,7 @@ import {
     CommandList,
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
-import { Link } from '@/i18n/routing';
+import { Link } from '@/i18n/navigation';
 import { Icon } from "@/components/ui/icon";
 import { useConfig } from "@/hooks/use-config";
 const HeaderSearch = () => {
@@ -27,7 +27,7 @@ const HeaderSearch = () => {
 
                 >
                     <Icon icon="heroicons-outline:search" />
-                    <span className="xl:inline-block hidden">Chercher... </span>
+                    <span className="xl:inline-block hidden">Search... </span>
                 </button>
             </DialogTrigger>
             <DialogContent className="p-0">

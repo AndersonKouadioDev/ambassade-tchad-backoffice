@@ -1,6 +1,6 @@
-import { Link } from '@/i18n/routing';
-import RegForm from "@/components/auth/reg-form";
-import Social from "@/components/auth/social";
+import { Link } from '@/i18n/navigation';
+import RegForm from "@/components/partials/auth/reg-form";
+import Social from "@/components/partials/auth/social";
 import Image from "next/image";
 import Logo from "@/components/logo";
 
@@ -44,7 +44,7 @@ const Register2 = () => {
                   </Link>
                 </div>
               </div>
-              <div className="text-xs font-normal text-default-500 z-[999] pb-10 text-center">
+              <div className="text-xs font-normal text-default-500 z-999 pb-10 text-center">
                 Copyright 2021, Dashcode All Rights Reserved.
               </div>
             </div>

@@ -8,7 +8,7 @@ export function ActualiteNotFound() {
   const router = useRouter();
   return (
     <div className="space-y-8">
-      <div className="bg-gradient-to-r from-embassy-blue-600 to-embassy-blue-700 dark:from-embassy-blue-800 dark:to-embassy-blue-900 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-800 dark:to-primary-900 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
@@ -23,7 +23,7 @@ export function ActualiteNotFound() {
           </div>
           <div>
             <h1 className="text-3xl font-bold">Erreur</h1>
-            <p className="text-embassy-blue-100 dark:text-embassy-blue-200 mt-2">
+            <p className="text-primary-100 dark:text-primary-200 mt-2">
               Actualité non trouvée
             </p>
           </div>

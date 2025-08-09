@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
-import { Button } from "@heroui/react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface PhotoPaginationProps {
@@ -72,7 +72,7 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
       <div className="flex items-center gap-2">
         {/* Bouton précédent */}
         <Button
-          variant="bordered"
+          variant="outline"
           size="sm"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
@@ -102,7 +102,7 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
             return (
               <Button
                 key={pageNumber}
-                variant={isActive ? "solid" : "bordered"}
+                variant={isActive ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => onPageChange(pageNumber)}
                 className={cn(
@@ -120,7 +120,7 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
 
         {/* Bouton suivant */}
         <Button
-          variant="bordered"
+          variant="outline"
           size="sm"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}

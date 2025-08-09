@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { Icon } from "@/components/ui/icon";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "@/components/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { LoginDTO, loginSchema } from "../../schemas/auth.schema";
 import { login } from "../../actions/auth.action";
@@ -69,7 +69,6 @@ const LoginForm = () => {
           {t("email_label")}{" "}
         </Label>
         <Input
-          size="lg"
           disabled={isPending}
           {...register("email")}
           type="email"
@@ -95,7 +94,6 @@ const LoginForm = () => {
         </Label>
         <div className="relative">
           <Input
-            size="lg"
             disabled={isPending}
             {...register("password")}
             type={passwordType}
@@ -134,12 +132,12 @@ const LoginForm = () => {
         </div>
         <Link
           href="/forgot-password"
-          className="text-sm text-default-800 dark:text-gray-300 leading-6 font-medium hover:text-embassy-blue-600 dark:hover:text-embassy-blue-400 transition-colors"
+          className="text-sm text-default-800 dark:text-gray-300 leading-6 font-medium hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
         >
           {t("forgot_password")}
         </Link>
       </div>
-      <Button fullWidth disabled={isPending}>
+      <Button className="w-full" disabled={isPending}>
         {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {isPending ? t("signing_in") : t("sign_in")}
       </Button>

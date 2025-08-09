@@ -1,7 +1,7 @@
-import { Link } from '@/i18n/routing';
-import ForgotPass from "@/components/auth/forgot-pass";
+import { Link } from '@/i18n/navigation';
+import ForgotPass from "@/components/partials/auth/forgot-pass";
 import Image from "next/image";
-import Copyright from "@/components/auth/copyright";
+import Copyright from "@/components/partials/auth/copyright";
 import Logo from "@/components/logo";
 
 const ForgotPass2 = () => {
@@ -38,7 +38,7 @@ const ForgotPass2 = () => {
                 to The Sign In
               </div>
             </div>
-            <div className="text-xs font-normal text-default-500  z-[999] pb-10 text-center">
+            <div className="text-xs font-normal text-default-500  z-999 pb-10 text-center">
               <Copyright />
             </div>
           </div>

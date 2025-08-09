@@ -26,7 +26,7 @@ export default async function EditEvenementPage({
   } catch (error) {
     return (
       <div className="space-y-8">
-        <div className="bg-gradient-to-r from-embassy-blue-600 to-embassy-blue-700 dark:from-embassy-blue-800 dark:to-embassy-blue-900 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-800 dark:to-primary-900 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
           <div className="flex items-center gap-4">
             <ButtonGoLink href="/contenu/evenement" />
             <div className="p-3 bg-white/20 dark:bg-white/10 rounded-lg backdrop-blur-sm">
@@ -34,7 +34,7 @@ export default async function EditEvenementPage({
             </div>
             <div>
               <h1 className="text-3xl font-bold">Erreur</h1>
-              <p className="text-embassy-blue-100 dark:text-embassy-blue-200 mt-2">
+              <p className="text-primary-100 dark:text-primary-200 mt-2">
                 Événement non trouvé
               </p>
             </div>
@@ -60,7 +60,7 @@ export default async function EditEvenementPage({
   return (
     <div className="space-y-8">
       {/* En-tête */}
-      <div className="bg-gradient-to-r from-embassy-blue-600 to-embassy-blue-700 dark:from-embassy-blue-800 dark:to-embassy-blue-900 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-800 dark:to-primary-900 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
         <div className="flex items-center gap-4">
           <ButtonGoLink href="/contenu/evenement" />
           <div className="p-3 bg-white/20 dark:bg-white/10 rounded-lg backdrop-blur-sm">
@@ -68,7 +68,7 @@ export default async function EditEvenementPage({
           </div>
           <div>
             <h1 className="text-3xl font-bold">Modifier l&apos;événement</h1>
-            <p className="text-embassy-blue-100 dark:text-embassy-blue-200 mt-2">
+            <p className="text-primary-100 dark:text-primary-200 mt-2">
               Modifiez le contenu et les paramètres de l&apos;événement
             </p>
           </div>

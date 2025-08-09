@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useState, useRef, useTransition, isValidElement } from "react";
+import React, { useState, useRef, useTransition, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, X, Image as ImageIcon, Trash2, Eye } from "lucide-react";
+import { Upload, X, Trash2, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { cn, Input, Textarea } from "@heroui/react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { IEvenement } from "../../types/evenement.type";
 import { EvenementDTO, evenementSchema } from "../../schemas/evenement.schema";
 import {
@@ -28,6 +29,7 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { useInvalidateEvenementQuery } from "../../queries/index.query";
+import { cn } from "@/lib/utils";
 
 //
 
@@ -42,8 +44,6 @@ interface ImageFile {
   name: string;
 }
 
-// TODO: Ajouter les images dans le formulaire
-
 export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
   const [isLoading, startTransition] = useTransition();
   const router = useRouter();
@@ -54,7 +54,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
       ? evenement.eventDate
       : evenement?.eventDate
       ? new Date(evenement.eventDate)
-      : new Date()
+      : undefined
   );
 
   const invalideEvenement = useInvalidateEvenementQuery();
@@ -76,7 +76,8 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
           ? evenement.eventDate.toISOString()
           : evenement.eventDate
         : "",
-      published: evenement?.published || false,
+      published: evenement?.published ?? false,
+      images: [],
     },
   });
 
@@ -84,7 +85,6 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
     router.push("/contenu/evenement");
   };
 
-  // TODO: Ajouter les images dans le formulaire
   const watchedPublished = watch("published");
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +98,6 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
           name: file.name,
         })
       );
-
       setImageFiles((prev) => [...prev, ...newImageFiles]);
     }
   };
@@ -122,7 +121,6 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
       preview: URL.createObjectURL(file),
       name: file.name,
     }));
-
     setImageFiles((prev) => [...prev, ...newImageFiles]);
   };
 
@@ -130,17 +128,13 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
     startTransition(async () => {
       const images: File[] = imageFiles.map((file) => file.file);
       const submitData = {
-        title: data.title,
-        description: data.description,
+        ...data,
         eventDate: new Date(data.eventDate),
-        location: data.location,
-        published: data.published,
         images,
       };
 
       let res: { success: boolean; message: string };
 
-      // Créer le FormData directement
       const formData = createFormData(submitData);
 
       if (evenement) {
@@ -150,7 +144,6 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
       }
 
       if (res.success) {
-        // Invalider tous les événements et l'événement spécifique
         await invalideEvenement();
         toast.success(res.message);
         router.push("/contenu/evenement");
@@ -160,6 +153,27 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
     });
   };
 
+  const createFormData = useCallback((data: any) => {
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (item instanceof File) {
+            formData.append(`${key}`, item);
+          } else {
+            formData.append(`${key}`, String(item));
+          }
+        });
+      } else if (value instanceof Date) {
+        formData.append(key, value.toISOString());
+      } else if (value !== null && value !== undefined) {
+        formData.append(key, String(value));
+      }
+    });
+    return formData;
+  }, []);
+
   return (
     <Card className="w-full max-w-5xl mx-auto shadow-md">
       <CardHeader className="text-center">
@@ -167,7 +181,6 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
           {evenement ? "Modifier l'événement" : "Créer un événement"}
         </CardTitle>
       </CardHeader>
-
       <CardContent>
         <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -178,10 +191,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
                 id="title"
                 {...register("title")}
                 placeholder="Ex: Conférence annuelle..."
-                className={cn(
-                  "!text-black placeholder:text-gray-500",
-                  errors.title && "border-red-500"
-                )}
+                className={cn(errors.title && "border-red-500")}
               />
               {errors.title && (
                 <p className="text-xs text-red-500">{errors.title.message}</p>
@@ -195,10 +205,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
                 id="location"
                 {...register("location")}
                 placeholder="Ex: Paris, Salle 3"
-                className={cn(
-                  "text-red placeholder:text-gray-500",
-                  errors.location && "border-red-500"
-                )}
+                className={cn(errors.location && "border-red-500")}
               />
               {errors.location && (
                 <p className="text-xs text-red-500">
@@ -216,10 +223,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
               {...register("description")}
               rows={5}
               placeholder="Détaillez ici l'événement..."
-              className={cn(
-                "!text-black placeholder:text-gray-500",
-                errors.description && "border-red-500"
-              )}
+              className={cn(errors.description && "border-red-500")}
             />
             {errors.description && (
               <p className="text-xs text-red-500">
@@ -235,7 +239,11 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full text-left justify-start"
+                  className={cn(
+                    "w-full text-left justify-start",
+                    !selectedDate && "text-muted-foreground",
+                    errors.eventDate && "border-red-500"
+                  )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {selectedDate
@@ -250,9 +258,12 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
                   onSelect={(date) => {
                     setSelectedDate(date);
                     if (date) {
-                      setValue("eventDate", date.toISOString());
+                      setValue("eventDate", date.toISOString(), {
+                        shouldValidate: true,
+                      });
                     }
                   }}
+                  initialFocus
                 />
               </PopoverContent>
             </Popover>
@@ -261,6 +272,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
               <p className="text-xs text-red-500">{errors.eventDate.message}</p>
             )}
           </div>
+
           {/* Images */}
           <div className="space-y-2">
             <Label>Images</Label>
@@ -344,10 +356,14 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
             <Switch
               id="published"
               checked={watchedPublished}
-              onCheckedChange={(checked) => setValue("published", checked)}
+              onCheckedChange={(checked) => {
+                setValue("published", checked, { shouldValidate: true });
+              }}
             />
             <Label htmlFor="published">Publier l’événement</Label>
-            <Badge>{watchedPublished ? "Publié" : "Brouillon"}</Badge>
+            <Badge variant={watchedPublished ? "default" : "secondary"}>
+              {watchedPublished ? "Publié" : "Brouillon"}
+            </Badge>
           </div>
 
           {/* Boutons */}
@@ -368,76 +384,3 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
     </Card>
   );
 };
-
-export function createFormData(formData: Record<string, unknown>): FormData {
-  const sendFormData = new FormData();
-
-  function appendFormData(key: string, value: unknown) {
-    // Cas null ou undefined
-    if (value === null || value === undefined) {
-      sendFormData.append(key, "");
-      return;
-    }
-
-    // Cas File
-    if (value instanceof File) {
-      sendFormData.append(key, value, value.name);
-      return;
-    }
-
-    // Cas Blob
-    if (value instanceof Blob) {
-      sendFormData.append(key, value);
-      return;
-    }
-
-    // Cas Date
-    if (value instanceof Date) {
-      sendFormData.append(key, value.toISOString());
-      return;
-    }
-
-    // Cas tableau
-    if (Array.isArray(value)) {
-      value.forEach((item, index) => {
-        // Pour les tableaux imbriqués ou objets dans les tableaux
-        if (Array.isArray(item) || isObject(item)) {
-          appendFormData(`${key}[${index}]`, item);
-        } else {
-          appendFormData(`${key}`, item);
-        }
-      });
-      return;
-    }
-
-    // Cas objet (excluant les types spéciaux déjà traités)
-    if (isObject(value)) {
-      Object.entries(value).forEach(([propertyKey, propertyValue]) => {
-        appendFormData(`${key}[${propertyKey}]`, propertyValue);
-      });
-      return;
-    }
-
-    // Cas des types primitifs (string, number, boolean)
-    sendFormData.append(key, String(value));
-  }
-
-  // Fonction utilitaire pour vérifier si une valeur est un objet
-  function isObject(value: unknown): value is Record<string, unknown> {
-    return (
-      typeof value === "object" &&
-      value !== null &&
-      !(value instanceof File) &&
-      !(value instanceof Blob) &&
-      !(value instanceof Date) &&
-      !Array.isArray(value)
-    );
-  }
-
-  // Traitement de chaque entrée du formData initial
-  Object.entries(formData).forEach(([key, value]) => {
-    appendFormData(key, value);
-  });
-
-  return sendFormData;
-}

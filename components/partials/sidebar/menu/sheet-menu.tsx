@@ -1,9 +1,7 @@
 "use client";
-import { Link } from "@/i18n/routing";
-import { MenuIcon, PanelsTopLeft } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { Icon } from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
-import { Menu } from "@/components/partials/sidebar/menu";
 import {
   Sheet,
   SheetHeader,
@@ -15,6 +13,7 @@ import DashCodeLogo from "@/components/dascode-logo";
 import { useMobileMenuConfig } from "@/hooks/use-mobile-menu";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useConfig } from "@/hooks/use-config";
+import { siteConfig } from "@/config/site";
 
 export function SheetMenu() {
   const [mobileMenuConfig, setMobileMenuConfig] = useMobileMenuConfig();
@@ -31,7 +30,6 @@ export function SheetMenu() {
       <SheetTrigger className="xl:hidden" asChild>
         <Button
           className="h-8"
-          variant="ghost"
           size="icon"
           onClick={() =>
             setConfig({
@@ -51,7 +49,7 @@ export function SheetMenu() {
           >
             <DashCodeLogo className="  text-default-900 h-8 w-8 [&>path:nth-child(3)]:text-background [&>path:nth-child(2)]:text-background" />
             <h1 className="text-xl font-semibold text-default-900 ">
-              Ambassade du Tchad
+              {siteConfig.name}
             </h1>
           </Link>
         </SheetHeader>

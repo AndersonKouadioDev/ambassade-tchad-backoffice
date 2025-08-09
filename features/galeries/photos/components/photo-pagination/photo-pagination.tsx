@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
-import { Button } from "@heroui/react";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -78,9 +78,10 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
       {/* Informations sur les éléments affichés */}
       <div className="flex items-center gap-4">
         <div className="text-sm text-muted-foreground">
-          Affichage de {startItem} à {endItem} sur {totalItems} photo{totalItems > 1 ? "s" : ""}
+          Affichage de {startItem} à {endItem} sur {totalItems} photo
+          {totalItems > 1 ? "s" : ""}
         </div>
-        
+
         {/* Sélecteur d'éléments par page */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">Par page:</span>
@@ -106,7 +107,7 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
       <div className="flex items-center gap-1">
         {/* Bouton précédent */}
         <Button
-          variant="bordered"
+          variant="outline"
           size="sm"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1 || isLoading}
@@ -120,7 +121,7 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
           <React.Fragment key={index}>
             {page === "..." ? (
               <Button
-                variant="bordered"
+                variant="outline"
                 size="sm"
                 disabled
                 className="h-8 w-8 p-0"
@@ -129,7 +130,7 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
               </Button>
             ) : (
               <Button
-                variant={currentPage === page ? "solid" : "bordered"}
+                variant={currentPage === page ? "default" : "outline"}
                 size="sm"
                 onClick={() => onPageChange(page as number)}
                 disabled={isLoading}
@@ -143,7 +144,7 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
 
         {/* Bouton suivant */}
         <Button
-          variant="bordered"
+          variant="outline"
           size="sm"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages || isLoading}
@@ -154,4 +155,4 @@ export const PhotoPagination: React.FC<PhotoPaginationProps> = ({
       </div>
     </div>
   );
-}; 
+};

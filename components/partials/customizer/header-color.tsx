@@ -1,16 +1,16 @@
-'use client'
-import React from 'react'
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { useConfig } from '@/hooks/use-config'
-import { Icon } from "@/components/ui/icon"
-import { Check } from 'lucide-react';
+"use client";
+import React from "react";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { useConfig } from "@/hooks/use-config";
+import { Icon } from "@/components/ui/icon";
+import { Check } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 
 import {
   lightTopbarColorSvg,
@@ -19,14 +19,16 @@ import {
 } from "./data";
 
 const HeaderColor = () => {
-  const [config, setConfig] = useConfig()
+  const [config, setConfig] = useConfig();
   const [show, setShow] = React.useState<boolean>(
-    config.headerTheme !== 'light' && config.headerTheme === 'transparent'
-  )
+    config.headerTheme !== "light" && config.headerTheme === "transparent"
+  );
 
   return (
     <div className="p-6 -mx-6">
-      <div className="text-sm font-medium mb-3">Topbar Color</div>
+      <div className="text-sm font-medium mb-3">
+        Couleur de la barre supérieure
+      </div>
       <div className=" grid grid-cols-3 gap-3 mb-4">
         <div>
           <button
@@ -39,7 +41,8 @@ const HeaderColor = () => {
             className={cn(
               " border  block  border-default-300 rounded relative h-[72px] w-full disabled:cursor-not-allowed duration-150 overflow-hidden",
               {
-                "text-default  border-default-700 dark:border-default-600": config.headerTheme === "light",
+                "text-default  border-default-700 dark:border-default-600":
+                  config.headerTheme === "light",
                 "text-muted-foreground ": config.headerTheme !== "light",
               }
             )}
@@ -56,7 +59,7 @@ const HeaderColor = () => {
             {lightTopbarColorSvg}
           </button>
           <Label className=" text-muted-foreground font-normal block mt-2.5 capitalize">
-            Default
+            Defaut
           </Label>
         </div>
         <div>
@@ -87,7 +90,7 @@ const HeaderColor = () => {
             {colorTopbarColorSvg}
           </button>
           <Label className=" text-muted-foreground font-normal block mt-2.5 capitalize">
-            color
+            Couleur
           </Label>
         </div>
         <div>
@@ -119,7 +122,7 @@ const HeaderColor = () => {
             {borderedSkinSvg}
           </button>
           <Label className=" text-muted-foreground font-normal block mt-2.5 capitalize">
-            transparent
+            Transparent
           </Label>
         </div>
       </div>
@@ -128,7 +131,6 @@ const HeaderColor = () => {
         <div className="flex gap-1 flex-wrap bg-default-200 p-3 rounded-md">
           {[
             "dark",
-            "embassy",
             "rose",
             "steel-blue",
             "purple",
@@ -148,10 +150,9 @@ const HeaderColor = () => {
                       }
                       disabled={config.headerTheme === color}
                       className={cn(
-                        " border    border-default-300  inline-flex justify-center rounded-md items-center relative h-8 w-8  disabled:cursor-not-allowed duration-150",
+                        " border border-default-300  inline-flex justify-center rounded-md items-center relative h-8 w-8  disabled:cursor-not-allowed duration-150",
                         {
                           "bg-default": color === "dark",
-                          "bg-[#003399]": color === "embassy",
                           "bg-[#343A40]": color === "gray",
                           "bg-[#B52755]": color === "rose",
                           "bg-[#405189]": color === "steel-blue",
@@ -183,6 +184,6 @@ const HeaderColor = () => {
       )}
     </div>
   );
-}
+};
 
-export default HeaderColor
+export default HeaderColor;

@@ -42,7 +42,7 @@ export const ActualiteListTable: React.FC = () => {
             Erreur lors du chargement
           </h3>
           <p className="text-muted-foreground">
-            Une erreur s'est produite lors du chargement des actualités.
+            Une erreur s&apos;est produite lors du chargement des actualités.
           </p>
         </div>
       </div>

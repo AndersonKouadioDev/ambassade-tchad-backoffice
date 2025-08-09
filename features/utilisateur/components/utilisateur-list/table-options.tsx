@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUtilisateurListTable } from "../../hooks/useUtilisateurListTable";
-import { Button } from "@heroui/react";
+import { Button } from "@/components/ui/button";
 import { getEnumValues } from "@/utils/getEnumValues";
 import { getUtilisateurRole } from "../../utils/getUtilisateurRole";
 import { getUtilisateurStatus } from "../../utils/getUtilisateurStatus";
@@ -88,10 +88,7 @@ export function TableOptions({
         </div>
         <div className="flex justify-end md:justify-start">
           {type === "personnel" && (
-            <Button
-              onPress={() => modalHandlers.setAddOpen(true)}
-              color="primary"
-            >
+            <Button onClick={() => modalHandlers.setAddOpen(true)}>
               Ajouter un utilisateur
             </Button>
           )}

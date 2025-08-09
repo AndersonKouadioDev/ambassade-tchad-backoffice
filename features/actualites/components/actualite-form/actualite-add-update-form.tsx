@@ -14,7 +14,6 @@ import {
   actualiteCreateSchema,
 } from "../../schemas/actualites.schema";
 import { useRouter } from "next/navigation";
-import { Button } from "@heroui/react";
 import { ImageDragDrop, ImageFile } from "@/components/blocks/image-drap-drop";
 import {
   useActualiteCreateMutation,
@@ -22,6 +21,7 @@ import {
 } from "../../queries/actualite.mutation";
 import { useActualiteDetailQuery } from "../../queries/actualite-details.query";
 import { getFullUrlFile } from "@/utils/getFullUrlFile";
+import { Button } from "@/components/ui/button";
 
 interface ActualiteFormProps {
   id?: string;
@@ -189,10 +189,10 @@ export const ActualiteAddUpdateForm: React.FC<ActualiteFormProps> = ({
 
           {/* Boutons d'action */}
           <div className="flex gap-3 justify-end">
-            <Button type="button" onPress={handleCancel}>
+            <Button type="button" variant="outline" onClick={handleCancel}>
               Annuler
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit"  disabled={isLoading}>
               {isLoading
                 ? "Enregistrement..."
                 : actualite
