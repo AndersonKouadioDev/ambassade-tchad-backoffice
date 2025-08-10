@@ -11,7 +11,6 @@ import { useQueryStates } from 'nuqs';
 import { depenseFiltersClient } from '../filters/depense.filter';
 import { useDepensesListQuery } from "../queries/depense-list.query";
 import { IDepense, IDepensesParams } from "../types/depense.type";
-import { DataProps } from "@/components/finance/depense-list/column";
 
 export interface IDepenseListTableProps {
     columns: ColumnDef<IDepense>[];
@@ -49,19 +48,19 @@ export function useDepenseListTable({ columns }: IDepenseListTableProps) {
     const [editOpen, setEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [lockUnlockOpen, setLockUnlockOpen] = useState(false);
-    const [currentUser, setCurrentUser] = useState<DataProps | null>(null);
+    const [currentUser, setCurrentUser] = useState<IDepense | null>(null);
 
-    const handleLockUnlockUser = useCallback((user: DataProps) => {
+    const handleLockUnlockUser = useCallback((user: IDepense) => {
         setCurrentUser(() => user);
         setLockUnlockOpen(true);
     }, []);
 
-    const handleEditUser = useCallback((user: DataProps) => {
+    const handleEditUser = useCallback((user: IDepense) => {
         setCurrentUser(() => user);
         setEditOpen(true);
     }, []);
 
-    const handleDeleteUser = useCallback((user: DataProps) => {
+    const handleDeleteUser = useCallback((user: IDepense) => {
         setCurrentUser(() => user);
         setDeleteOpen(true);
     }, []);

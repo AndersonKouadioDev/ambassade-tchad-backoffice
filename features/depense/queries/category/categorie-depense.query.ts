@@ -4,21 +4,20 @@ import {
     useQuery,
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
-import { obtenirTousDepensesAction } from '../actions/depense.action';
-import { IDepensesParams } from '../types/depense.type';
-import { depenseKeyQuery } from './index.query';
+import { obtenirCategoriesDepensesAction } from '../../actions/depense.action';
+import { categorieDepenseKeyQuery } from './index.query';
 import { toast } from 'sonner';
 
 const queryClient = getQueryClient();
 
 //1- Option de requête optimisée
-export const depensesListQueryOption = (depensesParamsDTO: IDepensesParams) => {
+export const categorieDepenseListQueryOption = () => {
     return {
-        queryKey: depenseKeyQuery("list", depensesParamsDTO),
+        queryKey: categorieDepenseKeyQuery("list"),
         queryFn: async () => {
-            const result = await obtenirTousDepensesAction(depensesParamsDTO);
+            const result = await obtenirCategoriesDepensesAction();
             if (!result.success) {
-                throw new Error(result.error);
+                throw new Error(result.error || "Erreur lors de la récupération des dépenses");
             }
             return result.data!;
         },
@@ -30,10 +29,8 @@ export const depensesListQueryOption = (depensesParamsDTO: IDepensesParams) => {
 };
 
 //2- Hook pour récupérer les dépenses
-export const useDepensesListQuery = (
-    depensesParamsDTO: IDepensesParams
-) => {
-    const query = useQuery(depensesListQueryOption(depensesParamsDTO));
+export const useCategorieDepensesListQuery = () => {
+    const query = useQuery(categorieDepenseListQueryOption());
 
     // Gestion des erreurs dans le hook
     React.useEffect(() => {
@@ -48,8 +45,6 @@ export const useDepensesListQuery = (
 };
 
 //3- Fonction pour précharger les dépenses appelée dans les pages
-export const prefetchDepensesListQuery = (
-    depensesParamsDTO: IDepensesParams
-) => {
-    return queryClient.prefetchQuery(depensesListQueryOption(depensesParamsDTO));
+export const prefetchCategoriesDepensesListQuery = () => {
+    return queryClient.prefetchQuery(categorieDepenseListQueryOption());
 }

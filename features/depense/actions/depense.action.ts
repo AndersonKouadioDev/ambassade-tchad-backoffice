@@ -1,10 +1,10 @@
 import { ActionResponse, PaginatedResponse } from "@/types";
 import { depenseAPI } from "../apis/depense.api";
-import { categorieDepenseAPI } from "../apis/categorieDepense.api";
+import { categorieDepenseAPI } from "../apis/categorie-depense.api";
 import { IDepense, IDepensesParams, IDepenseStatsResponse } from "../types/depense.type";
-import { ICategorieDepense } from "../types/categorieDepense.type";
+import { ICategorieDepense } from "../types/categorie-depense.type";
 import { handleServerActionError } from "@/utils/handleServerActionError";
-import { IDepenseCreateDTO, IDepenseUpdateDTO } from "../schemas/depense.schema";
+import { DepenseCreateDTO, DepenseUpdateDTO } from "../schemas/depense.schema";
 
 export const obtenirTousDepensesAction = async (params: IDepensesParams): Promise<ActionResponse<PaginatedResponse<IDepense>>> => {
     try {
@@ -32,7 +32,7 @@ export const obtenirUneDepenseAction = async (id: string): Promise<ActionRespons
     }
 }
 
-export const ajouterDepenseAction = async (data: IDepenseCreateDTO): Promise<ActionResponse<IDepense>> => {
+export const ajouterDepenseAction = async (data: DepenseCreateDTO): Promise<ActionResponse<IDepense>> => {
     try {
         const response = await depenseAPI.ajouterDepense(data);
         return {
@@ -45,7 +45,7 @@ export const ajouterDepenseAction = async (data: IDepenseCreateDTO): Promise<Act
     }
 }
 
-export const modifierDepenseAction = async (id: string, data: IDepenseUpdateDTO): Promise<ActionResponse<IDepense>> => {
+export const modifierDepenseAction = async (id: string, data: DepenseUpdateDTO): Promise<ActionResponse<IDepense>> => {
     try {
         const response = await depenseAPI.modifierDepense(id, data);
         return {

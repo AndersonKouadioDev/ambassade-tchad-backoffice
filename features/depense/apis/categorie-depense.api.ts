@@ -1,6 +1,6 @@
 import { PaginatedResponse } from "@/types";
 import { api } from "@/lib/api";
-import { ICategorieDepense } from "../types/categorieDepense.type";
+import { ICategorieDepense } from "../types/categorie-depense.type";
 
 export interface ICategorieDepenseAPI {
     obtenirToutesCategoriesDepenses(): Promise<PaginatedResponse<ICategorieDepense>>;
@@ -9,19 +9,16 @@ export interface ICategorieDepenseAPI {
 
 export const categorieDepenseAPI: ICategorieDepenseAPI = {
     async obtenirToutesCategoriesDepenses(): Promise<PaginatedResponse<ICategorieDepense>> {
-        const response = await api.request<PaginatedResponse<any>>({
+        return await api.request<PaginatedResponse<ICategorieDepense>>({
             endpoint: `/expense-categories`,
             method: "GET",
         });
-            
-        return response;
     },
+
     async obtenirCategoriesActives(): Promise<PaginatedResponse<ICategorieDepense>> {
-        const response = await api.request<PaginatedResponse<ICategorieDepense>>({
+        return await api.request<PaginatedResponse<ICategorieDepense>>({
             endpoint: `/expense-categories/active`,
             method: "GET",
         });
-        
-        return response;
     },
 }

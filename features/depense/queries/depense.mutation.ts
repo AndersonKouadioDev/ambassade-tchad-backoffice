@@ -11,15 +11,15 @@ import {
 import { useInvalidateDepenseQuery } from './index.query';
 import { toast } from "sonner";
 import { processAndValidateFormData } from "ak-zod-form-kit";
-import { depenseCreateSchema, depenseUpdateSchema, IDepenseCreateDTO, IDepenseUpdateDTO } from "../schemas/depense.schema";
+import { DepenseCreateSchema, DepenseUpdateSchema, DepenseCreateDTO, DepenseUpdateDTO } from "../schemas/depense.schema";
 
 export const useAjouterDepenseMutation = () => {
     const invalidateDepenseQuery = useInvalidateDepenseQuery()
 
     return useMutation({
-        mutationFn: async (data: IDepenseCreateDTO) => {
+        mutationFn: async (data: DepenseCreateDTO) => {
             // Validation des données
-            const validation = processAndValidateFormData(depenseCreateSchema, data,
+            const validation = processAndValidateFormData(DepenseCreateSchema, data,
                 {
                     outputFormat: "object",
                 })
@@ -29,7 +29,7 @@ export const useAjouterDepenseMutation = () => {
             }
 
             // Appel de l'API avec l'action
-            const result = await ajouterDepenseAction(validation.data as IDepenseCreateDTO);
+            const result = await ajouterDepenseAction(validation.data as DepenseCreateDTO);
 
             if (!result.success) {
                 throw new Error(result.error || "Erreur lors de l'ajout de la dépense");
@@ -43,7 +43,6 @@ export const useAjouterDepenseMutation = () => {
         },
 
         onError: async (error) => {
-            console.log("error query", error)
             toast.error("Erreur lors de l'ajout de la dépense:", {
                 description: error.message,
             });
@@ -54,9 +53,9 @@ export const useAjouterDepenseMutation = () => {
 export const useModifierDepenseMutation = () => {
     const invalidateDepenseQuery = useInvalidateDepenseQuery()
     return useMutation({
-        mutationFn: async ({ id, data }: { id: string, data: IDepenseUpdateDTO }) => {
+        mutationFn: async ({ id, data }: { id: string, data: DepenseUpdateDTO }) => {
             // Validation des données
-            const validation = processAndValidateFormData(depenseUpdateSchema, data,
+            const validation = processAndValidateFormData(DepenseUpdateSchema, data,
                 {
                     outputFormat: "object"
 
@@ -65,7 +64,7 @@ export const useModifierDepenseMutation = () => {
                 throw new Error(validation.errorsInString || "Une erreur est survenue lors de la validation des données.");
             }
 
-            const result = await modifierDepenseAction(id, validation.data as IDepenseUpdateDTO)
+            const result = await modifierDepenseAction(id, validation.data as DepenseUpdateDTO)
             if (!result.success) {
                 throw new Error(result.error || "Erreur lors de la modification de la dépense");
             }

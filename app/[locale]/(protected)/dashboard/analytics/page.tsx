@@ -1,12 +1,12 @@
 "use client";
 import { StatusBlock } from "@/components/blocks/status-block";
-import TransactionsTable from "../crm/components/transactions";
+import TransactionsTable from "./components/transactions";
 import { Box, DollarSign, TrendingUp, LineChart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import OverviewRadialChart from "./components/overview-radial";
 import DashboardDropdown from "@/components/dashboard-dropdown";
 import TeamTable from "@/components/project/team-table";
-import { teamData } from "../project/data";
+import { teamData } from "./data";
 import RecentActivity from "./components/recent-activity";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";

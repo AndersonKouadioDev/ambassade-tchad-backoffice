@@ -1,15 +1,15 @@
 "use client";
 
-import { Fragment, useCallback } from "react";
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Transition,
-  TransitionChild,
-} from "@headlessui/react";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,8 +20,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAjouterDepenseMutation } from "../../queries/depense.mutation";
-import { depenseCreateSchema, IDepenseCreateDTO } from "../../schemas/depense.schema";
-import { useCategorieDepensesListQuery } from "../../queries/category/categorieDepense.query";
+import {
+  DepenseCreateSchema,
+  DepenseCreateDTO,
+} from "../../schemas/depense.schema";
+import { useCategorieDepensesListQuery } from "../../queries/category/categorie-depense.query";
 
 type Props = {
   isOpen: boolean;
@@ -29,8 +32,11 @@ type Props = {
 };
 
 export function DepenseAddModal({ isOpen, setIsOpen }: Props) {
-  // Récupération des catégories depuis la base de données
-  const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useCategorieDepensesListQuery({});
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useCategorieDepensesListQuery();
 
   const {
     register,
@@ -39,12 +45,19 @@ export function DepenseAddModal({ isOpen, setIsOpen }: Props) {
     formState: { errors, isValid },
     reset,
     watch,
-  } = useForm<IDepenseCreateDTO>({
-    resolver: zodResolver(depenseCreateSchema),
+  } = useForm<DepenseCreateDTO>({
+    resolver: zodResolver(DepenseCreateSchema),
     mode: "onChange",
+    defaultValues: {
+      amount: 0,
+      description: "",
+      categoryName: "",
+      expenseDate: new Date(),
+    },
   });
 
-  const { mutateAsync: ajouterDepenseMutation, isPending } = useAjouterDepenseMutation();
+  const { mutateAsync: ajouterDepenseMutation, isPending } =
+    useAjouterDepenseMutation();
 
   const handleClose = useCallback(() => {
     if (!isPending) {
@@ -54,7 +67,7 @@ export function DepenseAddModal({ isOpen, setIsOpen }: Props) {
   }, [isPending, setIsOpen, reset]);
 
   const onSubmit = useCallback(
-    async (formdata: IDepenseCreateDTO) => {
+    async (formdata: DepenseCreateDTO) => {
       await ajouterDepenseMutation(formdata);
       handleClose();
     },
@@ -62,142 +75,121 @@ export function DepenseAddModal({ isOpen, setIsOpen }: Props) {
   );
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={handleClose}>
-        <TransitionChild
-          as={Fragment}
-          enter="ease-out duration-200"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black/25 backdrop-blur-sm" />
-        </TransitionChild>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Ajouter une dépense</DialogTitle>
+        </DialogHeader>
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <TransitionChild
-              as={Fragment}
-              enter="ease-out duration-200"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-150"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <Select
+              value={watch("categoryName") || ""}
+              onValueChange={(value) => setValue("categoryName", value)}
+              disabled={isPending || categoriesLoading}
             >
-              <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <DialogTitle className="text-lg font-medium text-gray-900 mb-4">
-                  Ajouter une dépense
-                </DialogTitle>
-
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                  <div>
-                    <Input
-                      {...register("description")}
-                      placeholder="Description"
-                      type="text"
-                    />
-                    {errors.description && (
-                      <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <Input
-                      {...register("amount")}
-                      placeholder="Montant"
-                      type="number"
-                    />
-                    {errors.amount && (
-                      <p className="text-sm text-red-500 mt-1">{errors.amount.message}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <Input
-                      {...register("expenseDate")}
-                      placeholder="Date de dépense"
-                      type="date"
-                    />
-                    {errors.expenseDate && (
-                      <p className="text-sm text-red-500 mt-1">{errors.expenseDate.message}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <Select
-                      value={watch("categoryName") || ""}
-                      onValueChange={(value) => setValue("categoryName", value)}
-                      disabled={isPending || categoriesLoading}
-                    >
-                      <SelectTrigger
-                        className={`w-full ${errors.categoryName ? "border-red-500" : ""}`}
-                      >
-                        <SelectValue
-                          placeholder={
-                            categoriesLoading
-                              ? "Chargement des catégories..."
-                              : categoriesError
-                                ? "Erreur de chargement"
-                                : "Choisir une catégorie"
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories && categories.data && categories.data.length > 0 ? (
-                          categories.data.map((cat) => (
-                            <SelectItem key={cat.id} value={cat.name}>
-                              {cat.name}
-                              {cat.description && (
-                                <span className="text-gray-500 text-xs ml-2">- {cat.description}</span>
-                              )}
-                            </SelectItem>
-                          ))
-                        ) : (
-                          <SelectItem disabled value="none">
-                            {categoriesLoading
-                              ? "Chargement des catégories..."
-                              : "Aucune catégorie disponible"}
-                          </SelectItem>
-                        )}
-                      </SelectContent>
-
-                    </Select>
-                    {errors.categoryName && (
-                      <p className="text-sm text-red-500 mt-1">{errors.categoryName.message}</p>
-                    )}
-                  </div>
-
-                  <div className="flex justify-end gap-3 pt-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleClose}
-                      disabled={isPending}
-                      className="px-4 py-2"
-                    >
-                      Annuler
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isPending || !isValid}
-                      className="px-4 py-2"
-                    >
-                      {isPending ? "Ajout..." : "Ajouter"}
-                    </Button>
-                  </div>
-                </form>
-              </DialogPanel>
-            </TransitionChild>
+              <SelectTrigger
+                className={`w-full ${
+                  errors.categoryName ? "border-red-500" : ""
+                }`}
+              >
+                <SelectValue
+                  placeholder={
+                    categoriesLoading
+                      ? "Chargement des catégories..."
+                      : categoriesError
+                      ? "Erreur de chargement"
+                      : "Choisir une catégorie"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {categories && categories.data && categories.data.length > 0 ? (
+                  categories.data.map((cat: any) => (
+                    <SelectItem key={cat.id} value={cat.name}>
+                      {cat.name}
+                      {cat.description && (
+                        <span className="text-gray-500 text-xs ml-2">
+                          - {cat.description}
+                        </span>
+                      )}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem disabled value="none">
+                    {categoriesLoading
+                      ? "Chargement des catégories..."
+                      : "Aucune catégorie disponible"}
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+            {errors.categoryName && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.categoryName.message}
+              </p>
+            )}
           </div>
-        </div>
-      </Dialog>
-    </Transition>
+
+          <div>
+            <Input
+              {...register("amount", { valueAsNumber: true })}
+              placeholder="Montant"
+              type="number"
+            />
+            {errors.amount && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.amount.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <Input
+              {...register("description")}
+              placeholder="Description"
+              type="text"
+            />
+            {errors.description && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <Input
+              {...register("expenseDate")}
+              placeholder="Date de dépense"
+              type="date"
+            />
+            {errors.expenseDate && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.expenseDate.message}
+              </p>
+            )}
+          </div>
+
+          <DialogFooter className="mt-4 sm:justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isPending}
+              className="px-4 py-2"
+            >
+              Annuler
+            </Button>
+            <Button
+              type="submit"
+              disabled={isPending || !isValid}
+              className="px-4 py-2"
+            >
+              {isPending ? "Ajout..." : "Ajouter"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
-function useCategoriesActivesQuery(): { data: any; isLoading: any; error: any; } {
-  throw new Error("Function not implemented.");
-}
-

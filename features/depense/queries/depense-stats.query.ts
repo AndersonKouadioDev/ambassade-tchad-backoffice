@@ -7,6 +7,7 @@ import getQueryClient from '@/lib/get-query-client';
 import { depenseKeyQuery } from './index.query';
 import { toast } from 'sonner';
 import { obtenirStatsDepensesAction } from '../actions/depense.action';
+
 const queryClient = getQueryClient();
 
 //1- Option de requête
@@ -16,7 +17,7 @@ export const depenseStatsQueryOption = () => {
         queryFn: async () => {
             const result = await obtenirStatsDepensesAction();
             if (!result.success) {
-                throw new Error(result.error || "Erreur lors de la récupération des stats dépenses");
+                throw new Error(result.error);
             }
             return result.data!;
         },
@@ -34,7 +35,7 @@ export const useDepenseStatsQuery = () => {
     React.useEffect(() => {
         if (query.isError && query.error) {
             toast.error("Erreur lors de la récupération des stats dépenses:", {
-                description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
+                description: query.error.message,
             });
         }
     }, [query]);

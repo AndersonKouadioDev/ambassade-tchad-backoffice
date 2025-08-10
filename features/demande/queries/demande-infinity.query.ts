@@ -10,7 +10,6 @@ import { getAllFilteredDemandRequestsAction, getMyRequestsAction } from '../acti
 import { IDemandeRechercheParams } from '../types/demande.type';
 import { demandeKeyQuery } from './index.query';
 import { toast } from 'sonner';
-import React from 'react';
 
 const queryClient = getQueryClient();
 

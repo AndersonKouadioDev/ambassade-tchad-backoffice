@@ -31,14 +31,14 @@ export const depenseQueryOption = (id: string) => {
 };
 
 //2- Hook pour récupérer un utilisateur
-export const useDepenseQuery = (id: string  ) => {
+export const useDepenseQuery = (id: string) => {
     const query = useQuery(depenseQueryOption(id));
 
     // Gestion des erreurs dans le hook
     React.useEffect(() => {
         if (query.isError && query.error) {
             toast.error("Erreur lors de la récupération de la dépense:", {
-                description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
+                description: query.error.message,
             });
         }
     }, [query.isError, query.error]);

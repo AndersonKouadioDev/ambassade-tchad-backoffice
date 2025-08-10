@@ -178,7 +178,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
               <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
                 Créé le{" "}
-                {new Date(evenement.createdAt).toLocaleDateString("fr-FR")}
+                {new Date(evenement.createdAt!).toLocaleDateString("fr-FR")}
               </span>
             </div>
 
@@ -224,7 +224,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
               <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                 <Clock className="w-3 h-3" />
                 <span>
-                  {new Date(evenement.createdAt).toLocaleDateString("fr-FR", {
+                  {new Date(evenement.createdAt!).toLocaleDateString("fr-FR", {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
@@ -260,7 +260,7 @@ export const EvenementCard: React.FC<EvenementCardProps> = ({
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                onPress={handleCancelDelete}
+                onClick={handleCancelDelete}
               >
                 <X className="w-4 h-4" />
               </Button>
