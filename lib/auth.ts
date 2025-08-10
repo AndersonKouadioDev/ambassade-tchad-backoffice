@@ -83,6 +83,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           type: token.type,
           status: token.status,
           isPasswordChangeRequired: token.isPasswordChangeRequired,
+          accessToken: token.accessToken,
+          refreshToken: token.refreshToken,
         };
       }
       if (token.error) {

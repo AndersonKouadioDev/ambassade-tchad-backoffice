@@ -1,6 +1,8 @@
 import { Api } from "ak-api-http";
 import { baseURL } from "@/config";
-import { getTokenInfo, logout } from "@/features/auth/actions/auth.action";
+import { logout } from "@/features/auth/actions/auth.action";
+import { auth } from "./auth";
+import { User } from "next-auth";
 
 export const api = new Api({
   baseUrl: baseURL, // Base URL de l'API
@@ -12,10 +14,18 @@ export const api = new Api({
   retryDelay: 1000, // Delais entre les tentatives
   enableAuth: true, // Authentification activée
   getSession: async () => {
-    const jwt = await getTokenInfo();
-    console.log("chargement du token avec succès", { jwt });
+    const session = await auth();
+    const user = session?.user as User;
+    if (user) {
+      console.log("chargement du token avec succès", user);
+      return {
+        accessToken: user.accessToken ?? "",
+      }
+    }
+    console.log("chargement du token avec echec", user);
+
     return {
-      accessToken: jwt?.accessToken ?? "",
+      accessToken: "",
     }
   },// Récupération du token
   signOut: logout, // Déconnexion automatique si la requête échoue avec un code 401

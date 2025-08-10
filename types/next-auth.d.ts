@@ -10,6 +10,8 @@ declare module "next-auth" {
       type: UserType;
       status: UserStatus;
       isPasswordChangeRequired: boolean;
+      accessToken: string;
+      refreshToken?: string;
     } & DefaultSession["user"];
     error?: string;
   }
