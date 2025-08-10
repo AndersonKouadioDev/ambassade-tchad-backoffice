@@ -25,8 +25,10 @@ const ProfileInfo = () => {
   const [user, setUser] = useState(session?.data?.user);
 
   useEffect(() => {
-    setUser(session?.data?.user);
-  }, [session]);
+    if (session.status === "authenticated") {
+      setUser(session?.data?.user);
+    }
+  }, [session.data, session.status]);
 
   return (
     <div className="md:block hidden">

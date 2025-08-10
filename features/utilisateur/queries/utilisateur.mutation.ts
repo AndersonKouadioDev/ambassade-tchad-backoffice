@@ -53,7 +53,6 @@ export const useAjouterUtilisateurMutation = () => {
         },
 
         onError: async (error) => {
-            console.log("error query", error)
             toast.error("Erreur lors de l'ajout de l'utilisateur:", {
                 description: error.message,
             });

@@ -486,12 +486,23 @@ Ces dossiers sont réservés aux éléments globaux, réutilisables dans toute l
 // src/lib/api.ts (Extrait)
 import { Api } from "ak-api-http"; // Votre bibliothèque de client HTTP
 import { baseURL } from "@/config";
-import { getTokenInfo, logout } from "@/features/auth/actions/auth.action";
+import {logout } from "@/features/auth/actions/auth.action";
+import { auth } from "./auth";
+import { User } from "next-auth";
 
 export const api = new Api({
     baseUrl: baseURL, timeout: 10000, headers: { "Content-Type": "application/json" },
     enableAuth: true,
-    getSession: async () => { const jwt = await getTokenInfo(); return { accessToken: jwt?.accessToken ?? "" }; },
+    getSession: async () => {   const session = await auth();
+    const user = session?.user as User;
+    if (user) {
+      return {
+        accessToken: user.accessToken ?? "",
+      }
+    }
+    return {
+      accessToken: "",
+    } },
     signOut: logout,
     debug: process.env.NODE_ENV === "development",
 });

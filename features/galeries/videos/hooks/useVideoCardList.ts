@@ -37,8 +37,6 @@ export const useVideoCardList = () => {
 
   const { data, isLoading, error } = useVideosList(currentSearchParams);
 
-  console.log('useVideoCardList - React Query result:', { data, isLoading, error });
-
   const handleTextFilterChange = (filterName: 'title' | 'description', value: string) => {
     setFilters((prev: any) => ({
       ...prev,
@@ -112,8 +110,6 @@ export const useVideoCardList = () => {
       totalPages: 1,
     },
   };
-
-  console.log('useVideoCardList - paginationData:', paginationData);
 
   const handlePageChange = (page: number) => {
     setFilters((prev: any) => ({

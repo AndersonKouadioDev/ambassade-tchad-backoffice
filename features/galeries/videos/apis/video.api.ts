@@ -44,7 +44,6 @@ export const videoAPI: IVideoAPI = {
     },
 
     create(data: VideoDTO): Promise<IVideo> {
-        console.log('videoAPI.create - Données reçues:', data);
 
         return api.request<IVideo>({
             endpoint: `/videos`,
@@ -60,8 +59,6 @@ export const videoAPI: IVideoAPI = {
     },
 
     update(id: string, data: VideoDTO): Promise<IVideo> {
-        console.log('videoAPI.update - Données reçues:', data);
-        console.log('videoAPI.update - FormData reçu:', data);
 
         return api.request<IVideo>({
             endpoint: `/videos/${id}`,

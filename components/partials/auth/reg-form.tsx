@@ -17,8 +17,7 @@ const RegForm = () => {
     watch,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
-  console.log(watch("example"));
+  const onSubmit: SubmitHandler<Inputs> = (data) => {};
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">

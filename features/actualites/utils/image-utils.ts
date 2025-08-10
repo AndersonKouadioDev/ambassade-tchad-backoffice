@@ -25,7 +25,6 @@ export const formatImageUrl = (imageUrl: string): string => {
     // Remplacer les backslashes par des forward slashes pour la compatibilité
     const normalizedPath = imageUrl.replace(/\\/g, '/');
     const finalUrl = `${baseUrl}/${normalizedPath}`;
-    console.log('Image URL formatée:', { original: imageUrl, final: finalUrl });
     return finalUrl;
   }
   

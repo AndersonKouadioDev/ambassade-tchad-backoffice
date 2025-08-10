@@ -40,7 +40,6 @@ export const useEvenementListTable = () => {
 
   const { data, isLoading, error } = useEvenementsList(currentSearchParams);
 
-  console.log('useEvenementListTable - React Query result:', { data, isLoading, error });
 
   const handleTextFilterChange = (filterName: 'title' | 'description' | 'authorId', value: string) => {
     setFilters(prev => ({
@@ -121,8 +120,6 @@ export const useEvenementListTable = () => {
       totalPages: 1,
     },
   };
-
-  console.log('useEvenementListTable - paginationData:', paginationData);
 
   const handlePageChange = (page: number) => {
     setFilters(prev => ({

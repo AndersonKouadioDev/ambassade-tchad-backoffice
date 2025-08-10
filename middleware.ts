@@ -2,7 +2,6 @@ import { NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { auth } from "@/lib/auth";
-import { getTokenInfo } from "@/features/auth/actions/auth.action";
 
 export const publicRoutes = ["/"];
 
@@ -15,10 +14,9 @@ export default async function middleware(req: NextRequest) {
 
   const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/';
 
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "development") {
     console.log(`Page dans le middleware : "${pathWithoutLocale}"`)
     console.log(session)
-    console.log(await getTokenInfo())
   };
 
   if (pathWithoutLocale.startsWith("/api/auth")) {

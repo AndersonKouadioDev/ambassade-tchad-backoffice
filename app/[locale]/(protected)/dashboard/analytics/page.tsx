@@ -9,16 +9,10 @@ import TeamTable from "@/components/project/team-table";
 import { teamData } from "./data";
 import RecentActivity from "./components/recent-activity";
 import { useTranslations } from "next-intl";
-import { useSession } from "next-auth/react";
-import { baseURL } from "@/config";
 
 const DashboardPage = () => {
   const t = useTranslations("AnalyticsDashboard");
   const tm = useTranslations("ProjectDashboard");
-  const session = useSession();
-
-  console.log({ session });
-  console.log({ baseURL });
 
   return (
     <div className="container">

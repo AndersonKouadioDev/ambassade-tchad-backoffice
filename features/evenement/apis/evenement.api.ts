@@ -41,7 +41,6 @@ export const evenementAPI: IEvenementAPI = {
     },
 
     create(formData: FormData): Promise<IEvenement> {
-        console.log('actualiteAPI.create - FormData reçu:', formData);
 
         return api.request<IEvenement>({
             endpoint: `/events`,
@@ -57,8 +56,6 @@ export const evenementAPI: IEvenementAPI = {
     },
 
     update(id: string, formData: FormData): Promise<IEvenement> {
-        console.log('actualiteAPI.update - Données reçues:', formData);
-        console.log('actualiteAPI.update - FormData reçu:', formData);
 
         return api.request<IEvenement>({
             endpoint: `/events/${id}`,

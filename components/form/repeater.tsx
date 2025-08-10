@@ -28,9 +28,7 @@ const Repeater = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
-
-  console.log(watch("test"));
+  const onSubmit: SubmitHandler<FormValues> = (data) => {};
 
   const { fields, append, remove } = useFieldArray({
     control,

@@ -37,7 +37,6 @@ export const photoAPI: IPhotoAPI = {
     },
 
         create(formData: FormData): Promise<IPhoto> {
-        console.log('photoAPI.create - FormData reçu:', formData);
 
         return api.request<IPhoto>({
             endpoint: `/photos`,
@@ -53,8 +52,6 @@ export const photoAPI: IPhotoAPI = {
     },
 
     update(id: string, formData: FormData): Promise<IPhoto> {
-        console.log('photoAPI.update - Données reçues:', formData);
-        console.log('photoAPI.update - FormData reçu:', formData);
 
         return api.request<IPhoto>({
             endpoint: `/photos/${id}`,

@@ -17,20 +17,14 @@ export const api = new Api({
     const session = await auth();
     const user = session?.user as User;
     if (user) {
-      console.log("chargement du token avec succès", user);
       return {
         accessToken: user.accessToken ?? "",
       }
     }
-    console.log("chargement du token avec echec", user);
-
     return {
       accessToken: "",
     }
   },// Récupération du token
   signOut: logout, // Déconnexion automatique si la requête échoue avec un code 401
-  onRequestError: (error) => {
-    console.log({ error: error })
-  },
   debug: true, // Debug activé en mode développement
 });

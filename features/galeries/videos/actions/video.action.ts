@@ -12,18 +12,13 @@ import { IVideoRechercheParams } from "../types/video.type";
 export async function createVideo(
     data: VideoDTO
 ): Promise<{ success: boolean; message: string }> {
-    console.log('createVideo - Données reçues:', data);
 
     try {
-        console.log('createVideo - Appel API avec données:', data);
 
         // Création de la video
         const createdVideo = await videoAPI.create(data);
 
-        console.log('createVideo - Video créée:', createdVideo);
-
         if (!createdVideo || !createdVideo.id) {
-            console.error('createVideo - Réponse API invalide:', createdVideo);
             return {
                 success: false,
                 message: "La création a échoué - réponse API invalide.",
@@ -35,13 +30,6 @@ export async function createVideo(
             message: "video créée avec succès.",
         };
     } catch (apiError: any) {
-        console.error('createVideo - Erreur API:', apiError);
-        console.error('createVideo - Détails erreur:', {
-            message: apiError.message,
-            status: apiError.status,
-            data: apiError.data,
-        });
-
         return {
             success: false,
             message: apiError.message || "Erreur lors de la création de la video.",
@@ -55,27 +43,17 @@ export async function updateVideo(
     id: string,
     data: VideoDTO
 ): Promise<{ success: boolean; message: string }> {
-    console.log('=== UPDATE Video ACTION ===');
-    console.log('ID:', id); console.log('updateVideo - Données reçues:', data);
 
     // mise à jour de la Video
     try {
-            console.log('updateVideo - Appel API avec Données:', data);
 
         const updated = await videoAPI.update(id, data);
-        console.log("Video mis à jour :", updated);
 
         return {
             success: true,
             message: "video mise à jour avec succès.",
         };
     } catch (apiError: any) {
-        console.error('updateVideo - Erreur API:', apiError);
-        console.error('updateVideo - Détails erreur:', {
-            message: apiError.message,
-            status: apiError.status,
-            data: apiError.data,
-        });
         return {
             success: false,
             message: apiError.message || "Erreur lors de la mise à jour de la video.",

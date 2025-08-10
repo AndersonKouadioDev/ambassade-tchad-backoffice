@@ -77,30 +77,3 @@ export async function logout() {
   await signOut({ redirect: false });
   redirect("/");
 }
-
-export async function getTokenInfo(): Promise<JWT | null> {
-  try {
-    const headersList = await headers()
-    const cookie = headersList.get('cookie')
-
-    const req = {
-      headers: {
-        cookie: cookie || ''
-      }
-    } as any
-
-    const token = await getToken({
-      req,
-      secret: process.env.AUTH_SECRET
-    })
-
-    if (!token) {
-      return null;
-    }
-
-    return token;
-  } catch (error) {
-    console.error('Erreur lors de la récupération des informations du token:', error)
-    return null;
-  }
-}
