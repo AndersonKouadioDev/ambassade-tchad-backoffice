@@ -35,6 +35,7 @@ export interface ExistingImageFile extends Omit<ImageFile, "file"> {
 }
 
 export interface NewImageFile extends ImageFile {
+  file: any;
   isExisting: false;
 }
 
