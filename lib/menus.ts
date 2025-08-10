@@ -53,29 +53,29 @@ export function getMenuList(pathname: string, t: any): Group[] {
           icon: "heroicons-outline:clipboard-document",
           submenus: [],
         },
-        // {
-        //   id: "finance",
-        //   href: "/finance",
-        //   label: "Gestion financière",
-        //   active: pathname.startsWith("/finance"),
-        //   icon: "heroicons-outline:clipboard-document",
-        //   submenus: [
-        //     {
-        //       href: "/finance/rapport",
-        //       label: "Rapport financière",
-        //       active: pathname === "/finance/rapport",
-        //       icon: "",
-        //       children: [],
-        //     },
-        //     {
-        //       href: "/finance/depenses",
-        //       label: "Gestion des dépenses",
-        //       active: pathname === "/finance/depenses",
-        //       icon: "",
-        //       children: [],
-        //     }
-        //   ],
-        // },
+        {
+          id: "finance",
+          href: "/finance",
+          label: "Gestion financière",
+          active: pathname.startsWith("/finance"),
+          icon: "heroicons-outline:clipboard-document",
+          submenus: [
+            {
+              href: "/finance/rapport",
+              label: "Rapport financière",
+              active: pathname === "/finance/rapport",
+              icon: "",
+              children: [],
+            },
+            {
+              href: "/finance/depenses",
+              label: "Gestion des dépenses",
+              active: pathname === "/finance/depenses",
+              icon: "",
+              children: [],
+            }
+          ],
+        },
         {
           id: "contenu",
           href: "/contenu",

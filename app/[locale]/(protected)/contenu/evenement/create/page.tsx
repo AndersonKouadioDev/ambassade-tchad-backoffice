@@ -10,7 +10,7 @@ export default function CreateEvenementPage() {
   return (
     <div className="space-y-8">
       {/* En-tête */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-800 dark:to-primary-900 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
         <div className="flex items-center gap-4">
           <ButtonGoLink href="/contenu/actualite" />
           <div className="p-3 bg-white/20 dark:bg-white/10 rounded-lg backdrop-blur-sm">
@@ -18,7 +18,7 @@ export default function CreateEvenementPage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold">Créer un nouvel évènement</h1>
-            <p className="text-primary-100 dark:text-primary-200 mt-2">
+            <p className="text-primary-100 mt-2">
               Rédigez et publiez un nouvel évènement
             </p>
           </div>
