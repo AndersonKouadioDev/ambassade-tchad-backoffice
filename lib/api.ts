@@ -12,9 +12,10 @@ export const api = new Api({
   retryDelay: 1000, // Delais entre les tentatives
   enableAuth: true, // Authentification activée
   getSession: async () => {
-    // const jwt = await getTokenInfo()
+    const jwt = await getTokenInfo();
+    console.log("chargement du token avec succès", { jwt });
     return {
-      accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkODJkYjYxMi03YzEyLTQxZGEtYjU1MC04ODBmYzkwZjNjZWUiLCJ0eXBlIjoiUEVSU09OTkVMIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU0ODM5NDI3LCJleHAiOjE3NTU0NDQyMjd9.O8_segcMi6SP5cftp_JhYZVQTk2XBTFZjoT8y1_RsXo",
+      accessToken: jwt?.accessToken ?? "",
     }
   },// Récupération du token
   signOut: logout, // Déconnexion automatique si la requête échoue avec un code 401
