@@ -1,10 +1,10 @@
 
 import { PhotoStats } from "@/features/galeries/photos/components";
-import { PhotoList } from "@/features/galeries/photos/components/photo-list";
 import { prefetchPhotosList } from "@/features/galeries/photos/queries/photo-list.query";
 import { prefetchPhotoStats } from "@/features/galeries/photos/queries/photo-stats.query";
 import { BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { PhotoListTable } from "@/features/galeries/photos/components/photo-list/index";
 
 export default async function PhotoListPage() {
   const t = await getTranslations("contenu.gestionActualite");
@@ -37,7 +37,7 @@ export default async function PhotoListPage() {
       <PhotoStats/>
 
       <div className="bg-white dark:bg-default-100 rounded-xl shadow-sm border border-default-200/50 p-6">
-        <PhotoList />
+        <PhotoListTable />
       </div>
     </div>
   );

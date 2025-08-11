@@ -2,33 +2,25 @@
 
 import React from "react";
 import { Search, Plus } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 interface PhotoFiltersProps {
   filters: {
     title: string;
-    description: string;
   };
   onTextFilterChange: (
-    filterName: "title" | "description",
+    filterName: "title",
     value: string
   ) => void;
-  onCreate: () => void;
 }
 
 export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
   filters,
   onTextFilterChange,
-  onCreate,
 }) => {
+  const router = useRouter();
   return (
     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
@@ -41,21 +33,12 @@ export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
             className="pl-10 w-full sm:w-64"
           />
         </div>
-
-        <Select
-          value={filters.description || "all"}
-          onValueChange={(value) => onTextFilterChange("description", value)}
-        >
-          <SelectTrigger className="w-full sm:w-48">
-            <SelectValue placeholder="Rechercher par description" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tous</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
-      <Button onClick={onCreate} className="w-full sm:w-auto">
+      <Button
+        onClick={() => router.push("/contenu/galerie-photo/create")}
+        className="w-full sm:w-auto"
+      >
         <Plus className="w-4 h-4 mr-2" />
         Créer une photo
       </Button>

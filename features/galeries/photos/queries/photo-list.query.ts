@@ -14,8 +14,8 @@ export const photoListQueryOption = (photoSearchParams: IPhotoRechercheParams) =
     return {
         queryKey: photoKeyQuery('list', photoSearchParams),    
         queryFn: async () => {
-            const data = await getPhotoTousAction(photoSearchParams);
-            return data;
+            const result = await getPhotoTousAction(photoSearchParams);
+            return result.data!;
         }
         ,
         keepPreviousData: true,

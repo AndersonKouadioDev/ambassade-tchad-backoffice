@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { processAndValidateFormData } from "ak-zod-form-kit";
 import { useInvalidateActualiteQuery } from './index.query';
 import { ActualiteCreateDTO, ActualiteUpdateDTO, actualiteCreateSchema, actualiteUpdateSchema } from '../schemas/actualites.schema';
-import { createActualiteAction, updateActualiteAction } from '../actions/actualites.action';
+import { createActualiteAction, deleteActualiteAction, updateActualiteAction } from '../actions/actualites.action';
 
 export const useActualiteCreateMutation = () => {
     const invalidateActualiteQuery = useInvalidateActualiteQuery()
@@ -87,27 +87,27 @@ export const useActualiteUpdateMutation = () => {
 };
 
 
-// export const useSupprimerUtilisateurMutation = () => {
-//     const invalidateUtilisateurQuery = useInvalidateUtilisateurQuery()
-//     return useMutation({
-//         mutationFn: async (id: string) => {
-//             if (!id) {
-//                 throw new Error("L'identifiant de l'utilisateur est requis.");
-//             }
-//             const result = await supprimerUtilisateurAction(id)
-//             if (!result.success) {
-//                 throw new Error(result.error || "Erreur lors de la suppression de l'utilisateur");
-//             }
-//             return result.data!;
-//         },
-//         onSuccess: async () => {
-//             await invalidateUtilisateurQuery();
-//             toast.success("Utilisateur supprimé avec succès");
-//         },
-//         onError: async (error) => {
-//             toast.error("Erreur suppression utilisateur:", {
-//                 description: error.message,
-//             });
-//         },
-//     });
-// };
+export const useSupprimerActualiteMutation = () => {
+    const invalidateActualiteQuery = useInvalidateActualiteQuery()
+    return useMutation({
+        mutationFn: async (id: string) => {
+            if (!id) {
+                throw new Error("L'identifiant de l'actualité est requis.");
+            }
+            const result = await deleteActualiteAction(id)
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la suppression de l'actualité");
+            }
+            return result.data!;
+        },
+        onSuccess: async () => {
+            await invalidateActualiteQuery();
+            toast.success("Actualité supprimée avec succès");
+        },
+        onError: async (error) => {
+            toast.error("Erreur suppression actualité:", {
+                description: error.message,
+            });
+        },
+    });
+};
