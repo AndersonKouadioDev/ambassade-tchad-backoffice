@@ -17,6 +17,7 @@ import { Loader2 } from "lucide-react";
 import { TableIndicatorFetching } from "./table-indicator-fetching";
 import { DepenseAddUpdateModal } from "../depense-modal/depense-add-update-modal";
 import { DepenseDeleteModal } from "../depense-modal/depense-delete-modal";
+import { TableAction } from "./table-action";
 
 export function DepenseList() {
   const columns = columnsDepenses;
@@ -36,12 +37,15 @@ export function DepenseList() {
 
   return (
     <div className="w-full">
-      <TableOptions
-        handleTextFilterChange={handleTextFilterChange}
-        handleEnumFilterChange={handleEnumFilterChange}
-        modalHandlers={modalHandlers}
-        filters={filters}
-      />
+      <div className="space-y-2 mb-4">
+        <TableOptions
+          handleTextFilterChange={handleTextFilterChange}
+          handleEnumFilterChange={handleEnumFilterChange}
+          modalHandlers={modalHandlers}
+          filters={filters}
+        />
+        <TableAction modalHandlers={modalHandlers} />
+      </div>
 
       {/* Indicateur de chargement global */}
       <div className="relative">

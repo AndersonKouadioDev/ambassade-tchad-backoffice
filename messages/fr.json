@@ -797,6 +797,13 @@
       "depenses_mensuelles": "Dépenses mensuelles",
       "depenses_annuelles": "Dépenses annuelles",
       "depenses_hebdomadaires": "Dépenses hebdomadaires"
+    },
+    "rapport": {
+      "title": "Gestion des rapports",
+      "total_rapport": "Total des rapports",
+      "rapport_mensuelles": "Rapports mensuels",
+      "rapport_annuelles": "Rapports annuels",
+      "rapport_hebdomadaires": "Rapports hebdomadaires"
     }
   },
   "gestionUtilisateur": {
@@ -812,12 +819,5 @@
     "demandeur_actif": "Citoyens actifs",
     "demandeur_inactif": "Citoyens inactifs",
     "demandeur_banni": "Citoyens bannis"
-  },
-  "gestionDepense": {
-    "title": "Gestion des dépenses",
-    "total_depense": "Total des dépenses",
-    "depenses_mensuelles": "Dépenses mensuelles",
-    "depenses_annuelles": "Dépenses annuelles",
-    "depenses_hebdomadaires": "Dépenses hebdomadaires"
   }
 }

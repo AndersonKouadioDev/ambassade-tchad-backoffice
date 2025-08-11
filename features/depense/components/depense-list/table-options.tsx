@@ -2,7 +2,6 @@
 
 import { Input } from "@/components/ui/input";
 import { useDepenseList } from "../../hooks/use-depense-list";
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import {
   Select,
@@ -11,6 +10,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CalendarIcon, Filter, RefreshCcw } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { fr, enGB, ar } from "react-day-picker/locale";
+import { useLocale } from "next-intl";
+
 import { useCategoriesDepensesActivesListQuery } from "../../queries/category/categorie-depense-active.query";
 
 export function TableOptions({
@@ -30,13 +44,42 @@ export function TableOptions({
     isLoading: categoriesLoading,
     error: categoriesError,
   } = useCategoriesDepensesActivesListQuery({ params: {} });
+  const locale = useLocale();
+
+  const safeDate = (
+    dateString: string | null | undefined
+  ): Date | undefined => {
+    if (!dateString) return undefined;
+    const date = new Date(dateString);
+    return isNaN(date.getTime()) ? undefined : date;
+  };
+
+  // Get locale for date-fns
+  const getDateFnsLocale = () => {
+    switch (locale) {
+      case "fr":
+        return fr;
+      case "ar":
+        return ar;
+      default:
+        return enGB;
+    }
+  };
+
+  const expenseDate = safeDate(filters.expenseDate);
 
   return (
-    <div className="w-full">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between py-4 px-5">
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center space-x-2 text-lg">
+          <Filter className="h-5 w-5 text-muted-foreground" />
+          <span>Filtrages</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3 w-full">
-          {/* Filtre par description */}
-          <div className="relative">
+          <div className="space-y-2">
+            <Label htmlFor="period-select">Description</Label>
             <Input
               placeholder="Filtrer par description..."
               value={filters.description}
@@ -47,9 +90,8 @@ export function TableOptions({
             />
           </div>
 
-          {/* Filtre par nom de catégorie */}
-
-          <div className="relative">
+          <div className="space-y-2">
+            <Label htmlFor="year-select">Catégorie</Label>
             <Select
               onValueChange={(value) =>
                 handleEnumFilterChange("category", value)
@@ -91,8 +133,65 @@ export function TableOptions({
             </Select>
           </div>
 
-          {/* Filtre par montant minimum */}
-          <div className="relative">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 min-h-[24px]">
+              <Label>Date de dépense</Label>
+              <RefreshCcw
+                size={16}
+                className="text-muted-foreground/80 hover:text-foreground shrink-0 transition-colors cursor-pointer"
+                aria-hidden="true"
+                onClick={() => handleTextFilterChange("expenseDate", "")}
+              />
+            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="group bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                >
+                  <span
+                    className={cn(
+                      "truncate",
+                      !expenseDate && "text-muted-foreground"
+                    )}
+                  >
+                    {expenseDate ? (
+                      <>
+                        {format(expenseDate, "dd LLL, y", {
+                          locale: getDateFnsLocale(),
+                        })}
+                      </>
+                    ) : (
+                      "Choisir une date"
+                    )}
+                  </span>
+                  <CalendarIcon
+                    size={16}
+                    className="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+                    aria-hidden="true"
+                  />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-2" align="start">
+                <Calendar
+                  mode="single"
+                  locale={getDateFnsLocale()}
+                  selected={expenseDate ? expenseDate : undefined}
+                  onSelect={(date) => {
+                    if (date) {
+                      handleTextFilterChange(
+                        "expenseDate",
+                        format(date, "yyyy-MM-dd")
+                      );
+                    }
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="period-select">Montant minimum</Label>
             <Input
               type="number"
               placeholder="Montant minimum..."
@@ -101,32 +200,8 @@ export function TableOptions({
               className="w-full pl-10"
             />
           </div>
-
-          {/* Filtre par date de dépense */}
-          <div className="relative">
-            <Input
-              type="date"
-              placeholder="Date de dépense..."
-              value={filters.expenseDate}
-              onChange={(e) =>
-                handleTextFilterChange("expenseDate", e.target.value)
-              }
-              className="w-full pl-10"
-            />
-          </div>
         </div>
-
-        {/* Bouton d'ajout */}
-        <div className="flex gap-2">
-          <Button
-            onClick={() => modalHandlers.setAddOpen(true)}
-            className="flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Ajouter une dépense
-          </Button>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

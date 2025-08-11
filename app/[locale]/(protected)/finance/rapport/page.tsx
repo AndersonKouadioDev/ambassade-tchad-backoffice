@@ -1,21 +1,9 @@
 import { getTranslations } from "next-intl/server";
-import { DepensesStatsGrid } from "@/features/depense/components/depense-stats-grid";
-import { prefetchDepenseStatsQuery } from "@/features/depense/queries/depense-stats.query";
-import { DepenseList } from "@/features/depense/components/depense-list";
-import { prefetchDepensesListQuery } from "@/features/depense/queries/depense-list.query";
 import { BookOpen } from "lucide-react";
+import { Dashboard } from "./Dashboard";
 
 export default async function DepenseListPage() {
-  const t = await getTranslations("finance.depenses");
-
-  // Précharger les données
-  await Promise.all([
-    prefetchDepenseStatsQuery(),
-    prefetchDepensesListQuery({
-      page: 1,
-      limit: 10,
-    }),
-  ]);
+  const t = await getTranslations("finance.rapport");
 
   return (
     <div className="space-y-8">
@@ -33,8 +21,7 @@ export default async function DepenseListPage() {
           </div>
         </div>
       </div>
-      <DepensesStatsGrid />
-      <DepenseList />
+      <Dashboard />
     </div>
   );
 }
