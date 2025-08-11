@@ -1,24 +1,69 @@
-import { PaginatedResponse } from "@/types";
 import { api } from "@/lib/api";
-import { ICategorieDepense } from "../types/categorie-depense.type";
+import { SearchParams } from "ak-api-http";
+import { CategorieDepenseCreateDTO, CategorieDepenseUpdateDTO } from "../schemas/categorie-depense.schema";
+import { ICategorieDepense, ICategorieDepenseParams, ICategorieDepenseStatsResponse } from "../types/categorie-depense.type";
 
 export interface ICategorieDepenseAPI {
-    obtenirToutesCategoriesDepenses(): Promise<PaginatedResponse<ICategorieDepense>>;
-    obtenirCategoriesActives(): Promise<PaginatedResponse<ICategorieDepense>>;
+    create(dto: CategorieDepenseCreateDTO): Promise<ICategorieDepense>;
+    obtenirToutesCategoriesDepenses(params: ICategorieDepenseParams): Promise<ICategorieDepense[]>;
+    obtenirCategoriesActives(params: ICategorieDepenseParams): Promise<ICategorieDepense[]>;
+    getStats(): Promise<ICategorieDepenseStatsResponse>;
+    findOne(id: string): Promise<ICategorieDepense>;
+    update(id: string, dto: CategorieDepenseUpdateDTO): Promise<ICategorieDepense>;
+    remove(id: string): Promise<ICategorieDepense>;
 }
 
 export const categorieDepenseAPI: ICategorieDepenseAPI = {
-    async obtenirToutesCategoriesDepenses(): Promise<PaginatedResponse<ICategorieDepense>> {
-        return await api.request<PaginatedResponse<ICategorieDepense>>({
+    async create(dto: CategorieDepenseCreateDTO): Promise<ICategorieDepense> {
+        return await api.request<ICategorieDepense>({
             endpoint: `/expense-categories`,
+            method: "POST",
+            data: dto,
+        });
+    },
+
+    async obtenirToutesCategoriesDepenses(params: ICategorieDepenseParams): Promise<ICategorieDepense[]> {
+        return await api.request<ICategorieDepense[]>({
+            endpoint: `/expense-categories`,
+            method: "GET",
+            searchParams: params as SearchParams,
+        });
+    },
+
+    async obtenirCategoriesActives(params: ICategorieDepenseParams): Promise<ICategorieDepense[]> {
+        return await api.request<ICategorieDepense[]>({
+            endpoint: `/expense-categories`,
+            method: "GET",
+            searchParams: { ...params, isActive: true },
+        });
+    },
+
+    async getStats(): Promise<ICategorieDepenseStatsResponse> {
+        return await api.request<ICategorieDepenseStatsResponse>({
+            endpoint: `/expense-categories/stats`,
             method: "GET",
         });
     },
 
-    async obtenirCategoriesActives(): Promise<PaginatedResponse<ICategorieDepense>> {
-        return await api.request<PaginatedResponse<ICategorieDepense>>({
-            endpoint: `/expense-categories/active`,
+    async findOne(id: string): Promise<ICategorieDepense> {
+        return await api.request<ICategorieDepense>({
+            endpoint: `/expense-categories/${id}`,
             method: "GET",
         });
     },
-}
+
+    async update(id: string, dto: CategorieDepenseUpdateDTO): Promise<ICategorieDepense> {
+        return await api.request<ICategorieDepense>({
+            endpoint: `/expense-categories/${id}`,
+            method: "PATCH",
+            data: dto,
+        });
+    },
+
+    async remove(id: string): Promise<ICategorieDepense> {
+        return await api.request<ICategorieDepense>({
+            endpoint: `/expense-categories/${id}`,
+            method: "DELETE",
+        });
+    },
+};

@@ -53,7 +53,7 @@ const LoginForm = () => {
           description: response.message,
         });
       } else {
-        router.push("/dashboard/analytics");
+        window.location.href = "/dashboard/analytics";
         toast.success("Connexion réussie");
       }
     });

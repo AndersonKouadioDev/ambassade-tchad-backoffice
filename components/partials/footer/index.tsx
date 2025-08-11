@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Icon } from "@/components/ui/icon";
 import { auth } from "@/lib/auth";
 import { siteConfig } from "@/config/site";
+import { getFullUrlFile } from "@/utils/getFullUrlFile";
 
 const BackOfficeFooter = async () => {
   const session = await auth();
@@ -44,8 +45,12 @@ const BackOfficeFooter = async () => {
         >
           <div className="h-[50px] w-[50px] rounded-full relative left-[0px] top-[0px] custom-dropshadow">
             <Image
-              src={session?.user?.image as string}
-              alt={session?.user?.name?.charAt(0) as string}
+              src={
+                session?.user?.image
+                  ? getFullUrlFile(session?.user?.image)
+                  : "/images/all-img/user3.png"
+              }
+              alt={session?.user?.name?.charAt(0) ?? "User"}
               width={50}
               height={50}
               className="w-full h-full rounded-full border-2"

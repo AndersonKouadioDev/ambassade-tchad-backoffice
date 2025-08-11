@@ -26,9 +26,6 @@ export function DemandeList() {
     handleTextFilterChange,
     handleEnumFilterChange,
     handleDateFilterChange,
-    modalStates,
-    modalHandlers,
-    currentDemande,
     filters,
   } = useDemandeListTable({ columns });
 
@@ -38,7 +35,6 @@ export function DemandeList() {
         handleTextFilterChange={handleTextFilterChange}
         handleEnumFilterChange={handleEnumFilterChange}
         handleDateFilterChange={handleDateFilterChange}
-        modalHandlers={modalHandlers}
         filters={filters}
       />
 

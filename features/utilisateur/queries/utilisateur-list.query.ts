@@ -39,7 +39,7 @@ export const useUtilisateursListQuery = (
     React.useEffect(() => {
         if (query.isError && query.error) {
             toast.error("Erreur lors de la récupération des utilisateurs:", {
-                description: query.error instanceof Error ? query.error.message : "Erreur inconnue",
+                description: query.error.message,
             });
         }
     }, [query]);

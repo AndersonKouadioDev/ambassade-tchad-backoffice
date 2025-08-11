@@ -17,6 +17,7 @@ export interface IDepense {
 export interface IDepensesParams {
   page?: number;
   limit?: number;
+  recordedBy?: string;
   category?: string;
   amount?: number;
   expenseDate?: string;

@@ -6,3 +6,14 @@ export interface ICategorieDepense {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface ICategorieDepenseParams {
+    name?: string;
+    isActive?: boolean;
+}
+
+export interface ICategorieDepenseStatsResponse {
+    total: number,
+    isActive: number,
+    isNotActive: number,
+}

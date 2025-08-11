@@ -11,11 +11,12 @@ import {
 } from "@/components/ui/table";
 import TablePagination from "./table-pagination";
 import { columnsDepenses } from "./column";
-import { useDepenseListTable } from "../../hooks/depenseListTable";
+import { useDepenseList } from "../../hooks/use-depense-list";
 import { TableOptions } from "./table-options";
 import { Loader2 } from "lucide-react";
 import { TableIndicatorFetching } from "./table-indicator-fetching";
-import { DepenseAddModal } from "../depense-modal/depense-add-modal";
+import { DepenseAddUpdateModal } from "../depense-modal/depense-add-update-modal";
+import { DepenseDeleteModal } from "../depense-modal/depense-delete-modal";
 
 export function DepenseList() {
   const columns = columnsDepenses;
@@ -30,7 +31,8 @@ export function DepenseList() {
     modalStates,
     modalHandlers,
     filters,
-  } = useDepenseListTable({ columns });
+    currentDepense,
+  } = useDepenseList({ columns });
 
   return (
     <div className="w-full">
@@ -125,25 +127,21 @@ export function DepenseList() {
       <TablePagination table={table} />
 
       {/* Modales */}
-      <DepenseAddModal
+      <DepenseAddUpdateModal
         isOpen={modalStates.addOpen}
         setIsOpen={modalHandlers.setAddOpen}
+        depense={currentDepense}
       />
 
-      {/* {currentDepense && (
+      {currentDepense && (
         <>
-          <DepenseUpdateModal
-            isOpen={modalStates.editOpen}
-            setIsOpen={modalHandlers.setEditOpen}
-            depense={currentDepense}
-          />
           <DepenseDeleteModal
             isOpen={modalStates.deleteOpen}
             setIsOpen={modalHandlers.setDeleteOpen}
             depense={currentDepense}
           />
         </>
-      )} */}
+      )}
     </div>
   );
 }

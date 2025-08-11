@@ -47,7 +47,7 @@ export const columns: ColumnDef<DataProps>[] = [
 
       return (
         <div className="flex gap-3 items-center font-medium text-card-foreground/80">
-          <Avatar className="w-8 h-8">
+          <Avatar className="w-8 h-8 border border-default-600">
             <AvatarFallback>
               {user.firstName ? user.firstName.charAt(0) : ""}
               {user.lastName ? user.lastName.charAt(0) : ""}
@@ -68,17 +68,11 @@ export const columns: ColumnDef<DataProps>[] = [
     header: "Type de Service",
     cell: ({ row }) => {
       const serviceType = row.getValue<ServiceType>("serviceType");
-      const { label: serviceTypeName, style: serviceTypeStyle } =
-        getServiceTypeLabel(serviceType);
+      const { label, style } = getServiceTypeLabel(serviceType);
 
       return (
-        <Badge
-          className={cn(
-            "rounded-full px-4 py-1 text-xs capitalize",
-            serviceTypeStyle
-          )}
-        >
-          {serviceTypeName}
+        <Badge className={cn("text-xs text-center capitalize", style)}>
+          {label}
         </Badge>
       );
     },
@@ -88,17 +82,11 @@ export const columns: ColumnDef<DataProps>[] = [
     header: "Statut",
     cell: ({ row }) => {
       const status = row.getValue<DemandeStatus>("status");
-      const { label: statusName, style: statusStyle } =
-        getDemandeStatusLabel(status);
+      const { label, style } = getDemandeStatusLabel(status);
 
       return (
-        <Badge
-          className={cn(
-            "rounded-full px-4 py-1 text-xs capitalize",
-            statusStyle
-          )}
-        >
-          {statusName}
+        <Badge className={cn("text-xs text-center capitalize", style)}>
+          {label}
         </Badge>
       );
     },
@@ -134,68 +122,14 @@ export const columns: ColumnDef<DataProps>[] = [
       const demande = row.original as DataProps;
       const meta = table.options.meta as {
         onView: (demande: DataProps) => void;
-        onUpdateStatus: (demande: DataProps) => void;
-        onDelete: (demande: DataProps) => void;
       };
 
       return (
         <div className="flex gap-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => meta.onView(demande)}
-                  className="w-7 h-7"
-                >
-                  <Eye className="w-4 h-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Voir Détails</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          {![
-            DemandeStatus.DELIVERED,
-            DemandeStatus.ARCHIVED,
-            DemandeStatus.EXPIRED,
-            DemandeStatus.REJECTED,
-          ].includes(demande.status) && (
-            <>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => meta.onUpdateStatus(demande)}
-                      className="w-7 h-7"
-                    >
-                      <SquarePen className="w-3 h-3" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Mettre à Jour Statut</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => meta.onDelete(demande)}
-                      className="w-7 h-7"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Supprimer</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </>
-          )}
+          <Button size="sm" onClick={() => meta.onView(demande)}>
+            <SquarePen className="mr-2 h-4 w-4" />
+            Traiter
+          </Button>
         </div>
       );
     },

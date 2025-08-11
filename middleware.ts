@@ -16,7 +16,7 @@ export default async function middleware(req: NextRequest) {
 
   if (process.env.NODE_ENV === "development") {
     console.log(`Page dans le middleware : "${pathWithoutLocale}"`)
-    console.log(session)
+    console.log({session})
   };
 
   if (pathWithoutLocale.startsWith("/api/auth")) {

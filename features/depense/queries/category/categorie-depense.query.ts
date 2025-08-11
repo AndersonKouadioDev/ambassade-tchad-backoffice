@@ -4,18 +4,19 @@ import {
     useQuery,
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
-import { obtenirCategoriesDepensesAction } from '../../actions/depense.action';
+import { obtenirCategoriesDepensesAction } from '../../actions/categorie-depense.action';
 import { categorieDepenseKeyQuery } from './index.query';
 import { toast } from 'sonner';
+import { ICategorieDepenseParams } from '../../types/categorie-depense.type';
 
 const queryClient = getQueryClient();
 
 //1- Option de requête optimisée
-export const categorieDepenseListQueryOption = () => {
+export const categorieDepenseListQueryOption = ({ params }: { params: ICategorieDepenseParams }) => {
     return {
         queryKey: categorieDepenseKeyQuery("list"),
         queryFn: async () => {
-            const result = await obtenirCategoriesDepensesAction();
+            const result = await obtenirCategoriesDepensesAction(params);
             if (!result.success) {
                 throw new Error(result.error || "Erreur lors de la récupération des dépenses");
             }
@@ -29,8 +30,8 @@ export const categorieDepenseListQueryOption = () => {
 };
 
 //2- Hook pour récupérer les dépenses
-export const useCategorieDepensesListQuery = () => {
-    const query = useQuery(categorieDepenseListQueryOption());
+export const useCategorieDepensesListQuery = ({ params }: { params: ICategorieDepenseParams }) => {
+    const query = useQuery(categorieDepenseListQueryOption({ params }));
 
     // Gestion des erreurs dans le hook
     React.useEffect(() => {
@@ -45,6 +46,6 @@ export const useCategorieDepensesListQuery = () => {
 };
 
 //3- Fonction pour précharger les dépenses appelée dans les pages
-export const prefetchCategoriesDepensesListQuery = () => {
-    return queryClient.prefetchQuery(categorieDepenseListQueryOption());
+export const prefetchCategoriesDepensesListQuery = ({ params }: { params: ICategorieDepenseParams }) => {
+    return queryClient.prefetchQuery(categorieDepenseListQueryOption({ params }));
 }

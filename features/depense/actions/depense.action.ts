@@ -1,8 +1,8 @@
+"use server";
+
 import { ActionResponse, PaginatedResponse } from "@/types";
 import { depenseAPI } from "../apis/depense.api";
-import { categorieDepenseAPI } from "../apis/categorie-depense.api";
 import { IDepense, IDepensesParams, IDepenseStatsResponse } from "../types/depense.type";
-import { ICategorieDepense } from "../types/categorie-depense.type";
 import { handleServerActionError } from "@/utils/handleServerActionError";
 import { DepenseCreateDTO, DepenseUpdateDTO } from "../schemas/depense.schema";
 
@@ -81,18 +81,5 @@ export const obtenirStatsDepensesAction = async (): Promise<ActionResponse<IDepe
         }
     } catch (error) {
         return handleServerActionError(error, "Erreur lors de la récupération des stats dépenses");
-    }
-}
-
-export const obtenirCategoriesDepensesAction = async (): Promise<ActionResponse<PaginatedResponse<ICategorieDepense>>> => {
-    try {
-        const response = await categorieDepenseAPI.obtenirToutesCategoriesDepenses();
-        return {
-            success: true,
-            data: response,
-            message: "Categories dépenses obtenues avec succès",
-        }
-    } catch (error) {
-        return handleServerActionError(error, "Erreur lors de la récupération des categories dépenses");
     }
 }

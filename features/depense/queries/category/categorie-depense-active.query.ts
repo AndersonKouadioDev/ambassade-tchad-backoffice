@@ -4,18 +4,19 @@ import {
     useQuery,
 } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
-import { obtenirCategoriesDepensesAction } from '../../actions/depense.action';
+import { obtenirCategoriesDepensesActiveAction } from '../../actions/categorie-depense.action';
 import { categorieDepenseKeyQuery } from './index.query';
 import { toast } from 'sonner';
+import { ICategorieDepenseParams } from '../../types/categorie-depense.type';
 
 const queryClient = getQueryClient();
 
 //1- Option de requête pour les catégories actives
-export const categoriesActivesQueryOption = () => {
+export const categoriesDepensesActivesListQueryOption = ({ params }: { params: ICategorieDepenseParams }) => {
     return {
         queryKey: categorieDepenseKeyQuery("categories-actives"),
         queryFn: async () => {
-            const result = await obtenirCategoriesDepensesAction();
+            const result = await obtenirCategoriesDepensesActiveAction(params);
             if (!result.success) {
                 throw new Error(result.error || "Erreur lors de la récupération des catégories");
             }
@@ -29,8 +30,8 @@ export const categoriesActivesQueryOption = () => {
 };
 
 //2- Hook pour récupérer les catégories actives
-export const useCategoriesActivesQuery = () => {
-    const query = useQuery(categoriesActivesQueryOption());
+export const useCategoriesDepensesActivesListQuery = ({ params }: { params: ICategorieDepenseParams }) => {
+    const query = useQuery(categoriesDepensesActivesListQueryOption({ params }));
 
     // Gestion des erreurs dans le hook
     React.useEffect(() => {
@@ -45,6 +46,6 @@ export const useCategoriesActivesQuery = () => {
 };
 
 //3- Fonction pour précharger les catégories
-export const prefetchCategoriesActivesQuery = () => {
-    return queryClient.prefetchQuery(categoriesActivesQueryOption());
+export const prefetchCategoriesDepensesActivesListQuery = ({ params }: { params: ICategorieDepenseParams }) => {
+    return queryClient.prefetchQuery(categoriesDepensesActivesListQueryOption({ params }));
 }

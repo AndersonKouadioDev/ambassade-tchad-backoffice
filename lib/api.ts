@@ -25,6 +25,8 @@ export const api = new Api({
       accessToken: "",
     }
   },// Récupération du token
-  signOut: logout, // Déconnexion automatique si la requête échoue avec un code 401
+  signOut: async () => {
+    // logout()
+  }, // Déconnexion automatique si la requête échoue avec un code 401
   debug: true, // Debug activé en mode développement
 });

@@ -2,8 +2,8 @@ import { IDepense } from "../types/depense.type";
 import { DepenseCreateDTO, DepenseUpdateDTO } from "../schemas/depense.schema";
 import { PaginatedResponse } from "@/types";
 import { SearchParams } from "ak-api-http";
-import { IDepensesParams } from "../types/depense.type";
 import { api } from "@/lib/api";
+import { IDepensesParams } from "../types/depense.type";
 import { IDepenseStatsResponse } from "../types/depense.type";
 
 export interface IDepenseAPI {

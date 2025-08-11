@@ -16,7 +16,7 @@ export interface IDepenseListTableProps {
     columns: ColumnDef<IDepense>[];
 }
 
-export function useDepenseListTable({ columns }: IDepenseListTableProps) {
+export function useDepenseList({ columns }: IDepenseListTableProps) {
     // États pour le tri et la visibilité des colonnes et la sélection des lignes
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -31,7 +31,7 @@ export function useDepenseListTable({ columns }: IDepenseListTableProps) {
             page: filters.page,
             limit: filters.limit,
             category: filters.category,
-            title: filters.title,
+            description: filters.description,
             amount: filters.amount,
             expenseDate: filters.expenseDate,
         };
@@ -45,23 +45,17 @@ export function useDepenseListTable({ columns }: IDepenseListTableProps) {
 
     // États et gestionnaires pour les modales
     const [addOpen, setAddOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [lockUnlockOpen, setLockUnlockOpen] = useState(false);
-    const [currentUser, setCurrentUser] = useState<IDepense | null>(null);
+    const [currentDepense, setCurrentDepense] = useState<IDepense | null>(null);
 
-    const handleLockUnlockUser = useCallback((user: IDepense) => {
-        setCurrentUser(() => user);
-        setLockUnlockOpen(true);
+    const handleEditDepense = useCallback((depense: IDepense) => {
+        setCurrentDepense(() => depense);
+        setAddOpen(true);
     }, []);
 
-    const handleEditUser = useCallback((user: IDepense) => {
-        setCurrentUser(() => user);
-        setEditOpen(true);
-    }, []);
-
-    const handleDeleteUser = useCallback((user: IDepense) => {
-        setCurrentUser(() => user);
+    const handleDeleteDepense = useCallback((depense: IDepense) => {
+        setCurrentDepense(() => depense);
         setDeleteOpen(true);
     }, []);
 
@@ -70,7 +64,7 @@ export function useDepenseListTable({ columns }: IDepenseListTableProps) {
      * Nuqs throttle automatiquement les mises à jour URL/serveur
      */
     const handleTextFilterChange = useCallback((
-        filterName: 'title' | 'category' | 'amount' | 'expenseDate',
+        filterName: 'description' | 'category' | 'amount' | 'expenseDate',
         value: string
     ) => {
         setFilters(prev => ({
@@ -85,7 +79,7 @@ export function useDepenseListTable({ columns }: IDepenseListTableProps) {
      * Pas de throttling nécessaire pour ces filtres (changements moins fréquents)
      */
     const handleEnumFilterChange = useCallback((
-        filterName: 'status',
+        filterName: 'category',
         value: string
     ) => {
         setFilters(prev => ({
@@ -124,9 +118,8 @@ export function useDepenseListTable({ columns }: IDepenseListTableProps) {
             }));
         },
         meta: {
-            onEdit: handleEditUser,
-            onDelete: handleDeleteUser,
-            onLockUnlock: handleLockUnlockUser,
+            onEdit: handleEditDepense,
+            onDelete: handleDeleteDepense,
         },
     });
 
@@ -141,16 +134,14 @@ export function useDepenseListTable({ columns }: IDepenseListTableProps) {
         modalStates: {
             addOpen,
             lockUnlockOpen,
-            editOpen,
             deleteOpen,
         },
         modalHandlers: {
             setAddOpen,
             setLockUnlockOpen,
-            setEditOpen,
             setDeleteOpen,
         },
-        currentUser,
+        currentDepense,
         filters,
     };
 }

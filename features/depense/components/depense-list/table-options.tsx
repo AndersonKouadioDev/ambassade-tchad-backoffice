@@ -1,49 +1,98 @@
 "use client";
+
 import { Input } from "@/components/ui/input";
-import { useDepenseListTable } from "../../hooks/depenseListTable";
+import { useDepenseList } from "../../hooks/use-depense-list";
 import { Button } from "@/components/ui/button";
-import { Plus, Search, Filter, Calendar, DollarSign } from "lucide-react";
+import { Plus } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useCategoriesDepensesActivesListQuery } from "../../queries/category/categorie-depense-active.query";
 
 export function TableOptions({
   handleTextFilterChange,
+  handleEnumFilterChange,
   modalHandlers,
   filters,
 }: Pick<
-  ReturnType<typeof useDepenseListTable>,
+  ReturnType<typeof useDepenseList>,
   | "handleTextFilterChange"
   | "handleEnumFilterChange"
   | "modalHandlers"
   | "filters"
 >) {
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useCategoriesDepensesActivesListQuery({ params: {} });
+
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between py-4 px-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3 w-full">
           {/* Filtre par description */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               placeholder="Filtrer par description..."
-              value={filters.title}
-              onChange={(e) => handleTextFilterChange("title", e.target.value)}
+              value={filters.description}
+              onChange={(e) =>
+                handleTextFilterChange("description", e.target.value)
+              }
               className="w-full pl-10"
             />
           </div>
 
           {/* Filtre par nom de catégorie */}
+
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Filtrer par catégorie..."
+            <Select
+              onValueChange={(value) =>
+                handleEnumFilterChange("category", value)
+              }
               value={filters.category}
-              onChange={(e) => handleTextFilterChange("category", e.target.value)}
-              className="w-full pl-10"
-            />
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue
+                  placeholder={
+                    categoriesLoading
+                      ? "Chargement des catégories..."
+                      : categoriesError
+                      ? "Erreur de chargement"
+                      : "Filtrer par catégorie"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent position="item-aligned">
+                <SelectItem value="_all_">Toutes les catégories</SelectItem>
+                {categories && categories.length > 0 ? (
+                  categories.map((cat: any) => (
+                    <SelectItem key={cat.id} value={cat.name}>
+                      {cat.name}
+                      {cat.description && (
+                        <span className="text-gray-500 text-xs ml-2">
+                          - {cat.description}
+                        </span>
+                      )}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem disabled value="none">
+                    {categoriesLoading
+                      ? "Chargement des catégories..."
+                      : "Aucune catégorie disponible"}
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Filtre par montant minimum */}
           <div className="relative">
-            <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="number"
               placeholder="Montant minimum..."
@@ -55,12 +104,13 @@ export function TableOptions({
 
           {/* Filtre par date de dépense */}
           <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="date"
               placeholder="Date de dépense..."
               value={filters.expenseDate}
-              onChange={(e) => handleTextFilterChange("expenseDate", e.target.value)}
+              onChange={(e) =>
+                handleTextFilterChange("expenseDate", e.target.value)
+              }
               className="w-full pl-10"
             />
           </div>

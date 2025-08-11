@@ -50,23 +50,9 @@ export function useDemandeListTable({ columns }: IDemandeListTableProps) {
     const demandes = data?.data || [];
     const totalPages = data?.meta?.totalPages || 1;
 
-    const [updateStatusOpen, setUpdateStatusOpen] = useState(false);
-    const [deleteOpen, setDeleteOpen] = useState(false);
-    const [currentDemande, setCurrentDemande] = useState<IDemande | null>(null);
-
     const handleViewDemande = useCallback((demande: IDemande) => {
         router.push(`/demande/${demande.ticketNumber}`);
     }, [router]);
-
-    const handleUpdateDemandeStatus = useCallback((demande: IDemande) => {
-        setCurrentDemande(demande);
-        setUpdateStatusOpen(true);
-    }, []);
-
-    const handleDeleteDemande = useCallback((demande: IDemande) => {
-        setCurrentDemande(demande);
-        setDeleteOpen(true);
-    }, []);
 
     /**
      * Handles changes for textual filter fields.
@@ -93,7 +79,7 @@ export function useDemandeListTable({ columns }: IDemandeListTableProps) {
     ) => {
         setFilters(prev => ({
             ...prev,
-            [filterName]: value === "_all_" ? undefined : (value as DemandeStatus | ServiceType),
+            [filterName]: value === "_all_" ? "" : (value as DemandeStatus | ServiceType),
             page: 1,
         }));
     }, [setFilters]);
@@ -141,8 +127,6 @@ export function useDemandeListTable({ columns }: IDemandeListTableProps) {
         },
         meta: {
             onView: handleViewDemande,
-            onUpdateStatus: handleUpdateDemandeStatus,
-            onDelete: handleDeleteDemande,
         },
     });
 
@@ -155,15 +139,6 @@ export function useDemandeListTable({ columns }: IDemandeListTableProps) {
         handleTextFilterChange,
         handleEnumFilterChange,
         handleDateFilterChange,
-        modalStates: {
-            updateStatusOpen,
-            deleteOpen,
-        },
-        modalHandlers: {
-            setUpdateStatusOpen,
-            setDeleteOpen,
-        },
-        currentDemande,
         filters,
     };
 }
