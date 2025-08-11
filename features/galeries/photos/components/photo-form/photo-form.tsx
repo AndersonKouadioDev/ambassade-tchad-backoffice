@@ -1,49 +1,52 @@
 "use client";
 
-import React, { useState, useRef, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, X,Trash2, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { processAndValidateFormData } from "ak-zod-form-kit";
-import { PhotoDTO, photoSchema } from "../../schemas/photo.schema";
-import { createPhoto, updatePhoto } from "../../actions/photo.action";
-import { IPhoto } from "../../types/photo.type";
+import { ImageDragDrop, ImageFile } from "@/components/blocks/image-drap-drop";
+import { getFullUrlFile } from "@/utils/getFullUrlFile";
 import { Button } from "@/components/ui/button";
-
-//
+import { usePhotoDetailQuery } from "../../queries/photo-details.query";
+import { PhotoDTO, photoSchema } from "../../schemas/photo.schema";
+import { usePhotoCreateMutation, usePhotoUpdateMutation } from "../../queries/photo.mutation";
 
 interface PhotoFormProps {
-  photo?: IPhoto;
+  id?: string;
 }
 
-interface ImageFile {
-  id: string;
-  file: File;
-  preview: string;
-  name: string;
+// Interface pour différencier les images existantes des nouvelles
+export interface ExistingImageFile extends Omit<ImageFile, "file"> {
+  file?: File;
+  url: string;
+  isExisting: true;
 }
 
-// TODO: Ajouter les images dans le formulaire
+export interface NewImageFile extends ImageFile {
+  file: any;
+  isExisting: false;
+}
 
-export const PhotoForm: React.FC<PhotoFormProps> = ({ photo }) => {
-  const [isLoading, startTransition] = useTransition();
+export type MixedImageFile = ExistingImageFile | NewImageFile;
+
+export const PhotoForm: React.FC<PhotoFormProps> = ({
+  id,
+}) => {
+  // Récupération de la photo si id est fourni
+  const { data: photo } = usePhotoDetailQuery(id!);
+
   const router = useRouter();
-  const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [imageFiles, setImageFiles] = useState<MixedImageFile[]>([]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
     setValue,
   } = useForm<PhotoDTO>({
     resolver: zodResolver(photoSchema),
@@ -53,85 +56,66 @@ export const PhotoForm: React.FC<PhotoFormProps> = ({ photo }) => {
     },
   });
 
-  const handleCancel = () => {
-    router.push("/contenu/photo");
-  };
+  useEffect(() => {
+    if (photo) {
+      setValue("title", photo.title);
+      setValue("description", photo.description);
 
-  // TODO: Ajouter les images dans le formulaire
+      // Mapper les images existantes
+      const existingImages: ExistingImageFile[] =
+        photo?.imageUrl?.map((imageUrl, index) => ({
+          id: `existing-${index}`,
+          url: getFullUrlFile(imageUrl),
+          preview: getFullUrlFile(imageUrl),
+          name: imageUrl.split("/").pop() || `Image ${index + 1}`,
+          isExisting: true,
+        })) || [];
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const newImageFiles: ImageFile[] = Array.from(files).map(
-        (file, index) => ({
-          id: `file-${Date.now()}-${index}`,
-          file,
-          preview: URL.createObjectURL(file),
-          name: file.name,
-        })
-      );
-
-      setImageFiles((prev) => [...prev, ...newImageFiles]);
+      setImageFiles(existingImages);
     }
+  }, [photo, setValue]);
+
+  const handleCancel = () => {
+    router.push("/contenu/galerie-photo");
   };
 
-  const handleImageRemove = (id: string) => {
-    setImageFiles((prev) => prev.filter((img) => img.id !== id));
-  };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+  // Hook de mutations
+  const {
+    mutateAsync: photoCreateMutation,
+    isPending: photoCreatePending,
+  } = usePhotoCreateMutation();
 
-    const newImageFiles: ImageFile[] = imageFiles.map((file, index) => ({
-      id: `drop-${Date.now()}-${index}`,
-      file,
-      preview: URL.createObjectURL(file),
-      name: file.name,
-    }));
+  const {
+    mutateAsync: photoUpdateMutation,
+    isPending: photoUpdatePending,
+  } = usePhotoUpdateMutation();
 
-    setImageFiles((prev) => [...prev, ...newImageFiles]);
-  };
+  const isLoading = photoCreatePending || photoUpdatePending;
 
   const onSubmitForm = async (data: PhotoDTO) => {
-    startTransition(async () => {
-      const images: File[] = imageFiles.map((file) => file.file);
+    try {
+      const newImages: File[] = imageFiles
+        .filter((imageFile): imageFile is NewImageFile => !imageFile.isExisting)
+        .map((newImage) => newImage.file);
+
       const submitData = {
         title: data.title,
         description: data.description,
-        images,
+        images: newImages.length > 0 ? newImages : undefined,
       };
 
-      let res: { success: boolean; message: string };
-
-      const result = processAndValidateFormData(photoSchema, submitData, {
-        outputFormat: "formData",
-      });
-
-      if (!result.success) {
-        toast.error(
-          result.errorsInString || "Des erreurs de validation sont survenues."
-        );
-      }
-      const cretedFormData = createFormData(submitData);
       if (photo) {
-        res = await updatePhoto(photo.id, cretedFormData as FormData);
+        await photoUpdateMutation({ id: photo.id, data: submitData });
       } else {
-        res = await createPhoto(result.data as FormData);
+        await photoCreateMutation(submitData);
       }
 
-      if (res.success) {
-        toast.success(res.message);
-        router.push("/contenu/photo");
-      } else {
-        toast.error(res.message);
-      }
-    });
+      router.push("/contenu/galerie-photo");
+    } catch (error) {
+      console.error("Erreur lors de la soumission:", error);
+    }
   };
 
   return (
@@ -173,129 +157,20 @@ export const PhotoForm: React.FC<PhotoFormProps> = ({ photo }) => {
           </div>
 
           {/* Images */}
-          <div className="space-y-4">
-            <Label>Images</Label>
+          <ImageDragDrop
+            imageFiles={imageFiles}
+            setImageFiles={setImageFiles}
+            isUpdateMode={!!photo}
+          />
 
-            {/* Zone d'upload */}
-            <div
-              className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer"
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                accept="image/*"
-                name="images"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
+          
 
-              <div className="space-y-4">
-                <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                  <Upload className="w-8 h-8 text-gray-400" />
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Glissez-déposez vos images ici
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    ou cliquez pour sélectionner des fichiers image
-                  </p>
-                  <p className="text-xs text-gray-400 mt-2">
-                    Seuls les fichiers image sont acceptés
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-                  <span>Formats supportés :</span>
-                  <Badge className="text-xs">JPG</Badge>
-                  <Badge className="text-xs">PNG</Badge>
-                </div>
-              </div>
-            </div>
-
-            {/* Images affichées */}
-            {imageFiles.length > 0 && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-medium">
-                    Images sélectionnées ({imageFiles.length})
-                  </h4>
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => setImageFiles([])}
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Tout supprimer
-                  </Button>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {imageFiles.map((imageFile) => (
-                    <div key={imageFile.id} className="relative group">
-                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                        <Image
-                          src={imageFile.preview}
-                          alt={imageFile.name}
-                          fill
-                          className="w-full h-full object-cover"
-                        />
-
-                        {/* Overlay avec actions */}
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <div className="flex gap-2">
-                            <Button
-                              type="button"
-                              color="secondary"
-                              size="sm"
-                              className="w-8 h-8 p-0 "
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open(imageFile.preview, "_blank");
-                              }}
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              type="button"
-                              color="danger"
-                              size="sm"
-                              className="w-4 h-8 p-0"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleImageRemove(imageFile.id);
-                              }}
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Nom du fichier */}
-                      <p className="text-xs text-gray-600 mt-1 truncate text-center">
-                        {imageFile.name}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-         
           {/* Boutons d'action */}
           <div className="flex gap-3 justify-end">
             <Button type="button" variant="outline" onClick={handleCancel}>
               Annuler
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit"  disabled={isLoading}>
               {isLoading
                 ? "Enregistrement..."
                 : photo
@@ -308,76 +183,3 @@ export const PhotoForm: React.FC<PhotoFormProps> = ({ photo }) => {
     </Card>
   );
 };
-
-export function createFormData(formData: Record<string, unknown>): FormData {
-  const sendFormData = new FormData();
-
-  function appendFormData(key: string, value: unknown) {
-    // Cas null ou undefined
-    if (value === null || value === undefined) {
-      sendFormData.append(key, "");
-      return;
-    }
-
-    // Cas File
-    if (value instanceof File) {
-      sendFormData.append(key, value, value.name);
-      return;
-    }
-
-    // Cas Blob
-    if (value instanceof Blob) {
-      sendFormData.append(key, value);
-      return;
-    }
-
-    // Cas Date
-    if (value instanceof Date) {
-      sendFormData.append(key, value.toISOString());
-      return;
-    }
-
-    // Cas tableau
-    if (Array.isArray(value)) {
-      value.forEach((item, index) => {
-        // Pour les tableaux imbriqués ou objets dans les tableaux
-        if (Array.isArray(item) || isObject(item)) {
-          appendFormData(`${key}[${index}]`, item);
-        } else {
-          appendFormData(`${key}`, item);
-        }
-      });
-      return;
-    }
-
-    // Cas objet (excluant les types spéciaux déjà traités)
-    if (isObject(value)) {
-      Object.entries(value).forEach(([propertyKey, propertyValue]) => {
-        appendFormData(`${key}[${propertyKey}]`, propertyValue);
-      });
-      return;
-    }
-
-    // Cas des types primitifs (string, number, boolean)
-    sendFormData.append(key, String(value));
-  }
-
-  // Fonction utilitaire pour vérifier si une valeur est un objet
-  function isObject(value: unknown): value is Record<string, unknown> {
-    return (
-      typeof value === "object" &&
-      value !== null &&
-      !(value instanceof File) &&
-      !(value instanceof Blob) &&
-      !(value instanceof Date) &&
-      !Array.isArray(value)
-    );
-  }
-
-  // Traitement de chaque entrée du formData initial
-  Object.entries(formData).forEach(([key, value]) => {
-    appendFormData(key, value);
-  });
-
-  return sendFormData;
-}

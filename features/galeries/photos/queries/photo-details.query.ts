@@ -9,17 +9,17 @@ export const photoQueryOption = (id: string) => {
     return {
         queryKey: photoKeyQuery(id),
         queryFn: async () => {    
-            const data = await getPhotoDetailAction(id);
-            return data;
+            const result = await getPhotoDetailAction(id);
+            return result.data!;
         },
         enabled: !!id,
     };
 }
 // Hook pour récupérer une photo
-export const usePhoto = (id: string) => {
+export const usePhotoDetailQuery = (id: string) => {
     return useQuery(photoQueryOption(id));
 };
 // Hook pour précharger une photo
-export const prefetchPhoto = (id: string) => {
+export const prefetchPhotoDetailQuery = (id: string) => {
     return queryClient.prefetchQuery(photoQueryOption(id));
 }

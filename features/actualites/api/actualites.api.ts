@@ -53,7 +53,7 @@ export const actualiteAPI: IActualiteAPI = {
     update(id: string, formData: FormData): Promise<IActualite> {
         return api.request<IActualite>({
             endpoint: `/news/${id}`,
-            method: "PUT",
+            method: "PATCH",
             config: {
                 headers: {
                     "Content-Type": "multipart/form-data"

@@ -1,57 +1,44 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQueryStates } from 'nuqs';
-import { IPhotoRechercheParams } from "../types/photo.type";
-import { usePhotosList } from "../queries/photo-list.query";
 import { photoFiltersClient } from "../filters/photo.filters";
+import { IPhoto, IPhotoRechercheParams } from "../types/photo.type";
+import { usePhotosList } from "../queries/photo-list.query";
 
 export const usePhotoCardList = () => {
   // Gestion des paramètres d'URL via Nuqs
-  const [filters, setFilters] = useQueryStates(photoFiltersClient, {
-    clearOnDefault: true
-  });
+  const [filters, setFilters] = useQueryStates(photoFiltersClient.filter, photoFiltersClient.option);
 
   // Construction des paramètres de recherche par défaut pour React Query
   const currentSearchParams: IPhotoRechercheParams = useMemo(() => {
-    const params: IPhotoRechercheParams = {
+    return {
       page: Number(filters.page) || 1,
-      limit: Number(filters.limit) || 12,
-    };
-  
-    if (filters.title?.trim()) {
-      params.title = filters.title.trim();
+      limit: Number(filters.limit) || 10,
+      title: filters.title.trim(),
+      description: filters.description,
     }
-  
-    if (filters.description?.trim()) {
-      params.description = filters.description.trim();
-    }
-  
-    return params;
   }, [filters]);
 
+  // Recherche des  photos
   const { data, isLoading, error } = usePhotosList(currentSearchParams);
 
-  console.log('usePhotoCardList - React Query result:', { data, isLoading, error });
+  const [currentPhoto, setCurrentPhoto] = useState<IPhoto | null>(null);
 
-  const handleTextFilterChange =(filterName: 'title' | 'description', value: string) => {
+  const handleView = (photo: IPhoto) => {
+    setCurrentPhoto(photo);
+  }
+
+  const handleDelete = (photo: IPhoto) => {
+    setCurrentPhoto(photo);
+  }
+
+  const handleTextFilterChange = (filterName: 'title' | 'description', value: string) => {
     setFilters((prev: any) => ({
       ...prev,
       [filterName]: value,
-      page: 1, // Réinitialise à la première page
+      page: 1,
     }));
   };
 
-  // Extraction des données de pagination
-  const paginationData = {
-    data: Array.isArray((data as any)?.data) ? (data as any).data : [],
-    meta: (data as any)?.meta || {
-      page: 1,
-      limit: 12,
-      totalItems: 0,
-      totalPages: 1,
-    },
-  };
-
-  console.log('usePhotoCardList - paginationData:', paginationData);
 
   const handlePageChange = (page: number) => {
     setFilters((prev: any) => ({
@@ -64,24 +51,27 @@ export const usePhotoCardList = () => {
     setFilters((prev: any) => ({
       ...prev,
       limit,
-      page: 1, // Retour à la première page lors du changement de limite
+      page: 1,
     }));
   };
 
   return {
-    data: paginationData.data,
+    data: data?.data,
     isLoading,
     error,
     filters,
     pagination: {
-      currentPage: paginationData.meta.page,
-      totalPages: paginationData.meta.totalPages,
-      totalItems: paginationData.meta.totalItems,
-      itemsPerPage: paginationData.meta.limit,
+      currentPage: data?.meta.page,
+      totalPages: data?.meta.totalPages,
+      totalItems: data?.meta.total,
+      itemsPerPage: data?.meta.limit,
     },
     handleTextFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
+    handleView,
+    handleDelete,
+    currentPhoto,
   };
 };
 

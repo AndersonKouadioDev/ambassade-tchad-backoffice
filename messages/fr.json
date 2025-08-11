@@ -819,5 +819,26 @@
     "demandeur_actif": "Citoyens actifs",
     "demandeur_inactif": "Citoyens inactifs",
     "demandeur_banni": "Citoyens bannis"
+  },
+  "gestionDepense": {
+    "title": "Gestion des dépenses",
+    "total_depense": "Total des dépenses",
+    "depenses_mensuelles": "Dépenses mensuelles",
+    "depenses_annuelles": "Dépenses annuelles",
+    "depenses_hebdomadaires": "Dépenses hebdomadaires"
+  },
+  "gestionPhoto": {
+    "title": "Gestion des photos",
+    "total_photo": "Total des photos",
+    "photo_actif": "Photos actives",
+    "photo_inactif": "Photos inactives",
+    "photo_banni": "Photos bannies"
+  },
+  "gestionVideo": {
+    "title": "Gestion des vidéos",
+    "total_video": "Total des vidéos",
+    "video_actif": "Vidéos actives",
+    "video_inactif": "Vidéos inactives",
+    "video_banni": "Vidéos bannies"
   }
 }

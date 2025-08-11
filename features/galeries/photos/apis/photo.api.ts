@@ -55,7 +55,7 @@ export const photoAPI: IPhotoAPI = {
 
         return api.request<IPhoto>({
             endpoint: `/photos/${id}`,
-            method: "PUT",
+            method: "PATCH",
             config: {
                 headers: {
                     "Content-Type": "multipart/form-data"

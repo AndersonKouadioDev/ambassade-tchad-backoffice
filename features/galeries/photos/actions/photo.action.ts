@@ -1,49 +1,32 @@
 "use server";
-
+import { ActionResponse, PaginatedResponse } from "@/types";
+import { handleServerActionError } from "@/utils/handleServerActionError";
+import { IPhoto, IPhotoRechercheParams, IPhotoStats } from "../types/photo.type";
 import { photoAPI } from "../apis/photo.api";
-import { IPhotoRechercheParams } from "../types/photo.type";
 
 
-
-/**
- * Fonction pour créer un nouvel événement
- * @param formdata - Les données du formulaire à valider et envoyer
- * @returns Un objet indiquant le succès de l'opération et un message
- */
-export async function createPhoto(
+export async function createPhotoAction(
     formdata: FormData
-): Promise<{ success: boolean; message: string }> {
+): Promise<ActionResponse<IPhoto>> {
 
     try {
-        // Création de l'évènement
         const createdPhoto = await photoAPI.create(formdata);
-
-        if (!createdPhoto || !createdPhoto.id) {
-            return {
-                success: false,
-                message: "La création a échoué - réponse API invalide.",
-            };
-        }
 
         return {
             success: true,
-            message: "photo créée avec succès.",
+            data: createdPhoto,
+            message: "Photo créée avec succès.",
         };
-    } catch (apiError: any) {
-
-        return {
-            success: false,
-            message: apiError.message || "Erreur lors de la création de la photo.",
-        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la création de la photo.");
     }
 }
 
 
-// Mise à jour d'un Evenement existant
-export async function updatePhoto(
+export async function updatePhotoAction(
     id: string,
     formData: FormData
-): Promise<{ success: boolean; message: string }> {
+): Promise<ActionResponse<IPhoto>> {
 
     try {
 
@@ -51,54 +34,67 @@ export async function updatePhoto(
 
         return {
             success: true,
-            message: "photo mise à jour avec succès.",
+            data: updated,
+            message: "Photo mise à jour avec succès.",
         };
+
     } catch (apiError: any) {
-        return {
-            success: false,
-            message: apiError.message || "Erreur lors de la mise à jour de la photo.",
-        };
+        return handleServerActionError(apiError, "Erreur lors de la mise à jour de la photo.");
     }
 }
-// Suppression d'un Evenement
-export async function deletePhoto(
+
+export async function deletePhotoAction(
     id: string
-): Promise<{ success: boolean; message: string }> {
-    // Vérification de l'ID de l'evenement et verification de espace dans id
-    if (!id || id.trim() === "") {
-        return {
-            success: false,
-            message: "ID de la photo requis.",
-        };
-    }
+): Promise<ActionResponse<void>> {
+
     try {
         await photoAPI.delete(id);
         return {
             success: true,
-            message: "photo supprimée avec succès.",
+            message: "Photo supprimé avec succès.",
         };
     } catch (apiError: any) {
+        return handleServerActionError(apiError, "Erreur lors de la suppression de la photo.");
+    }
+}
+
+
+export async function getPhotoDetailAction(id: string): Promise<ActionResponse<IPhoto>> {
+    try {
+        const photo = await photoAPI.getById(id);
         return {
-            success: false,
-            message: apiError.message || "Erreur lors de la suppression de la photo.",
+            success: true,
+            data: photo,
+            message: "Photo récupérée avec succès.",
         };
+    } catch (apiError: any) {
+        return handleServerActionError(apiError, "Erreur lors de la récupération de la photo.");
     }
 }
 
-// Les gets sont appelés dans les queries
-
-export async function getPhotoDetailAction(id: string) {
-    if (!id || id.trim() === "") {
-        throw new Error("ID de la photo requis.");
+export async function getPhotoTousAction(params: IPhotoRechercheParams):
+    Promise<ActionResponse<PaginatedResponse<IPhoto>>> {
+    try {
+        const photos = await photoAPI.getAll(params);
+        return {
+            success: true,
+            data: photos,
+            message: "Photos récupérées avec succès.",
+        };
+    } catch (apiError: any) {
+        return handleServerActionError(apiError, "Erreur lors de la récupération des photos.");
     }
-    return photoAPI.getById(id);
 }
 
-export async function getPhotoTousAction(params: IPhotoRechercheParams) {
-    return photoAPI.getAll(params);
-}
-
-export async function getPhotoStatsAction() {
-
-    return photoAPI.getStats();
+export async function getPhotoStatsAction(): Promise<ActionResponse<IPhotoStats>> {
+    try {
+        const stats = await photoAPI.getStats();
+        return {
+            success: true,
+            data: stats,
+            message: "Statistiques récupérées avec succès.",
+        };
+    } catch (apiError: any) {
+        return handleServerActionError(apiError, "Erreur lors de la récupération des statistiques.");
+    }
 }

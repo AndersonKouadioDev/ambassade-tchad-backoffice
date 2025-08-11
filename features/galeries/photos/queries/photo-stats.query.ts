@@ -10,8 +10,8 @@ export const photoStatsQueryOption = () => {
     return {        
         queryKey: photoKeyQuery(),
         queryFn: async () => {
-            const data = await getPhotoStatsAction();
-            return data;
+            const result = await getPhotoStatsAction();
+            return result.data!;
         },
         keepPreviousData: true,
         staleTime: 5 * 60 * 1000, // 5 minutes

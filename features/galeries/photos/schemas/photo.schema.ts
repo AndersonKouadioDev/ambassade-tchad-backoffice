@@ -17,3 +17,6 @@ export const photoSchema = z.object({
 });
 
 export type PhotoDTO = z.infer<typeof photoSchema>;
+export const photoUpdateSchema = photoSchema.omit({ images: true });
+export type PhotoUpdateDTO = z.infer<typeof photoUpdateSchema>;
+
