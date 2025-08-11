@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { processAndValidateFormData } from "ak-zod-form-kit";
 import { useInvalidatePhotoQuery } from './index.query';
 import { createPhotoAction, deletePhotoAction, updatePhotoAction } from '../actions/photo.action';
-import { PhotoDTO, photoSchema, PhotoUpdateDTO, photoUpdateSchema } from '../schemas/photo.schema';
+import { PhotoDTO, photoSchema } from '../schemas/photo.schema';
 
 export const usePhotoCreateMutation = () => {
     const invalidatePhotoQuery = useInvalidatePhotoQuery()
@@ -49,9 +49,9 @@ export const usePhotoCreateMutation = () => {
 export const usePhotoUpdateMutation = () => {
     const invalidatePhotoQuery = useInvalidatePhotoQuery()
     return useMutation({
-        mutationFn: async ({ id, data }: { id: string, data:PhotoUpdateDTO  }) => {
+        mutationFn: async ({ id, data }: { id: string, data: PhotoDTO }) => {
             // Validation des données
-            const validation = processAndValidateFormData(photoUpdateSchema, data,
+            const validation = processAndValidateFormData(photoSchema, data,
                 {
                     outputFormat: "formData"
 
