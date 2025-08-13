@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
 import { IActualiteRechercheParams } from "../types/actualites.type";
 import { getActualiteTousAction } from "../actions/actualites.action";
-import { actualiteKeyQuery, useInvalidateActualiteQuery } from "./index.query";
+import { actualiteKeyQuery } from "./index.query";
 import { toast } from "sonner";
 import React from "react";
 

@@ -54,6 +54,9 @@ importers:
       '@iconify/react':
         specifier: ^6.0.0
         version: 6.0.0(react@19.1.1)
+      '@origin-space/image-cropper':
+        specifier: ^0.1.9
+        version: 0.1.9(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@radix-ui/react-accordion':
         specifier: ^1.2.11
         version: 1.2.11(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1144,6 +1147,12 @@ packages:
 
   '@open-draft/until@2.1.0':
     resolution: {integrity: sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==}
+
+  '@origin-space/image-cropper@0.1.9':
+    resolution: {integrity: sha512-Ebl57I6beh7uKjSv8+r3VObEoOXIXhx4SicDUdxa9U7NVY18SzEGfqPDuhNyXuFIB5G/S8nYUToNlIRp9wwB9Q==}
+    peerDependencies:
+      react: ^19.1.0
+      react-dom: ^19.1.0
 
   '@panva/hkdf@1.2.1':
     resolution: {integrity: sha512-6oclG6Y3PiDFcoyk8srjLfVKyMfVCKJ27JwNPViuXziFpmdz+MZnZN/aKY0JGXgYuO/VghU0jcOAZgWXZ1Dmrw==}
@@ -7075,6 +7084,11 @@ snapshots:
       outvariant: 1.4.3
 
   '@open-draft/until@2.1.0': {}
+
+  '@origin-space/image-cropper@0.1.9(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
 
   '@panva/hkdf@1.2.1': {}
 
