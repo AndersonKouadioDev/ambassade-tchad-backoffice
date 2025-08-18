@@ -5,8 +5,6 @@ import { redirect } from "next/navigation";
 import { LoginDTO, loginSchema } from "../schemas/auth.schema";
 import { processAndValidateFormData } from "ak-zod-form-kit";
 import { authAPI } from "../apis/auth.api";
-import { headers } from "next/headers";
-import { getToken, JWT } from "next-auth/jwt";
 
 export async function login(
   formdata: LoginDTO

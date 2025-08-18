@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { BookOpen } from "lucide-react";
-import { Dashboard } from "./Dashboard";
+import { Dashboard } from "@/features/finance/rapport/components/dashboard";
 
 export default async function DepenseListPage() {
   const t = await getTranslations("finance.rapport");

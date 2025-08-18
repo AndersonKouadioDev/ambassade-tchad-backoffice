@@ -1,6 +1,6 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { RevenueByService } from './types';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RevenueByService } from "@/features/finance/rapport/types/rapport-financier.type";
 
 interface RevenueTableProps {
   data: RevenueByService[];
@@ -8,9 +8,9 @@ interface RevenueTableProps {
 
 export const RevenueTable: React.FC<RevenueTableProps> = ({ data }) => {
   const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: "XOF",
     }).format(amount);
   };
 
@@ -19,7 +19,7 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({ data }) => {
   return (
     <Card className="mb-8">
       <CardHeader>
-        <CardTitle>Revenue by Service Type</CardTitle>
+        <CardTitle>Revenus par Type de Service</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -27,19 +27,19 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({ data }) => {
             <thead className="bg-muted/50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Service Type
+                  Type de Service
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Amount
+                  Montant
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Count
+                  Nombre
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Average
+                  Moyenne
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  % of Total
+                  % du Total
                 </th>
               </tr>
             </thead>
@@ -75,9 +75,7 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({ data }) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
                   {data.reduce((sum, item) => sum + item.count, 0)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  -
-                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">-</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
                   100.0%
                 </td>

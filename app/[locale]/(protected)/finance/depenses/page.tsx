@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
-import { DepensesStatsGrid } from "@/features/depense/components/depense-stats-grid";
-import { prefetchDepenseStatsQuery } from "@/features/depense/queries/depense-stats.query";
-import { DepenseList } from "@/features/depense/components/depense-list";
-import { prefetchDepensesListQuery } from "@/features/depense/queries/depense-list.query";
+import { DepensesStatsGrid } from "@/features/finance/depense/components/depense-stats-grid";
+import { prefetchDepenseStatsQuery } from "@/features/finance/depense/queries/depense-stats.query";
+import { DepenseList } from "@/features/finance/depense/components/depense-list";
+import { prefetchDepensesListQuery } from "@/features/finance/depense/queries/depense-list.query";
 import { BookOpen } from "lucide-react";
 
 export default async function DepenseListPage() {
