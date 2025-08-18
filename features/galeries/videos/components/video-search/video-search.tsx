@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IPhotoRechercheParams } from "../../types/photo.type";
+import { IPhotoRechercheParams } from "@/features/galeries/photos/types/photo.type";
 import { Button } from "@/components/ui/button";
 
 interface PhotoSearchProps {
