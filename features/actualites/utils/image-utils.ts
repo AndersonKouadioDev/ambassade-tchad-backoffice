@@ -11,11 +11,11 @@ export const formatImageUrl = (imageUrl: string): string => {
   const getBaseUrl = () => {
     // En production, utilise l'URL de l'API
     if (process.env.NODE_ENV === 'production') {
-      return process.env.NEXT_PUBLIC_API_URL || 'https://api.ambassade-tchad.com';
+      return process.env.NEXT_PUBLIC_API_FILE_URL || 'https://api.ambassade-tchad.com';
     }
     
     // En développement, utiliser localhost avec le port 8081
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081';
+    return process.env.NEXT_PUBLIC_API_FILE_URL || 'http://localhost:8081';
   };
   
   const baseUrl = getBaseUrl();
@@ -49,11 +49,11 @@ export const formatDatabaseImageUrl = (imageUrl: string): string => {
   const getBaseUrl = () => {
     // En production, utilise l'URL de l'API
     if (process.env.NODE_ENV === 'production') {
-      return process.env.NEXT_PUBLIC_API_URL || 'https://api.ambassade-tchad.com';
+      return process.env.NEXT_PUBLIC_API_FILE_URL || 'https://api.ambassade-tchad.com';
     }
     
     // En développement, utiliser localhost avec le port 8081
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081';
+    return process.env.NEXT_PUBLIC_API_FILE_URL || 'http://localhost:8081';
   };
   
   const baseUrl = getBaseUrl();

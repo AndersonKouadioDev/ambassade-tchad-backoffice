@@ -16,6 +16,5 @@ export interface IVideoRechercheParams {
 }
 
 export interface IVideoStats {
-    allVideos: number;
-    allVideosSeries: { date: string; value: number }[];
+    total: number;
 }

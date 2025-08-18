@@ -1,54 +1,41 @@
 "use client";
 
-import React, { useState, useRef, useTransition, useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, X, Trash2, Eye } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { IEvenement } from "../../types/evenement.type";
-import { EvenementDTO, evenementSchema } from "../../schemas/evenement.schema";
+import React, {useEffect, useState} from "react";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Calendar as CalendarIcon} from "lucide-react";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
+import {Switch} from "@/components/ui/switch";
+import {useRouter} from "next/navigation";
+import {Input} from "@/components/ui/input";
+import {Textarea} from "@/components/ui/textarea";
+import {EvenementDTO, evenementSchema} from "../../schemas/evenement.schema";
+import {Label} from "@/components/ui/label";
+import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
+import {Button} from "@/components/ui/button";
+import {Calendar} from "@/components/ui/calendar";
+import {format} from "date-fns";
+import {cn} from "@/lib/utils";
+import {useEvenementCreateMutation, useEvenementUpdateMutation} from "@/features/evenement/queries/evenement.mutation";
 import {
-  createEvenement,
-  updateEvenement,
-} from "../../actions/evenement.action";
-import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { useInvalidateEvenementQuery } from "../../queries/index.query";
-import { cn } from "@/lib/utils";
-
-//
+  ExistingImageFile,
+  MixedImageFile,
+  NewImageFile
+} from "@/features/actualites/components/actualite-form/actualite-add-update-form";
+import {ImageDragDrop} from "@/components/blocks/image-drap-drop";
+import {useEvenementDetailQuery} from "@/features/evenement/queries/evenement-details.query";
+import {getFullUrlFile} from "@/utils/getFullUrlFile";
 
 interface EvenementFormProps {
-  evenement?: IEvenement;
+  id?: string;
 }
 
-interface ImageFile {
-  id: string;
-  file: File;
-  preview: string;
-  name: string;
-}
+export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
+  const { data: evenement } = useEvenementDetailQuery(id!);
 
-export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
-  const [isLoading, startTransition] = useTransition();
   const router = useRouter();
-  const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageFiles, setImageFiles] = useState<MixedImageFile[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     evenement?.eventDate instanceof Date
       ? evenement.eventDate
@@ -57,7 +44,18 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
       : undefined
   );
 
-  const invalideEvenement = useInvalidateEvenementQuery();
+  // Hook de mutations
+  const {
+    mutateAsync: evenementCreateMutation,
+    isPending: evenementCreatePending,
+  } = useEvenementCreateMutation()
+
+  const {
+    mutateAsync: evenementUpdateMutation,
+    isPending: evenementUpdatePending,
+  } = useEvenementUpdateMutation();
+
+  const isLoading = evenementCreatePending || evenementUpdatePending;
 
   const {
     register,
@@ -67,7 +65,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
     setValue,
   } = useForm<EvenementDTO>({
     resolver: zodResolver(evenementSchema),
-    defaultValues: {
+    values: {
       title: evenement?.title || "",
       description: evenement?.description || "",
       location: evenement?.location || "",
@@ -81,98 +79,59 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
     },
   });
 
+  useEffect(() => {
+    if (evenement) {
+      setValue("title", evenement.title);
+      setValue("description", evenement.description);
+      setValue("published", evenement.published);
+
+      // Mapper les images existantes
+      const existingImages: ExistingImageFile[] =
+          evenement?.imageUrl?.map((imageUrl, index) => ({
+            id: `existing-${index}`,
+            url: getFullUrlFile(imageUrl),
+            preview: getFullUrlFile(imageUrl),
+            name: imageUrl.split("/").pop() || `Image ${index + 1}`,
+            isExisting: true,
+          })) || [];
+
+      setImageFiles(existingImages);
+    }
+  }, [evenement, setValue]);
+
   const handleCancel = () => {
     router.push("/contenu/evenement");
   };
 
   const watchedPublished = watch("published");
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const newImageFiles: ImageFile[] = Array.from(files).map(
-        (file, index) => ({
-          id: `file-${Date.now()}-${index}`,
-          file,
-          preview: URL.createObjectURL(file),
-          name: file.name,
-        })
-      );
-      setImageFiles((prev) => [...prev, ...newImageFiles]);
-    }
-  };
-
-  const handleImageRemove = (id: string) => {
-    setImageFiles((prev) => prev.filter((img) => img.id !== id));
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-
-    const newImageFiles: ImageFile[] = imageFiles.map((file, index) => ({
-      id: `drop-${Date.now()}-${index}`,
-      file,
-      preview: URL.createObjectURL(file),
-      name: file.name,
-    }));
-    setImageFiles((prev) => [...prev, ...newImageFiles]);
-  };
-
   const onSubmitForm = async (data: EvenementDTO) => {
-    startTransition(async () => {
-      const images: File[] = imageFiles.map((file) => file.file);
+    try {
+      const newImages: File[] = imageFiles
+          .filter((imageFile): imageFile is NewImageFile => !imageFile.isExisting)
+          .map((newImage) => newImage.file);
+
       const submitData = {
-        ...data,
-        eventDate: new Date(data.eventDate),
-        images,
+        title: data.title,
+        description: data.description,
+        eventDate: data.eventDate,
+        location: data.location,
+        published: data.published,
+        images: newImages.length > 0 ? newImages : undefined,
+
       };
 
-      let res: { success: boolean; message: string };
-
-      const formData = createFormData(submitData);
-
       if (evenement) {
-        res = await updateEvenement(evenement.id, formData);
+        await evenementUpdateMutation({ id: evenement.id, data: submitData });
       } else {
-        res = await createEvenement(formData);
+        await evenementCreateMutation(submitData);
       }
 
-      if (res.success) {
-        await invalideEvenement();
-        toast.success(res.message);
-        router.push("/contenu/evenement");
-      } else {
-        toast.error(res.message);
-      }
-    });
+      router.push("/contenu/actualite");
+    } catch (error) {
+      console.error("Erreur lors de la soumission:", error);
+    }
   };
-
-  const createFormData = useCallback((data: any) => {
-    const formData = new FormData();
-
-    Object.entries(data).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          if (item instanceof File) {
-            formData.append(`${key}`, item);
-          } else {
-            formData.append(`${key}`, String(item));
-          }
-        });
-      } else if (value instanceof Date) {
-        formData.append(key, value.toISOString());
-      } else if (value !== null && value !== undefined) {
-        formData.append(key, String(value));
-      }
-    });
-    return formData;
-  }, []);
 
   return (
     <Card className="w-full max-w-5xl mx-auto shadow-md">
@@ -274,82 +233,11 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ evenement }) => {
           </div>
 
           {/* Images */}
-          <div className="space-y-2">
-            <Label>Images</Label>
-            <div
-              className="border-2 border-dashed p-6 rounded-lg text-center hover:border-gray-400 cursor-pointer"
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-              <Upload className="mx-auto text-gray-400 w-10 h-10" />
-              <p className="mt-2 text-sm text-gray-500">
-                Glissez-déposez ou cliquez pour ajouter des images
-              </p>
-            </div>
-
-            {imageFiles.length > 0 && (
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <h4 className="text-sm font-medium">
-                    Images sélectionnées ({imageFiles.length})
-                  </h4>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="text-red-500"
-                    onClick={() => setImageFiles([])}
-                  >
-                    <Trash2 className="w-4 h-4 mr-1" />
-                    Tout supprimer
-                  </Button>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {imageFiles.map((img) => (
-                    <div key={img.id} className="relative group">
-                      <div className="aspect-square border rounded overflow-hidden bg-gray-100">
-                        <Image
-                          src={img.preview}
-                          alt={img.name}
-                          fill
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex justify-center items-center gap-2 transition">
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            onClick={() => window.open(img.preview, "_blank")}
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            onClick={() => handleImageRemove(img.id)}
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                      <p className="text-xs truncate text-center mt-1">
-                        {img.name}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          <ImageDragDrop
+              imageFiles={imageFiles}
+              setImageFiles={setImageFiles}
+              isUpdateMode={!!evenement}
+          />
 
           {/* Switch publié */}
           <div className="flex items-center gap-3">

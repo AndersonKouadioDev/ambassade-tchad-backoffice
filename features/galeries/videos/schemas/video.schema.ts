@@ -7,3 +7,7 @@ export const videoSchema = z.object({
 });
 
 export type VideoDTO = z.infer<typeof videoSchema>;
+
+export const VideoUpdateSchema = videoSchema.partial();
+
+export type VideoUpdateDTO = z.infer<typeof videoSchema>;

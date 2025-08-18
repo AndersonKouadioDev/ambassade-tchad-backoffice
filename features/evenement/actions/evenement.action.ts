@@ -1,6 +1,8 @@
 "use server";
-import { evenementAPI } from "../apis/evenement.api";
-import { IEvenementRechercheParams } from "../types/evenement.type";
+import {evenementAPI} from "../apis/evenement.api";
+import {IEvenement, IEvenementRechercheParams} from "../types/evenement.type";
+import {handleServerActionError} from "@/utils/handleServerActionError";
+import {ActionResponse} from "@/types";
 
 
 /**
@@ -8,58 +10,48 @@ import { IEvenementRechercheParams } from "../types/evenement.type";
  * @param formdata - Les données du formulaire à valider et envoyer
  * @returns Un objet indiquant le succès de l'opération et un message
  */
-export async function createEvenement(
+export async function createEvenementAction(
     formdata: FormData
-): Promise<{ success: boolean; message: string }> {
+): Promise<ActionResponse<IEvenement>> {
     try {
         // Création de l'évènement
-        const createdEvenement = await evenementAPI.create(formdata);
-
-        if (!createdEvenement || !createdEvenement.id) {
-            return {
-                success: false,
-                message: "La création a échoué - réponse API invalide.",
-            };
-        }
+        const result = await evenementAPI.create(formdata);
 
         return {
             success: true,
-            message: "évènement créée avec succès.",
+            data: result,
+            message: "Actualité créée avec succès.",
         };
-    } catch (apiError: any) {
-        return {
-            success: false,
-            message: apiError.message || "Erreur lors de la création de l'évènement.",
-        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la création de l'actualité.");
     }
 }
 
 
 // Mise à jour d'un Evenement existant
-export async function updateEvenement(
+export async function updateEvenementAction(
     id: string,
     formData: FormData
-): Promise<{ success: boolean; message: string }> {
+): Promise<ActionResponse<IEvenement>> {
     try {
         // mise à jour de l'Evenement
-        await evenementAPI.update(id, formData);
+        const result = await evenementAPI.update(id, formData);
 
         return {
             success: true,
-            message: "évènement mise à jour avec succès.",
+            data: result,
+            message: "Actualité créée avec succès.",
         };
-    } catch (apiError: any) {
-        return {
-            success: false,
-            message: apiError.message || "Erreur lors de la mise à jour de l'évènement.",
-        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la création de l'actualité.");
     }
 }
+
 // Suppression d'un Evenement
-export async function deleteEvenement(
+export async function deleteEvenementAction(
     id: string
-): Promise<{ success: boolean; message: string }> {
-    // Vérification de l'ID de l'evenement et verification de espace dans id
+): Promise<ActionResponse<IEvenement>> {
+    // Vérification de l'ID de l'evenement et verification d'espace dans id
     if (!id || id.trim() === "") {
         return {
             success: false,
@@ -74,20 +66,26 @@ export async function deleteEvenement(
             success: true,
             message: "evenement supprimé avec succès.",
         };
-    } catch (apiError: any) {
+    } catch (error: any) {
         return {
             success: false,
-            message: apiError.message || "Erreur lors de la suppression de l'evenement.",
+            message: error.message || "Erreur lors de la suppression de l'evenement.",
         };
     }
 }
 
 // Les gets sont appelés dans les queries
-export async function getEvenementDetailAction(id: string) {
-    if (!id || id.trim() === "") {
-        throw new Error("ID de l'évènement requis.");
+export async function getEvenementDetailAction(id: string): Promise<ActionResponse<IEvenement>> {
+    try {
+        const evenement = await evenementAPI.getById(id);
+        return {
+            success: true,
+            data: evenement,
+            message: "Événement récupéré avec succès.",
+        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération de l'événement.");
     }
-    return evenementAPI.getById(id);
 }
 
 export async function getEvenementTousAction(params: IEvenementRechercheParams) {

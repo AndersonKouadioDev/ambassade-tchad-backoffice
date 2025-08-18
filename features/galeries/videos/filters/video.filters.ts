@@ -8,8 +8,15 @@ import { parseAsString, parseAsInteger } from 'nuqs';
  * et sa valeur par défaut.
  */
 export const videoFiltersClient = {
-    title: parseAsString.withDefault(''),
-    description: parseAsString.withDefault(''),
-    page: parseAsInteger.withDefault(1),
-    limit: parseAsInteger.withDefault(12),
+    filter: {
+        title: parseAsString.withDefault(''),
+        youtubeUrl: parseAsString.withDefault(''),
+        description: parseAsString.withDefault(''),
+        page: parseAsInteger.withDefault(1),
+        limit: parseAsInteger.withDefault(12),
+    },
+    option: {
+        clearOnDefault: true,
+        throttleMs: 500,
+    }
 };

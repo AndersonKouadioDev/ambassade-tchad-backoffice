@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import {z} from 'zod';
 
 export const evenementSchema = z.object({
     title: z.string({ message: "Titre requis" }).min(1, { message: "Le titre ne peut pas être vide" }),
@@ -20,3 +20,6 @@ export const evenementSchema = z.object({
 });
 
 export type EvenementDTO = z.infer<typeof evenementSchema>;
+
+export const evenementUpdateSchema = evenementSchema.partial();
+export type EvenementUpdateDTO = z.infer<typeof evenementUpdateSchema>;

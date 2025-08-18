@@ -26,7 +26,7 @@ export default async function EvenementListPage() {
           <div>
             <h1 className="text-3xl font-bold">{t("title")}</h1>
             <p className="text-primary-100 mt-2">
-              Gérez et organisez vos actualités avec une interface moderne et
+              Gérez et organisez vos évènements avec une interface moderne et
               intuitive
             </p>
           </div>

@@ -1,27 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import {
-  ActualiteCreateDTO,
-  actualiteCreateSchema,
-} from "../../schemas/actualites.schema";
-import { useRouter } from "next/navigation";
-import { ImageDragDrop, ImageFile } from "@/components/blocks/image-drap-drop";
-import {
-  useActualiteCreateMutation,
-  useActualiteUpdateMutation,
-} from "../../queries/actualite.mutation";
-import { useActualiteDetailQuery } from "../../queries/actualite-details.query";
-import { getFullUrlFile } from "@/utils/getFullUrlFile";
-import { Button } from "@/components/ui/button";
+import React, {useEffect, useState} from "react";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Input} from "@/components/ui/input";
+import {Textarea} from "@/components/ui/textarea";
+import {Badge} from "@/components/ui/badge";
+import {Switch} from "@/components/ui/switch";
+import {Label} from "@/components/ui/label";
+import {ActualiteCreateDTO, actualiteCreateSchema,} from "../../schemas/actualites.schema";
+import {useRouter} from "next/navigation";
+import {ImageDragDrop, ImageFile} from "@/components/blocks/image-drap-drop";
+import {useActualiteCreateMutation, useActualiteUpdateMutation,} from "../../queries/actualite.mutation";
+import {useActualiteDetailQuery} from "../../queries/actualite-details.query";
+import {getFullUrlFile} from "@/utils/getFullUrlFile";
+import {Button} from "@/components/ui/button";
 
 interface ActualiteFormProps {
   id?: string;

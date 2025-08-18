@@ -38,8 +38,8 @@ export async function updatePhotoAction(
             message: "Photo mise à jour avec succès.",
         };
 
-    } catch (apiError: any) {
-        return handleServerActionError(apiError, "Erreur lors de la mise à jour de la photo.");
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la mise à jour de la photo.");
     }
 }
 
@@ -53,8 +53,8 @@ export async function deletePhotoAction(
             success: true,
             message: "Photo supprimé avec succès.",
         };
-    } catch (apiError: any) {
-        return handleServerActionError(apiError, "Erreur lors de la suppression de la photo.");
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la suppression de la photo.");
     }
 }
 
@@ -67,8 +67,8 @@ export async function getPhotoDetailAction(id: string): Promise<ActionResponse<I
             data: photo,
             message: "Photo récupérée avec succès.",
         };
-    } catch (apiError: any) {
-        return handleServerActionError(apiError, "Erreur lors de la récupération de la photo.");
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération de la photo.");
     }
 }
 
@@ -81,8 +81,8 @@ export async function getPhotoTousAction(params: IPhotoRechercheParams):
             data: photos,
             message: "Photos récupérées avec succès.",
         };
-    } catch (apiError: any) {
-        return handleServerActionError(apiError, "Erreur lors de la récupération des photos.");
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération des photos.");
     }
 }
 
@@ -94,7 +94,7 @@ export async function getPhotoStatsAction(): Promise<ActionResponse<IPhotoStats>
             data: stats,
             message: "Statistiques récupérées avec succès.",
         };
-    } catch (apiError: any) {
-        return handleServerActionError(apiError, "Erreur lors de la récupération des statistiques.");
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération des statistiques.");
     }
 }

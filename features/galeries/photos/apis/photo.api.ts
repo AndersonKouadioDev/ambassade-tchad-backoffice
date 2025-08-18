@@ -13,8 +13,6 @@ export interface IPhotoAPI {
 
 export const photoAPI: IPhotoAPI = {
     getAll(params: IPhotoRechercheParams): Promise<PaginatedResponse<IPhoto>> {
-        // Validation des paramètres
-
         return api.request<PaginatedResponse<IPhoto>>({
             endpoint: `/photos`,
             method: "GET",

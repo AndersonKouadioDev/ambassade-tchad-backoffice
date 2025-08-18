@@ -1,36 +1,17 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import {
-  SquarePen,
-  Trash2,
-  AlertTriangle,
-  X,
-  Calendar,
-  User,
-  Clock,
-  Image as ImageIcon,
-  Eye,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { IActualite } from "../../types/actualites.type";
-import { formatImageUrl } from "../../utils/image-utils";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay"
-import { ActualiteDeleteModal } from "../actualite-modal/actualite-delete-modal";
-import { Link } from "@/i18n/navigation";
-import { ActualitePagination } from "./actualite-pagination";
+import React, {useState} from "react";
+import {Calendar, Clock, Eye, SquarePen, Trash2, User,} from "lucide-react";
+import {Card, CardContent, CardFooter,} from "@/components/ui/card";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {Badge} from "@/components/ui/badge";
+import {cn} from "@/lib/utils";
+import {IActualite} from "../../types/actualites.type";
+import {useRouter} from "next/navigation";
+import {Button} from "@/components/ui/button";
+import {ActualiteDeleteModal} from "../actualite-modal/actualite-delete-modal";
+import {Link} from "@/i18n/navigation";
+import CarouselImage from "@/components/blocks/carousel-image";
 
 interface ActualiteCardProps {
   actualite: IActualite;
@@ -75,7 +56,7 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
       >
         {/* Image avec overlay titre & actions */}
         <div className="relative">
-          <ActualiteImageCarousel actualite={actualite} />
+          <CarouselImage images={actualite.imageUrls!} />
 
           {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10" />
@@ -121,7 +102,6 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
               size="icon"
               onClick={(e) => {
                 e.stopPropagation();
-                handleDeleteClick();
                 router.push(`/contenu/actualite/edit/${actualite.id}`);
               }}
               title="Modifier"
@@ -223,35 +203,6 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
       <ActualiteDeleteModal actualite={actualite} isOpen={showDeleteAlert} setIsOpen={setShowDeleteAlert} />
       
     </>
-  );
-};
-const ActualiteImageCarousel = ({ actualite }: { actualite: IActualite }) => {
-  const plugin = useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
-  )
-  return (
-    <Carousel
-      plugins={[plugin.current]}
-      className="w-full mx-auto"
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
-    >
-      <CarouselContent>
-        {actualite.imageUrls?.map((imageUrl, index) => (
-          <CarouselItem key={index} >
-            <Image
-              src={formatImageUrl(imageUrl)}
-              alt={`Image ${index + 1}`}
-              width={500}
-              height={500}
-              className="aspect-square object-cover"
-            />
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2" />
-      <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2" />
-    </Carousel>
   );
 };
 
