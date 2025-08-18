@@ -456,6 +456,20 @@
     }
   },
   "contenu": {
+    "gestionPhoto": {
+      "title": "Gestion des photos",
+      "total_photo": "Total des photos",
+      "photo_actif": "Photos actives",
+      "photo_inactif": "Photos inactives",
+      "photo_banni": "Photos bannies"
+    },
+    "gestionVideo": {
+      "title": "Gestion des vidéos",
+      "total_video": "Total des vidéos",
+      "video_actif": "Vidéos actives",
+      "video_inactif": "Vidéos inactives",
+      "video_banni": "Vidéos bannies"
+    },
     "gestionActualite": {
       "title": "Gestion des actualités",
       "total_brouillon": "Total d'actualité brouillon",

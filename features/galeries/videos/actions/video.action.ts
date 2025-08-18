@@ -1,78 +1,55 @@
 "use server";
 
-import { videoAPI } from "../apis/video.api";
-import { VideoDTO } from "../schemas/video.schema";
-import { IVideoRechercheParams } from "../types/video.type";
+import {videoAPI} from "../apis/video.api";
+import {VideoDTO} from "../schemas/video.schema";
+import {IVideo, IVideoRechercheParams, IVideoStats} from "../types/video.type";
+import {ActionResponse, PaginatedResponse} from "@/types";
+import {handleServerActionError} from "@/utils/handleServerActionError";
 
 /**
  * Fonction pour créer une nouvelle video
  * @param data - Les données du formulaire à valider et envoyer
  * @returns Un objet indiquant le succès de l'opération et un message
  */
-export async function createVideo(
+export async function createVideoAction(
     data: VideoDTO
-): Promise<{ success: boolean; message: string }> {
+): Promise<ActionResponse<IVideo>> {
 
     try {
-
-        // Création de la video
-        const createdVideo = await videoAPI.create(data);
-
-        if (!createdVideo || !createdVideo.id) {
-            return {
-                success: false,
-                message: "La création a échoué - réponse API invalide.",
-            };
-        }
+        const result = await videoAPI.create(data);
 
         return {
             success: true,
-            message: "video créée avec succès.",
-        };
-    } catch (apiError: any) {
-        return {
-            success: false,
-            message: apiError.message || "Erreur lors de la création de la video.",
-        };
+            data: result,
+            message: "Video créée avec succès.",
+        }
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la création de la video.");
     }
 }
 
 
 // Mise à jour d'une Video existante
-export async function updateVideo(
+export async function updateVideoAction(
     id: string,
     data: VideoDTO
-): Promise<{ success: boolean; message: string }> {
-
-    // mise à jour de la Video
+): Promise<ActionResponse<IVideo>> {
     try {
-
-        const updated = await videoAPI.update(id, data);
-
+        const result = await videoAPI.update(id, data);
         return {
             success: true,
-            message: "video mise à jour avec succès.",
+            data: result,
+            message: "Video mise à jour avec succès.",
         };
-    } catch (apiError: any) {
-        return {
-            success: false,
-            message: apiError.message || "Erreur lors de la mise à jour de la video.",
-        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la mise à jour de la video.");
     }
 }
-// Suppression d'une Video
-export async function deleteVideo(
-    id: string
-): Promise<{ success: boolean; message: string }> {
 
-    // Vérification de l'ID de la video et verification de espace dans id
-    if (!id || id.trim() === "") {
-        return {
-            success: false,
-            message: "ID de la video requis.",
-        };
-    }
-    // Vérification de l'existence de la video
+// Suppression d'une Video
+export async function deleteVideoAction(
+    id: string
+): Promise<ActionResponse<void>> {
     try {
         // Appel à l'API pour supprimer la video
         await videoAPI.delete(id);
@@ -80,27 +57,48 @@ export async function deleteVideo(
             success: true,
             message: "video supprimée avec succès.",
         };
-    } catch (apiError: any) {
-        return {
-            success: false,
-            message: apiError.message || "Erreur lors de la suppression de la video.",
-        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la suppression de la video.");
     }
 }
 
 // Les gets sont appelés dans les queries
 
-export async function getVideoDetailAction(id: string) {
-    if (!id || id.trim() === "") {
-        throw new Error("ID de la video requis.");
+export async function getVideoDetailAction(id: string):Promise<ActionResponse<IVideo>> {
+    try {
+        const video = await videoAPI.getById(id);
+        return {
+            success: true,
+            data: video,
+            message: "Video récupérée avec succès.",
+        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération de la video.");
     }
-    return videoAPI.getById(id);
 }
 
-    export async function getVideoTousAction(params: IVideoRechercheParams) {
-    return videoAPI.getAll(params);
+export async function getVideoTousAction(params: IVideoRechercheParams):Promise<ActionResponse<PaginatedResponse<IVideo>>> {
+    try {
+        const videos = await videoAPI.getAll(params);
+        return {
+            success: true,
+            data: videos,
+            message: "Videos récupérées avec succès.",
+        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération des videos.");
+    }
 }
 
-export async function getVideoStatsAction() {
-    return videoAPI.getStats();
+export async function getVideoStatsAction():Promise<ActionResponse<IVideoStats>> {
+    try {
+        const stats = await videoAPI.getStats();
+        return {
+            success: true,
+            data: stats,
+            message: "Statistiques des videos récupérées avec succès.",
+        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération des statistiques des videos.");
+    }
 }

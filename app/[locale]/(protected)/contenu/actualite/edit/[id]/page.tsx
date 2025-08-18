@@ -1,10 +1,10 @@
 import React from "react";
-import { BookOpen } from "lucide-react";
-import { ButtonGoLink } from "@/components/blocks/button-goLink";
-import { getTranslations } from "next-intl/server";
-import { ActualiteNotFound } from "@/features/actualites/components/actualite-not-found";
-import { ActualiteAddUpdateForm } from "@/features/actualites/components/actualite-form/actualite-add-update-form";
-import { prefetchActualiteDetailQuery } from "@/features/actualites/queries/actualite-details.query";
+import {BookOpen} from "lucide-react";
+import {ButtonGoLink} from "@/components/blocks/button-goLink";
+import {getTranslations} from "next-intl/server";
+import {ActualiteNotFound} from "@/features/actualites/components/actualite-not-found";
+import {ActualiteAddUpdateForm} from "@/features/actualites/components/actualite-form/actualite-add-update-form";
+import {prefetchActualiteDetailQuery} from "@/features/actualites/queries/actualite-details.query";
 
 interface EditActualitePageProps {
   params: Promise<{ id: string }>;

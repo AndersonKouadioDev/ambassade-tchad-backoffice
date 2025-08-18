@@ -104,13 +104,13 @@ export function getMenuList(pathname: string, t: any): Group[] {
               icon: "",
               children: [],
             },
-            // {
-            //   href: "/contenu/galerie-video",
-            //   label: "Galerie vidéos",
-            //   active: pathname === "/contenu/galerie-video",
-            //   icon: "",
-            //   children: [],
-            // },
+            {
+              href: "/contenu/galerie-video",
+              label: "Galerie vidéos",
+              active: pathname === "/contenu/galerie-video",
+              icon: "",
+              children: [],
+            },
             // {
             //   href: "/contenu/services",
             //   label: "Services",

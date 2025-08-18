@@ -9,6 +9,7 @@ import { parseAsString, parseAsInteger, parseAsStringEnum } from 'nuqs';
  */
 export const evenementFiltersClient = {
     title: parseAsString.withDefault(''),
+    eventDate: parseAsString.withDefault(''),
     description: parseAsString.withDefault(''),
     published: parseAsStringEnum(['true', 'false', 'all']).withDefault('all'),
     authorId: parseAsString.withDefault(''),

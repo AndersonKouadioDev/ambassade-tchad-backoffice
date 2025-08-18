@@ -4,7 +4,7 @@ import { prefetchPhotosList } from "@/features/galeries/photos/queries/photo-lis
 import { prefetchPhotoStats } from "@/features/galeries/photos/queries/photo-stats.query";
 import { BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { PhotoListTable } from "@/features/galeries/photos/components/photo-list/index";
+import { PhotoListTable } from "@/features/galeries/photos/components/photo-list";
 
 export default async function PhotoListPage() {
   const t = await getTranslations("contenu.gestionActualite");

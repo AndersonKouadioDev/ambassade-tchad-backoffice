@@ -17,9 +17,7 @@ export const videoAPI: IVideoAPI = {
         return api.request<PaginatedResponse<IVideo>>({
             endpoint: `/videos`,
             method: "GET",
-            searchParams: {
-                ...params as unknown as SearchParams,
-            },
+            searchParams: params as SearchParams,
         });
     },
 
@@ -27,12 +25,6 @@ export const videoAPI: IVideoAPI = {
         return api.request<IVideo>({
             endpoint: `/videos/${id}`,
             method: "GET",
-            config: {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            },  
-            
         });
     },
 
@@ -48,9 +40,9 @@ export const videoAPI: IVideoAPI = {
         return api.request<IVideo>({
             endpoint: `/videos`,
             method: "POST",
-            config: {
-                headers: {
-                    "Content-Type": "multipart/form-data"
+            config:{
+                headers:{
+                    "Content-Type": "application/json"
                 }
             },
             data: data,
@@ -62,7 +54,7 @@ export const videoAPI: IVideoAPI = {
 
         return api.request<IVideo>({
             endpoint: `/videos/${id}`,
-            method: "PUT",
+            method: "PATCH",
             config: {
                 headers: {
                     "Content-Type": "application/json"

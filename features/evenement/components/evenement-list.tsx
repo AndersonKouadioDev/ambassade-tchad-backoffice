@@ -1,18 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AlertTriangle, Search } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { useEvenementListTable } from "../hooks/useEvenementListTable";
-import { IEvenement } from "../types/evenement.type";
-import { EvenementImageGalleryModal } from "./evenement-modal/evenement-image-gallery-modal";
-import { EvenementViewModal } from "./evenement-modal/evenement-view-modal";
-import { EvenementCard } from "./evenement-list/evenement-card";
-import { EvenementFilters } from "./evenement-list/evenement-filters";
-import { EvenementPagination } from "./evenement-pagination/evenement-pagination";
-
-
+import React from "react";
+import {useRouter} from "next/navigation";
+import {AlertTriangle, Search} from "lucide-react";
+import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card";
+import {useEvenementListTable} from "../hooks/useEvenementListTable";
+import {IEvenement} from "../types/evenement.type";
+import {EvenementCard} from "./evenement-list/evenement-card";
+import {EvenementFilters} from "./evenement-list/evenement-filters";
+import {EvenementPagination} from "./evenement-pagination/evenement-pagination";
 
 
 export const EvenementList: React.FC = () => {
@@ -27,37 +23,11 @@ export const EvenementList: React.FC = () => {
     handlePublishedFilterChange,
     handlePageChange,
     handleItemsPerPageChange,
-    handleCreate,
-    handleUpdate,
-    handleDelete,
   } = useEvenementListTable();
-
-  const [selectedEvenement, setSelectedEvenement] = useState<IEvenement | null>(null);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [isImageGalleryOpen, setIsImageGalleryOpen] = useState(false);
-
-  const handleView = (evenement: IEvenement) => {
-    setSelectedEvenement(evenement);
-    setIsViewModalOpen(true);
-  };
-
-  const handleEdit = (evenement: IEvenement) => {
-    // Navigation vers la page d'édition
-    router.push(`/contenu/evenement/edit/${evenement.id}`);
-  };
-
-  const handleDeleteEvenement = async (evenement: IEvenement) => {
-    await handleDelete(evenement.id);
-  };
 
   const handleCreateEvenement = () => {
     // Navigation vers la page de création
     router.push(`/contenu/evenement/create`);
-  };
-
-  const handleOpenImageGallery = () => {
-    setIsViewModalOpen(false);
-    setIsImageGalleryOpen(true);
   };
 
   if (error) {
@@ -118,14 +88,11 @@ export const EvenementList: React.FC = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {data.map((evenement: IEvenement) => (
               <EvenementCard
                 key={evenement.id}
                 evenement={evenement}
-                onView={handleView}
-                onEdit={handleEdit}
-                onDelete={handleDeleteEvenement}
               />
             ))}
           </div>
@@ -141,22 +108,6 @@ export const EvenementList: React.FC = () => {
             />
           )}
         </>
-      )}
-
-      <EvenementViewModal
-        evenement={selectedEvenement}
-        isOpen={isViewModalOpen}
-        onClose={() => setIsViewModalOpen(false)}
-        onOpenImageGallery={handleOpenImageGallery}
-      />
-
-      {selectedEvenement && selectedEvenement.imageUrl && selectedEvenement.imageUrl.length > 0 && (
-        <EvenementImageGalleryModal
-          isOpen={isImageGalleryOpen}
-          onClose={() => setIsImageGalleryOpen(false)}
-          images={selectedEvenement.imageUrl}
-          title={selectedEvenement.title}
-        />
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { useQueryStates } from 'nuqs';
 import { evenementFiltersClient } from '../filters/evenement.filters';
 import { IEvenementRechercheParams } from "../types/evenement.type";
 import { useEvenementsList } from "../queries/evenement-list.query";
-import { createEvenement, updateEvenement, deleteEvenement } from "../actions/evenement.action";
+import { createEvenementAction, updateEvenementAction, deleteEvenementAction } from "../actions/evenement.action";
 import { EvenementDTO } from "../schemas/evenement.schema";
 import { toast } from "sonner";
 
@@ -41,7 +41,7 @@ export const useEvenementListTable = () => {
   const { data, isLoading, error } = useEvenementsList(currentSearchParams);
 
 
-  const handleTextFilterChange = (filterName: 'title' | 'description' | 'authorId', value: string) => {
+  const handleTextFilterChange = (filterName: 'title' | 'description' | 'authorId' | 'eventDate', value: string) => {
     setFilters(prev => ({
       ...prev,
       [filterName]: value,
@@ -61,7 +61,7 @@ export const useEvenementListTable = () => {
 
   const handleCreate = async (formData: EvenementDTO, formDataToSend?: FormData) => {
     try {
-      const result = await createEvenement(formData as any);
+      const result = await createEvenementAction(formData as any);
 
       if (result.success) {
         toast.success(result.message);
@@ -78,7 +78,7 @@ export const useEvenementListTable = () => {
 
   const handleUpdate = async (id: string, formData: EvenementDTO) => {
     try {
-      const result = await updateEvenement(id, formData as any);
+      const result = await updateEvenementAction(id, formData as any);
 
       if (result.success) {
         toast.success(result.message);
@@ -95,7 +95,7 @@ export const useEvenementListTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const result = await deleteEvenement(id);
+      const result = await deleteEvenementAction(id);
 
       if (result.success) {
         toast.success(result.message);
