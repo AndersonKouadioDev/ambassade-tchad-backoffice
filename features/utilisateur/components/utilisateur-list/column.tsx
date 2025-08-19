@@ -61,11 +61,11 @@ export const columns: ColumnDef<DataProps>[] = [
       const roleName = getUtilisateurRole(role) || "Inconnu";
 
       const statusColors: Record<string, string> = {
-        [UtilisateurRole.ADMIN]: "bg-green-100 text-green-600",
-        [UtilisateurRole.CHEF_SERVICE]: "bg-purple-100 text-purple-700",
-        [UtilisateurRole.CONSUL]: "bg-blue-100 text-blue-600",
-        [UtilisateurRole.AGENT]: "bg-yellow-100 text-yellow-700",
-        default: "bg-muted text-muted-foreground",
+        [UtilisateurRole.ADMIN]: "bg-green-100 text-green-600 hover:bg-green-200",
+        [UtilisateurRole.CHEF_SERVICE]: "bg-purple-100 text-purple-700 hover:bg-purple-200",
+        [UtilisateurRole.CONSUL]: "bg-blue-100 text-blue-600 hover:bg-blue-200",
+        [UtilisateurRole.AGENT]: "bg-yellow-100 text-yellow-700 hover:bg-yellow-200",
+        default: "bg-muted text-muted-foreground hover:bg-muted/80",
       };
 
       const roleStyles = statusColors[role] || statusColors.default;
@@ -83,10 +83,10 @@ export const columns: ColumnDef<DataProps>[] = [
     },
   },
   {
-    accessorKey: "status", // Add status as a column
+    accessorKey: "status",
     header: "Statut",
     cell: ({ row }) => {
-      const status = row.getValue<UtilisateurStatus>("status"); // Status is a number enum
+      const status = row.getValue<UtilisateurStatus>("status");
       const statusName =
         status === UtilisateurStatus.ACTIVE
           ? "actif"
@@ -94,13 +94,13 @@ export const columns: ColumnDef<DataProps>[] = [
           ? "verrouillé"
           : status === UtilisateurStatus.DELETED
           ? "banni"
-          : "inconnu"; // Directly mapping for simplicity, adjust if more statuses
+          : "inconnu";
 
       const statusColors: Record<string, string> = {
-        actif: "bg-green-100 text-green-600",
-        verrouillé: "bg-yellow-100 text-yellow-600",
-        banni: "bg-red-100 text-red-600",
-        default: "bg-muted text-muted-foreground",
+        actif: "bg-green-100 text-green-600 hover:bg-green-200",
+        verrouillé: "bg-yellow-100 text-yellow-600 hover:bg-yellow-200",
+        banni: "bg-red-100 text-red-600 hover:bg-red-200",
+        default: "bg-muted text-muted-foreground hover:bg-muted/80",
       };
 
       const statusStyles = statusColors[statusName] || statusColors.default;
@@ -123,7 +123,7 @@ export const columns: ColumnDef<DataProps>[] = [
     enableHiding: false,
     cell: ({ row, table }) => {
       const user = row.original as DataProps;
-      
+
       const meta = table.options.meta as {
         onView: (user: DataProps) => void;
         onEdit: (user: DataProps) => void;

@@ -3,21 +3,30 @@
     "title": "Hello world!"
   },
   "AnalyticsDashboard": {
-    "widget_title": "Upgrade your Dashcode",
+    "title": "Dashboard",
+    "widget_title": "Pending Requests",
     "widget_desc": "Pro plan for better results",
     "widget_badge": "now",
-    "revenue_chart_title": "Total Revenue",
+    "total_requests": "Total Requests",
+    "total_expenses": "Total Expenses",
+    "personnel_count": "Active Staff",
+    "demandeur_count": "Active Citizens",
     "revenue_report": "Revenue Report",
-    "sold_chart_title": "Products sold",
-    "growth_chart_title": "Growth",
+    "sold_chart_title": "Active Staff",
+    "growth_chart_title": "Financial Report",
     "overview_circle_chart_title": "Overview",
-    "company_table_title": "All Company",
-    "recent_activity_table_title": "Recent Activity",
-    "most_sales_map_title": "Most Sales",
-    "total_earning_map_desc": "Total earnings",
-    "total_earning_map_desc_2": "From Last Month",
+    "media_content": "Media Content",
+    "news": "News",
+    "events": "Events",
+    "photos": "Photos",
+    "videos": "Videos",
+    "company_table_title": "Recent Activity",
+    "recent_activity_table_title": "New Orders",
+    "most_sales_map_title": "Best Sellers",
+    "total_earning_map_desc": "Total Earnings",
+    "total_earning_map_desc_2": "Since last month",
     "total_earning_map_button_1": "Global",
-    "invested_amount": "Invested amount",
+    "invested_amount": "Invested Amount",
     "last_28_days": "Last 28 days",
     "last_months": "Last months",
     "last_year": "Last year"
@@ -25,7 +34,7 @@
   "BankingDashboard": {
     "widget_title": "Good evening",
     "widget_desc": "Welcome to Dashcode",
-    "current_balance": "Current balance",
+    "current_balance": "Current Balance",
     "credit": "Credit",
     "debit": "Debit",
     "my_card": "My Card",
@@ -35,19 +44,19 @@
     "contacts": "Contacts",
     "view_all": "View all",
     "account": "Account",
-    "recipient_account_number": "Recipient account number",
+    "recipient_account_number": "Recipient's account number",
     "total_amount": "Amount",
-    "send_money": "Send money",
-    "account_receivable": "Account Receivable",
-    "account_payable": "Account Payable"
+    "send_money": "Send Money",
+    "account_receivable": "Accounts Receivable",
+    "account_payable": "Accounts Payable"
   },
   "DemandeModals": {
     "view_title": "Request Details",
-    "edit_title": "Edit Request",
+    "edit_title": "Request Modification",
     "demandeur": "Applicant",
     "statut_actuel": "Current Status",
     "informations_financieres": "Financial Information",
-    "informations_personne": "Person Information",
+    "informations_personne": "Personal Information",
     "details_voyage": "Travel Details",
     "observations": "Observations",
     "soumise_le": "Submitted on",
@@ -60,11 +69,11 @@
     "lieu_naissance": "Place of birth",
     "nationalite": "Nationality",
     "profession": "Profession",
-    "domicile": "Address",
+    "domicile": "Home address",
     "pere": "Father",
     "mere": "Mother",
     "destination": "Destination",
-    "motif_voyage": "Travel reason",
+    "motif_voyage": "Reason for travel",
     "document_justificatif": "Supporting document",
     "date_expiration": "Expiration date",
     "accompagne": "Accompanied",
@@ -75,7 +84,7 @@
     "modifier_statut": "Modify status",
     "nouveau_statut": "New status",
     "commentaire_optionnel": "Comment (optional)",
-    "commentaire_placeholder": "Add a comment on this modification...",
+    "commentaire_placeholder": "Add a comment about this change...",
     "commentaire_historique": "This comment will be added to the request history",
     "apercu_changement": "Change preview",
     "notification_email": "The applicant will be automatically notified of this change by email.",
@@ -94,7 +103,7 @@
     "title": "Login",
     "subtitle": "Access your administrative space",
     "no_account": "Don't have an account yet?",
-    "register": "Sign up",
+    "register": "Register",
     "contact": "Contact",
     "help": "Help"
   },
@@ -102,94 +111,49 @@
     "email_label": "Email address",
     "password_label": "Password",
     "email_invalid": "Your email is invalid.",
-    "password_min_length": "Password must contain at least 4 characters.",
-    "remember_me": "Stay logged in",
+    "password_min_length": "Password must be at least 4 characters long.",
+    "remember_me": "Remember me",
     "forgot_password": "Forgot password?",
     "sign_in": "Sign in",
     "signing_in": "Signing in..."
-  },
-  "gestionDemande": {
-    "title": "Request Management",
-    "pending": "Pending",
-    "approved": "Approved",
-    "rejected": "Rejected",
-    "archived": "Archived",
-    "searchPlaceholder": "Search by name, email, ticket...",
-    "status": "Status",
-    "service": "Service",
-    "export": "Export",
-    "refresh": "Refresh",
-    "noResults": "No requests found",
-    "error": "Error loading data",
-    "retry": "Retry",
-    "dataRefreshed": "Data refreshed",
-    "exportDevelopment": "Export feature in development",
-    "first": "First",
-    "previous": "Previous",
-    "next": "Next",
-    "last": "Last",
-    "page": "Page",
-    "of": "of",
-    "showing": "Showing",
-    "to": "to",
-    "results": "results",
-    "selected": "selected",
-    "on": "of",
-    "statuses": {
-      "new": "New",
-      "inReviewDocs": "Reviewing docs",
-      "approvedByAgent": "Approved by agent",
-      "rejected": "Rejected",
-      "delivered": "Delivered",
-      "archived": "Archived"
-    },
-    "services": {
-      "visa": "Visa",
-      "birthActApplication": "Birth Certificate",
-      "consularCard": "Consular Card",
-      "laissezPasser": "Laissez-Passer"
-    },
-    "filters": {
-      "allStatuses": "All statuses",
-      "allServices": "All services"
-    }
   },
   "EcommerceDashboard": {
     "widget_title": "Good evening",
     "widget_desc": "Welcome to Dashcode",
     "revenue_chart_title": "Total Revenue",
     "revenue_report": "Revenue Report",
-    "sold_chart_title": "Products sold",
+    "sold_chart_title": "Products Sold",
     "growth_chart_title": "Growth",
-    "company_table_title": "All Company",
+    "company_table_title": "All Companies",
     "recent_order_table_title": "Recent Orders",
     "customer": "Customer",
     "visitors_report": "Visitors Report",
-    "Visitors_by_gender": "Visitors By Gender",
-    "best_selling_products": "Best Selling Products",
+    "Visitors_by_gender": "Visitors by gender",
+    "best_selling_products": "Best Sellers",
     "best_selling_products_desc": "Car engine oil",
-    "best_selling_products_button": "View More",
+    "best_selling_products_button": "View more",
     "progress": "Progress",
-    "most_sales_map_title": "Most Sales",
+    "most_sales_map_title": "Best Sellers",
     "total_earning_map_button_1": "Global",
     "orders": "Orders",
     "profit": "Profit",
     "earnings": "Earnings",
     "statistics": "Statistics",
-    "statistics_graph_desc": "From Last weeks"
+    "statistics_graph_desc": "Since last weeks"
   },
   "ProjectDashboard": {
-    "total_task": "Total Task",
+    "total_task": "Total Tasks",
     "completed": "Completed",
     "hours": "Hours",
     "spendings": "Spendings",
     "progress": "Progress",
-    "deal_distribution_by_stage": "Deal Distribution By Stage",
+    "deal_distribution_by_stage": "Deal distribution by stage",
     "notes": "Notes",
-    "task_list": "Task List",
+    "task_list": "Task list",
     "messages": "Messages",
     "activity": "Activity",
-    "team_members": "Team Members",
+    "team_members": "Team members",
+    "demandeurs": "Applicants",
     "files": "Files",
     "download": "Download",
     "project_start_date": "Project start date"
@@ -199,32 +163,32 @@
     "revenue": "Revenue",
     "conversion": "Conversion",
     "leads": "Leads",
-    "from_last_weeks": "From last weeks",
-    "deal_distribution_by_stage": "Deal Distribution By Stage",
+    "from_last_weeks": "Since last weeks",
+    "deal_distribution_by_stage": "Deal distribution by stage",
     "campaigns": "Campaigns",
-    "trends_calculation": "Trends Calculation",
-    "latest_transactions": "Latest Transactions"
+    "trends_calculation": "Trends calculation",
+    "latest_transactions": "Recent activity"
   },
   "ChatApp": {
-    "blankMessageTitle": "No message yet...",
-    "blankMessageDesc": "don't worry, just take a deep breath & say 'Hello'",
+    "blankMessageTitle": "No messages yet...",
+    "blankMessageDesc": "don't worry, take a deep breath and say 'Hello'",
     "about": "About"
   },
   "EmailApp": {
     "compose": "Compose",
-    "composeEmail": "Compose Email"
+    "composeEmail": "Compose an email"
   },
   "KanbanApp": {
     "title": "Kanban",
-    "addBoard": "Add Board"
+    "addBoard": "Add board"
   },
   "CalendarApp": {
-    "addEvent": "Add Event",
+    "addEvent": "Add event",
     "shortDesc": "Drag and drop your event or click in the calendar",
     "filter": "FILTER"
   },
   "TodoApp": {
-    "addTask": "Add Task",
+    "addTask": "Add task",
     "todos": "Todos"
   },
   "EcommerceApp": {
@@ -232,228 +196,15 @@
     "brands": "brands",
     "price": "price",
     "ratings": "ratings",
-    "view_less": "View Less",
-    "add_to_cart": "Add to Cart"
-    
-  },
-  "contenu": {
-    "gestionActualite": {
-      "title": "News Management",
-      "total_brouillon": "Total Draft News",
-      "total_publie": "Total Published News",
-      "total_actualite": "Total News",
-      "create_article": "Create Article",
-      "edit_article": "Edit Article",
-      "delete_article": "Delete Article",
-      "view_article": "View Article",
-      "search_placeholder": "Search by title or description...",
-      "no_results": "No news found",
-      "status": {
-        "brouillon": "Draft",
-        "publie": "Published",
-        "archive": "Archived"
-      },
-      "category": {
-        "diplomatie": "Diplomacy",
-        "culture": "Culture",
-        "economie": "Economy",
-        "societe": "Society",
-        "education": "Education"
-      },
-      "fields": {
-        "titre": "Title",
-        "description": "Description",
-        "contenu": "Content",
-        "image": "Featured Image",
-        "status": "Status",
-        "categorie": "Category",
-        "tags": "Tags",
-        "priorite": "Priority",
-        "langue": "Language",
-        "metaTitre": "Meta Title",
-        "metaDescription": "Meta Description",
-        "datePublication": "Publication Date",
-        "vues": "View Count"
-      },
-      "priority": {
-        "normale": "Normal",
-        "importante": "Important",
-        "urgente": "Urgent"
-      }
-    },
-    "gestionEvenement": {
-      "title": "Event Management",
-      "total_brouillon": "Total Draft Events",
-      "total_publie": "Total Published Events",
-      "total_evenement": "Total Events",
-      "create_event": "Create Event",
-      "edit_event": "Edit Event",
-      "delete_event": "Delete Event",
-      "view_event": "View Event",
-      "search_placeholder": "Search by title, description or location...",
-      "no_results": "No events found",
-      "status": {
-        "brouillon": "Draft",
-        "publie": "Published",
-        "annule": "Cancelled",
-        "archive": "Archived"
-      },
-      "type": {
-        "conference": "Conference",
-        "seminaire": "Seminar",
-        "atelier": "Workshop",
-        "ceremonie": "Ceremony",
-        "reception": "Reception",
-        "formation": "Training",
-        "autre": "Other"
-      },
-      "fields": {
-        "titre": "Title",
-        "description": "Description",
-        "contenu": "Content",
-        "dateDebut": "Start Date",
-        "dateFin": "End Date",
-        "heureDebut": "Start Time",
-        "heureFin": "End Time",
-        "lieu": "Location",
-        "adresse": "Address",
-        "image": "Featured Image",
-        "status": "Status",
-        "categorie": "Category",
-        "tags": "Tags",
-        "priorite": "Priority",
-        "langue": "Language",
-        "metaTitre": "Meta Title",
-        "metaDescription": "Meta Description",
-        "capaciteMax": "Maximum Capacity",
-        "prixEntree": "Entry Price",
-        "gratuit": "Free",
-        "inscriptionRequise": "Registration Required",
-        "lienInscription": "Registration Link",
-        "typeEvenement": "Event Type",
-        "contact": "Contact"
-      },
-      "priority": {
-        "normale": "Normal",
-        "importante": "Important",
-        "urgente": "Urgent"
-      }
-    },
-    "gestionGalerie": {
-      "photo": {
-        "title": "Photo Gallery Management",
-        "total_brouillon": "Total Draft Photos",
-        "total_publie": "Total Published Photos",
-        "total_photo": "Total Photos",
-        "create_photo": "Add Photo",
-        "edit_photo": "Edit Photo",
-        "delete_photo": "Delete Photo",
-        "view_photo": "View Photo",
-        "search_placeholder": "Search by title, description or tags...",
-        "no_results": "No photos found",
-        "status": {
-          "brouillon": "Draft",
-          "publie": "Published",
-          "archive": "Archived"
-        },
-        "category": {
-          "evenement": "Event",
-          "reception": "Reception",
-          "conference": "Conference",
-          "culture": "Culture",
-          "diplomatie": "Diplomacy"
-        },
-        "fields": {
-          "titre": "Title",
-          "description": "Description",
-          "image": "Image",
-          "status": "Status",
-          "categorie": "Category",
-          "tags": "Tags",
-          "dateAjout": "Date Added",
-          "taille": "File Size",
-          "resolution": "Resolution"
-        }
-      },
-      "videos": {
-        "title": "Video Gallery Management",
-        "total_brouillon": "Total Draft Videos",
-        "total_publie": "Total Published Videos",
-        "total_video": "Total Videos",
-        "create_video": "Add Video",
-        "edit_video": "Edit Video",
-        "delete_video": "Delete Video",
-        "view_video": "View Video",
-        "search_placeholder": "Search by title, description or tags...",
-        "no_results": "No videos found",
-        "status": {
-          "brouillon": "Draft",
-          "publie": "Published",
-          "archive": "Archived"
-        },
-        "category": {
-          "evenement": "Event",
-          "interview": "Interview",
-          "presentation": "Presentation",
-          "culture": "Culture",
-          "documentaire": "Documentary"
-        },
-        "fields": {
-          "titre": "Title",
-          "description": "Description",
-          "url": "Video URL",
-          "thumbnail": "Thumbnail",
-          "status": "Status",
-          "categorie": "Category",
-          "tags": "Tags",
-          "dateAjout": "Date Added",
-          "duree": "Duration",
-          "qualite": "Quality"
-        }
-      }
-    },
-    "gestionService": {
-      "title": "Service Management",
-      "total_service": "Total Services",
-      "total_actif": "Active Services",
-      "total_inactif": "Inactive Services",
-      "create_service": "Create Service",
-      "edit_service": "Edit Service",
-      "delete_service": "Delete Service",
-      "view_service": "View Service",
-      "search_placeholder": "Search by name, description or type...",
-      "no_results": "No services found",
-      "status": {
-        "actif": "Active",
-        "inactif": "Inactive",
-        "maintenance": "Under Maintenance"
-      },
-      "type": {
-        "consulaire": "Consular Service",
-        "visa": "Visa",
-        "passeport": "Passport",
-        "authentification": "Authentication",
-        "notariat": "Notarial Service"
-      },
-      "fields": {
-        "nom": "Service Name",
-        "description": "Description",
-        "type": "Service Type",
-        "status": "Status",
-        "tarif": "Fee",
-        "delaiTraitement": "Processing Time",
-        "documentsRequis": "Required Documents",
-        "contact": "Contact Person",
-        "horaires": "Opening Hours"
-      }
-    }
+    "view_less": "View less",
+    "add_to_cart": "Add to cart"
   },
   "Menu": {
     "dashboard": "Dashboard",
     "analytics": "Analytics",
     "banking": "Banking",
-    "crm": "Crm",
-    "ecommerce": "Ecommerce",
+    "crm": "CRM",
+    "ecommerce": "E-commerce",
     "project": "Project",
     "changelog": "Changelog",
     "apps": "Apps",
@@ -461,26 +212,26 @@
     "email": "Email",
     "kanban": "Kanban",
     "calendar": "Calendar",
-    "todo": "Todo",
+    "todo": "Todos",
     "projects": "Projects",
     "pages": "Pages",
     "authentication": "Authentication",
-    "signInOne": "Signin One",
-    "signInTwo": "Signin Two",
-    "signInThree": "Signin Three",
-    "signUpOne": "Signup One",
-    "signUpTwo": "Signup Two",
-    "signUpThree": "Signup Three",
+    "signInOne": "Sign in One",
+    "signInTwo": "Sign in Two",
+    "signInThree": "Sign in Three",
+    "signUpOne": "Sign up One",
+    "signUpTwo": "Sign up Two",
+    "signUpThree": "Sign up Three",
     "forgotPasswordOne": "Forgot Password One",
     "forgotPasswordTwo": "Forgot Password Two",
     "forgotPasswordThree": "Forgot Password Three",
     "lockScreenOne": "Lock Screen One",
     "lockScreenTwo": "Lock Screen Two",
     "lockScreenThree": "Lock Screen Three",
-    "utility": "utility",
+    "utility": "Utility",
     "blankPage": "Blank Page",
     "blog": "Blog",
-    "faq": "Faq",
+    "faq": "FAQ",
     "invoice": "Invoice",
     "pricing": "Pricing",
     "profile": "Profile",
@@ -521,17 +272,17 @@
     "input": "Input",
     "textarea": "Textarea",
     "select": "Select",
-    "reactSelect":"React Select",
+    "reactSelect": "React Select",
     "slider": "Slider",
     "switch": "Switch",
     "inputGroup": "Input Group",
-    "inputLayout":"Input Layout",
-    "inputMask":"Input Mask",
-    "inputFile":"File Input",
-    "formValidation":"Form Validation",
+    "inputLayout": "Input Layout",
+    "inputMask": "Input Mask",
+    "inputFile": "File Input",
+    "formValidation": "Form Validation",
     "radio": "Radio",
     "checkbox": "Checkbox",
-    "inputOtp": "Input Otp",
+    "inputOtp": "OTP Input",
     "combobox": "Combobox",
     "command": "Command",
     "table": "Table",
@@ -563,9 +314,9 @@
     "rechart": "Rechart",
     "composedCharts": "Composed Charts",
     "chartJs": "Chart JS",
-    "animationCharts": "Animations Charts",
+    "animationCharts": "Animation Charts",
     "legendCharts": "Legend Charts",
-    "scaleOptionCharts": "Scaleoptions Charts",
+    "scaleOptionCharts": "Scale Option Charts",
     "scaleCharts": "Scale Charts",
     "scriptableCharts": "Scriptable Charts",
     "titleCharts": "Title Charts",
@@ -573,11 +324,11 @@
     "otherCharts": "Other Charts",
     "unovisChart": "Unovis Chart",
     "maps": "Maps",
-    "mapsLeaflet": "Maps Leaflet",
-    "mapsUnovisAdvance": "Maps unovis advance",
-    "mapsUnovisFlow": "Maps unovis flow",
-    "mapsUnovisLeaflet": "Maps unovis leaflet",
-    "mapsVector": "Maps Vector",
+    "mapsLeaflet": "Leaflet Maps",
+    "mapsUnovisAdvance": "Unovis Advance Maps",
+    "mapsUnovisFlow": "Unovis Flow Maps",
+    "mapsUnovisLeaflet": "Unovis Leaflet Maps",
+    "mapsVector": "Vector Maps",
     "icons": "Icons",
     "userApp": "User App",
     "adminApp": "Admin App",
@@ -596,13 +347,13 @@
     "colors": "Colors"
   },
   "Changelog": {
-    "version": "Version's",
+    "version": "Versions",
     "changelog": "CHANGELOG",
     "versionHistory": "VERSION HISTORY"
   },
   "gestionDemande": {
     "title": "Request Management",
-    "description": "Manage user requests",
+    "description": "Manage your users' requests",
     "searchPlaceholder": "Search by name, email or ID",
     "statusFilter": "Filter by status",
     "allStatus": "All statuses",
@@ -623,10 +374,10 @@
     "error": "Error loading requests",
     "retry": "Retry",
     "dataRefreshed": "Data refreshed",
-    "exportDevelopment": "Export functionality under development",
+    "exportDevelopment": "Export feature under development",
     "page": "Page",
     "of": "of",
-    "on": "of",
+    "on": "on",
     "showing": "Showing",
     "to": "to",
     "results": "results",
@@ -635,31 +386,31 @@
     "previous": "Previous",
     "next": "Next",
     "last": "Last",
-    "requestId": "Request ID",
+    "requestId": "ID",
     "applicant": "Applicant",
     "service": "Service",
     "status": "Status",
-    "createdAt": "Created",
-    "updatedAt": "Last Updated",
+    "createdAt": "Creation Date",
+    "updatedAt": "Last updated",
     "statuses": {
       "new": "New",
-      "inReviewDocs": "Document Review",
-      "pendingAdditionalInfo": "Additional Info Required",
-      "approvedByAgent": "Approved by Agent",
-      "approvedByChef": "Approved by Head",
-      "approvedByConsul": "Approved by Consul",
+      "inReviewDocs": "Document review",
+      "pendingAdditionalInfo": "Additional info required",
+      "approvedByAgent": "Approved by agent",
+      "approvedByChef": "Approved by supervisor",
+      "approvedByConsul": "Approved by consul",
       "rejected": "Rejected",
-      "readyForPickup": "Ready for Pickup",
+      "readyForPickup": "Ready for pickup",
       "delivered": "Delivered",
       "archived": "Archived"
     },
     "services": {
       "visa": "Visa",
-      "birthActApplication": "Birth Certificate",
+      "birthActApplication": "Birth Act",
       "consularCard": "Consular Card",
       "laissezPasser": "Laissez-passer",
-      "marriageCapacityAct": "Marriage Capacity Certificate",
-      "deathActApplication": "Death Certificate",
+      "marriageCapacityAct": "Marriage Capacity Act",
+      "deathActApplication": "Death Act",
       "powerOfAttorney": "Power of Attorney",
       "nationalityCertificate": "Nationality Certificate"
     },
@@ -672,7 +423,7 @@
         "title": "Request Details #{id}",
         "applicantInfo": "Applicant Information",
         "requestDetails": "Request Details",
-        "specificDetails": "Service Specific Details",
+        "specificDetails": "Specific Service Details",
         "attachedDocuments": "Attached Documents",
         "amount": "Amount",
         "fcfa": "FCFA",
@@ -687,12 +438,12 @@
       },
       "editRequest": {
         "title": "Edit Request #{id}",
-        "currentStatus": "Current Status",
-        "newStatus": "New Status",
+        "currentStatus": "Current status",
+        "newStatus": "New status",
         "changeReason": "Reason for change (optional)",
         "reasonPlaceholder": "Explain the reason for this status change...",
         "criticalAction": "Critical Action",
-        "criticalWarning": "This status change may have important consequences. Make sure to document the reason properly.",
+        "criticalWarning": "This status change can have significant consequences. Be sure to document the reason well.",
         "noChangeDetected": "No changes detected",
         "updated": "Request updated successfully",
         "error": "Error updating request",
@@ -701,11 +452,11 @@
         "saving": "Saving..."
       },
       "deleteRequest": {
-        "title": "Confirm Deletion",
+        "title": "Confirm deletion",
         "warning": "Warning:",
         "warningText": "This action will permanently delete this request and all associated data. This action is irreversible.",
         "cancel": "Cancel",
-        "delete": "Delete Permanently"
+        "delete": "Permanently delete"
       }
     },
     "tooltips": {
@@ -713,5 +464,405 @@
       "editStatus": "Edit status",
       "delete": "Delete"
     }
+  },
+  "contenu": {
+    "gestionPhoto": {
+      "title": "Photo Management",
+      "total_photo": "Total photos",
+      "photo_actif": "Active photos",
+      "photo_inactif": "Inactive photos",
+      "photo_banni": "Banned photos"
+    },
+    "gestionVideo": {
+      "title": "Video Management",
+      "total_video": "Total videos",
+      "video_actif": "Active videos",
+      "video_inactif": "Inactive videos",
+      "video_banni": "Banned videos"
+    },
+    "gestionActualite": {
+      "title": "News Management",
+      "total_brouillon": "Total draft news",
+      "total_publie": "Total published news",
+      "total_actualite": "Total news",
+      "create_article": "Create article",
+      "edit_article": "Edit article",
+      "delete_article": "Delete article",
+      "view_article": "View article",
+      "search_placeholder": "Search by title or description...",
+      "no_results": "No news found",
+      "status": {
+        "brouillon": "Draft",
+        "publie": "Published",
+        "archive": "Archived"
+      },
+      "category": {
+        "diplomatie": "Diplomacy",
+        "culture": "Culture",
+        "economie": "Economy",
+        "societe": "Society",
+        "education": "Education"
+      },
+      "fields": {
+        "titre": "Title",
+        "description": "Description",
+        "contenu": "Content",
+        "image": "Main image",
+        "status": "Status",
+        "categorie": "Category",
+        "tags": "Tags",
+        "priorite": "Priority",
+        "langue": "Language",
+        "metaTitre": "Meta title",
+        "metaDescription": "Meta description",
+        "datePublication": "Publication date",
+        "vues": "Number of views"
+      },
+      "priority": {
+        "normale": "Normal",
+        "importante": "Important",
+        "urgente": "Urgent"
+      },
+      "filters": {
+        "all_status": "All statuses",
+        "all_categories": "All categories",
+        "all_priorities": "All priorities"
+      },
+      "labels": {
+        "articles_found_singular": "article found",
+        "articles_found_plural": "articles found"
+      },
+      "empty_state": {
+        "title": "No news found",
+        "description": "Try changing your filters or create a new article",
+        "create_button": "Create article"
+      }
+    },
+    "gestionEvenement": {
+      "title": "Event Management",
+      "total_brouillon": "Total draft events",
+      "total_publie": "Total published events",
+      "total_evenement": "Total events",
+      "create_event": "Create event",
+      "edit_event": "Edit event",
+      "delete_event": "Delete event",
+      "view_event": "View event",
+      "search_placeholder": "Search by title, description or location...",
+      "no_results": "No events found",
+      "status": {
+        "brouillon": "Draft",
+        "publie": "Published",
+        "annule": "Canceled",
+        "archive": "Archived"
+      },
+      "type": {
+        "conference": "Conference",
+        "seminaire": "Seminar",
+        "atelier": "Workshop",
+        "ceremonie": "Ceremony",
+        "reception": "Reception",
+        "formation": "Training",
+        "autre": "Other"
+      },
+      "fields": {
+        "titre": "Title",
+        "description": "Description",
+        "contenu": "Content",
+        "dateDebut": "Start date",
+        "dateFin": "End date",
+        "heureDebut": "Start time",
+        "heureFin": "End time",
+        "lieu": "Location",
+        "adresse": "Address",
+        "image": "Main image",
+        "status": "Status",
+        "categorie": "Category",
+        "tags": "Tags",
+        "priorite": "Priority",
+        "langue": "Language",
+        "metaTitre": "Meta title",
+        "metaDescription": "Meta description",
+        "capaciteMax": "Max capacity",
+        "prixEntree": "Entry price",
+        "gratuit": "Free",
+        "inscriptionRequise": "Registration required",
+        "lienInscription": "Registration link",
+        "typeEvenement": "Event type",
+        "contact": "Contact"
+      },
+      "priority": {
+        "normale": "Normal",
+        "importante": "Important",
+        "urgente": "Urgent"
+      },
+      "filters": {
+        "all_status": "All statuses",
+        "all_types": "All types",
+        "all_priorities": "All priorities"
+      },
+      "labels": {
+        "upcoming": "Upcoming",
+        "free": "Free",
+        "participants": "participants",
+        "registration_link": "Registration link",
+        "organized_by": "Organized by",
+        "events_found_singular": "event found",
+        "events_found_plural": "events found"
+      },
+      "empty_state": {
+        "title": "No events found",
+        "description": "Try changing your filters or create a new event",
+        "create_button": "Create event"
+      }
+    },
+    "gestionGalerie": {
+      "photo": {
+        "title": "Photo Gallery Management",
+        "total_brouillon": "Total draft photos",
+        "total_publie": "Total published photos",
+        "total_photo": "Total photos",
+        "create_photo": "Add photo",
+        "edit_photo": "Edit photo",
+        "delete_photo": "Delete photo",
+        "view_photo": "View photo",
+        "search_placeholder": "Search by title, description or tags...",
+        "no_results": "No photos found",
+        "status": {
+          "brouillon": "Draft",
+          "publie": "Published",
+          "archive": "Archived"
+        },
+        "category": {
+          "evenement": "Event",
+          "reception": "Reception",
+          "conference": "Conference",
+          "culture": "Culture",
+          "diplomatie": "Diplomacy",
+          "autre": "Other"
+        },
+        "fields": {
+          "titre": "Title",
+          "description": "Description",
+          "image": "Image",
+          "status": "Status",
+          "categorie": "Category",
+          "tags": "Tags",
+          "dateAjout": "Date added",
+          "taille": "File size",
+          "resolution": "Resolution"
+        },
+        "filters": {
+          "all_status": "All statuses",
+          "all_categories": "All categories",
+          "all_priorities": "All priorities"
+        },
+        "labels": {
+          "photos_found_singular": "photo found",
+          "photos_found_plural": "photos found",
+          "file_size": "Size",
+          "resolution": "Resolution",
+          "taken_by": "Taken by"
+        },
+        "placeholders": {
+          "search": "Search gallery..."
+        },
+        "empty_state": {
+          "title": "No photos found",
+          "description": "Try changing your filters or add a new photo",
+          "create_button": "Add photo"
+        },
+        "priority": {
+          "normale": "Normal",
+          "importante": "Important",
+          "urgente": "Urgent"
+        }
+      },
+      "videos": {
+        "title": "Video Gallery Management",
+        "total_brouillon": "Total draft videos",
+        "total_publie": "Total published videos",
+        "total_video": "Total videos",
+        "create_video": "Add video",
+        "edit_video": "Edit video",
+        "delete_video": "Delete video",
+        "view_video": "View video",
+        "search_placeholder": "Search by title, description or tags...",
+        "no_results": "No videos found",
+        "status": {
+          "brouillon": "Draft",
+          "publie": "Published",
+          "archive": "Archived"
+        },
+        "category": {
+          "evenement": "Event",
+          "interview": "Interview",
+          "presentation": "Presentation",
+          "culture": "Culture",
+          "documentaire": "Documentary",
+          "diplomatie": "Diplomacy",
+          "ceremonie": "Ceremony",
+          "autre": "Other"
+        },
+        "fields": {
+          "titre": "Title",
+          "description": "Description",
+          "url": "Video URL",
+          "thumbnail": "Thumbnail",
+          "status": "Status",
+          "categorie": "Category",
+          "tags": "Tags",
+          "dateAjout": "Date added",
+          "duree": "Duration",
+          "qualite": "Quality"
+        },
+        "filters": {
+          "all_status": "All statuses",
+          "all_categories": "All categories",
+          "all_priorities": "All priorities"
+        },
+        "labels": {
+          "videos_found_singular": "video found",
+          "videos_found_plural": "videos found",
+          "duration": "Duration",
+          "quality": "Quality",
+          "uploaded_by": "Uploaded by"
+        },
+        "placeholders": {
+          "search": "Search videos..."
+        },
+        "empty_state": {
+          "title": "No videos found",
+          "description": "Try changing your filters or add a new video",
+          "create_button": "Add video"
+        },
+        "priority": {
+          "normale": "Normal",
+          "importante": "Important",
+          "urgente": "Urgent"
+        }
+      }
+    },
+    "gestionService": {
+      "title": "Service Management",
+      "total_service": "Total services",
+      "total_actif": "Active services",
+      "total_inactif": "Inactive services",
+      "create_service": "Create service",
+      "edit_service": "Edit service",
+      "delete_service": "Delete service",
+      "view_service": "View service",
+      "search_placeholder": "Search by name, description or type...",
+      "no_results": "No services found",
+      "status": {
+        "actif": "Active",
+        "inactif": "Inactive",
+        "maintenance": "Under maintenance",
+        "bientot_disponible": "Coming soon"
+      },
+      "type": {
+        "consulaire": "Consular service",
+        "visa": "Visa",
+        "passeport": "Passport",
+        "authentification": "Authentication",
+        "notariat": "Notary"
+      },
+      "fields": {
+        "nom": "Service name",
+        "description": "Description",
+        "type": "Service type",
+        "status": "Status",
+        "tarif": "Price",
+        "delaiTraitement": "Processing time",
+        "documentsRequis": "Required documents",
+        "contact": "Responsible contact",
+        "horaires": "Opening hours"
+      },
+      "filters": {
+        "all_status": "All statuses",
+        "all_categories": "All categories",
+        "all_priorities": "All priorities"
+      },
+      "labels": {
+        "services_found_singular": "service found",
+        "services_found_plural": "services found",
+        "processing_time": "Processing time",
+        "price": "Price",
+        "recent": "New",
+        "free": "Free",
+        "responsible": "Responsible"
+      },
+      "placeholders": {
+        "search": "Search for a service..."
+      },
+      "empty_state": {
+        "title": "No services found",
+        "description": "Try changing your filters or add a new service",
+        "create_button": "Add a service"
+      },
+      "priority": {
+        "normale": "Normal",
+        "importante": "Important",
+        "urgente": "Urgent"
+      },
+      "category": {
+        "consulaire": "Consular",
+        "administratif": "Administrative",
+        "juridique": "Legal",
+        "culture": "Culture",
+        "commerce": "Commerce",
+        "autre": "Other"
+      }
+    }
+  },
+  "finance": {
+    "depenses": {
+      "title": "Expense Management",
+      "total_depense": "Total expenses",
+      "depenses_mensuelles": "Monthly expenses",
+      "depenses_annuelles": "Annual expenses",
+      "depenses_hebdomadaires": "Weekly expenses"
+    },
+    "rapport": {
+      "title": "Report Management",
+      "total_rapport": "Total reports",
+      "rapport_mensuelles": "Monthly reports",
+      "rapport_annuelles": "Annual reports",
+      "rapport_hebdomadaires": "Weekly reports"
+    }
+  },
+  "gestionUtilisateur": {
+    "title": "User Management",
+    "total_utilisateur": "Total users",
+    "utilisateur_actif": "Active users",
+    "utilisateur_inactif": "Inactive users",
+    "utilisateur_banni": "Banned users"
+  },
+  "gestionDemandeur": {
+    "title": "Citizen Management",
+    "total_demandeur": "Total citizens",
+    "demandeur_actif": "Active citizens",
+    "demandeur_inactif": "Inactive citizens",
+    "demandeur_banni": "Banned citizens"
+  },
+  "gestionDepense": {
+    "title": "Expense Management",
+    "total_depense": "Total expenses",
+    "depenses_mensuelles": "Monthly expenses",
+    "depenses_annuelles": "Annual expenses",
+    "depenses_hebdomadaires": "Weekly expenses"
+  },
+  "gestionPhoto": {
+    "title": "Photo Management",
+    "total_photo": "Total photos",
+    "photo_actif": "Active photos",
+    "photo_inactif": "Inactive photos",
+    "photo_banni": "Banned photos"
+  },
+  "gestionVideo": {
+    "title": "Video Management",
+    "total_video": "Total videos",
+    "video_actif": "Active videos",
+    "video_inactif": "Inactive videos",
+    "video_banni": "Banned videos"
   }
 }

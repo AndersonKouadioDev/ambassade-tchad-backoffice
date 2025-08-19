@@ -39,9 +39,9 @@ export function getMenuList(pathname: string, t: any): Group[] {
       menus: [
         {
           id: "dashboard",
-          href: "/dashboard/analytics",
+          href: "/dashboard",
           label: t("dashboard"),
-          active: pathname.startsWith("/dashboard/analytics"),
+          active: pathname.startsWith("/dashboard"),
           icon: "heroicons-outline:home",
           submenus: []
         },
@@ -157,15 +157,15 @@ export function getHorizontalMenuList(pathname: string, t: any): Group[] {
       menus: [
         {
           id: "dashboard",
-          href: "/dashboard/analytics",
+          href: "/dashboard",
           label: t("dashboard"),
           active: pathname.includes("/dashboard"),
           icon: "heroicons-outline:home",
           submenus: [
             {
-              href: "/dashboard/analytics",
+              href: "/dashboard",
               label: t("analytics"),
-              active: pathname === "/dashboard/analytics",
+              active: pathname === "/dashboard",
               icon: "heroicons:arrow-trending-up",
               children: [],
             },

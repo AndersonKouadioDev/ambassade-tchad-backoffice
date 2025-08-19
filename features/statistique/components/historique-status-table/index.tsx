@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnFiltersState,
   SortingState,
@@ -11,9 +11,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { columns } from "./columns"
-import { Input } from "@/components/ui/input"
+} from "@tanstack/react-table";
+import { columns } from "./columns";
 
 import {
   Table,
@@ -22,20 +21,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import { data } from "./data"
-import TablePagination from "./table-pagination"
-import { useTranslations } from "next-intl"
+import { useTranslations } from "next-intl";
+import { IRecentStatusHistory } from "@/features/statistique/types/statistique.type";
 
-const TransactionsTable= () => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+interface HistoriqueStatusTableProps {
+  data: IRecentStatusHistory[];
+}
+
+const HistoriqueStatusTable = ({ data }: HistoriqueStatusTableProps) => {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -54,25 +56,13 @@ const TransactionsTable= () => {
       columnVisibility,
       rowSelection,
     },
-  })
-   const t = useTranslations("CrmDashboard");
+  });
+  const t = useTranslations("CrmDashboard");
   return (
     <div className="w-full">
       <div className="flex items-center flex-wrap gap-2 py-4 px-5">
-        <div className="flex-1 text-xl font-medium text-default-900 whitespace-nowrap">
+        <div className="flex-1 text-xl md:text-2xl font-bold text-default-900 whitespace-nowrap">
           {t("latest_transactions")}
-        </div>
-        <div className="flex-none">
-          <Input
-            placeholder="Search..."
-            value={
-              (table.getColumn("status")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("status")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm "
-          />
         </div>
       </div>
 
@@ -118,8 +108,8 @@ const TransactionsTable= () => {
           )}
         </TableBody>
       </Table>
-      <TablePagination table={table} />
     </div>
   );
-}
-export default TransactionsTable;
+};
+
+export default HistoriqueStatusTable;

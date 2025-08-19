@@ -1,18 +1,13 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { Eye, SquarePen, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { ColumnDef } from "@tanstack/react-table";
+import { SquarePen } from "lucide-react";
 
-import { IDemande, DemandeStatus } from "../../types/demande.type";
+
 import { ServiceType } from "@/features/service/types/service.type";
+import { DemandeStatus, IDemande } from "../../types/demande.type";
 
 import { getDemandeStatusLabel } from "../../utils/getDemandeStatusLabel";
 import { getServiceTypeLabel } from "../../utils/getServiceTypeLabel";

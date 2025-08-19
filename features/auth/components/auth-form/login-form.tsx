@@ -53,7 +53,7 @@ const LoginForm = () => {
           description: response.message,
         });
       } else {
-        window.location.href = "/dashboard/analytics";
+        window.location.href = "/dashboard";
         toast.success("Connexion réussie");
       }
     });

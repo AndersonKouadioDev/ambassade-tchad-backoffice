@@ -1,18 +1,14 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RevenueByService } from "@/features/finance/rapport/types/rapport-financier.type";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface RevenueTableProps {
   data: RevenueByService[];
 }
 
 export const RevenueTable: React.FC<RevenueTableProps> = ({ data }) => {
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: "XOF",
-    }).format(amount);
-  };
+
 
   const totalRevenue = data.reduce((sum, item) => sum + item.amount, 0);
 

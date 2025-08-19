@@ -4,6 +4,7 @@ import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Transaction } from "@/features/finance/rapport/types/rapport-financier.type";
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface TransactionLogProps {
   transactions: Transaction[];
@@ -12,12 +13,6 @@ interface TransactionLogProps {
 export const TransactionLog: React.FC<TransactionLogProps> = ({
   transactions,
 }) => {
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: "XOF",
-    }).format(Math.abs(amount));
-  };
 
   const formatDate = (dateString: string): string => {
     return format(new Date(dateString), "dd/MM/yyyy");

@@ -3,6 +3,7 @@ import { TrendingUp, TrendingDown, DollarSign } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { KPIData } from "@/features/finance/rapport/types/rapport-financier.type";
 import { StatusBlock } from "@/components/blocks/status-block";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface KPICardsProps {
   data: KPIData;
@@ -13,12 +14,6 @@ export const KPICards: React.FC<KPICardsProps> = ({ data, isLoading }) => {
   const { totalRevenue, totalExpenses, surplusDeficit } = data;
   const isPositive = surplusDeficit >= 0;
 
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: "XOF",
-    }).format(Math.abs(amount));
-  };
 
   if (isLoading) {
     return (

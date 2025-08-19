@@ -1,10 +1,15 @@
 import { getTranslations } from "next-intl/server";
 import { BookOpen } from "lucide-react";
 import { Dashboard } from "@/features/finance/rapport/components/dashboard";
+import { prefetchFinancialReportQuery } from "@/features/finance/rapport/queries/rapport-financier.query";
 
 export default async function DepenseListPage() {
   const t = await getTranslations("finance.rapport");
 
+  await prefetchFinancialReportQuery({
+    year: new Date().getFullYear(),
+    period: "month",
+  });
   return (
     <div className="space-y-8">
       <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-8 text-white shadow-lg dark:shadow-2xl">
