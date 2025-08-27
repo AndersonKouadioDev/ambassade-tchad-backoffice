@@ -25,8 +25,20 @@ export const useEvenementListTable = () => {
       params.title = filters.title.trim();
     }
 
-    if (filters.description && filters.description.trim()) {
-      params.description = filters.description.trim();
+    if (filters.location && filters.location.trim()) {
+      params.location = filters.location.trim();
+    }
+
+    if (filters.eventDate && filters.eventDate.trim()) {
+      params.eventDate = filters.eventDate.trim();
+    }
+
+    if (filters.fromDate && filters.fromDate.trim()) {
+      params.fromDate = filters.fromDate.trim();
+    }
+
+    if (filters.toDate && filters.toDate.trim()) {
+      params.toDate = filters.toDate.trim();
     }
 
     if (filters.authorId && filters.authorId.trim()) {
