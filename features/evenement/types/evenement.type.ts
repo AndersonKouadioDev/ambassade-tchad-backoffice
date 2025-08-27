@@ -18,10 +18,12 @@ export interface IEvenement {
 
 export interface IEvenementRechercheParams {
     title?: string;
-    description?: string;
-    eventDate?: Date;
-    published?: boolean;
     authorId?: string;
+    published?: boolean;
+    location?: String;
+    eventDate?: string;
+    fromDate?: string;
+    toDate?: string;
     page?: number;
     limit?: number;
 }
@@ -36,5 +38,5 @@ export interface IEvenementStats {
             id: number;
         };
     }[];
- 
+
 }

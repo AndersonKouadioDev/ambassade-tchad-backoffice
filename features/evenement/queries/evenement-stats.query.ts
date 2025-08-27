@@ -2,15 +2,22 @@ import getQueryClient from "@/lib/get-query-client";
 import { useQuery } from "@tanstack/react-query";
 import { getEvenementStatsAction } from "../actions/evenement.action";
 import { evenementKeyQuery } from "./index.query";
+import React from "react";
+import { toast } from "sonner";
 
 const queryClient = getQueryClient();
-// Option de requête
+
 export const evenementStatsQueryOption = () => {
     return {
         queryKey: evenementKeyQuery(),
         queryFn: async () => {
-           const data = await getEvenementStatsAction();
-           return data;
+            const result = await getEvenementStatsAction();
+
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+
+            return result.data!;
         },
         keepPreviousData: true,
         staleTime: 5 * 60 * 1000, // 5 minutes
@@ -20,7 +27,15 @@ export const evenementStatsQueryOption = () => {
 }
 // Hook pour récupérer les stats des événements
 export const useEvenementStats = () => {
-    return useQuery(evenementStatsQueryOption());
+    const query = useQuery(evenementStatsQueryOption());
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error("Erreur de récupération des stats des événements:", {
+                description: query.error?.message,
+            });
+        }
+    }, [query]);
+    return query;
 };
 
 // Hook pour précharger les stats des événements

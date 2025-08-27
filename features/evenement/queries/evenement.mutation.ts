@@ -28,18 +28,18 @@ export const useEvenementCreateMutation = () => {
             const result = await createEvenementAction(validation.data as FormData);
 
             if (!result.success) {
-                throw new Error(result.error || "Erreur lors de la création de l'actualité");
+                throw new Error(result.error || "Erreur lors de la création de l'évènement");
             }
 
             return result.data!;
         },
         onSuccess: async () => {
             await invalidateEvenementQuery();
-            toast.success("Actualité ajoutée avec succès");
+            toast.success("Evènement ajouté avec succès");
         },
 
         onError: async (error) => {
-            toast.error("Erreur lors de l'ajout de l'actualité:", {
+            toast.error("Erreur lors de l'ajout de l'évènement:", {
                 description: error.message,
             });
         },
@@ -62,24 +62,24 @@ export const useEvenementUpdateMutation = () => {
             }
 
             if (!id) {
-                throw new Error("L'identifiant de l'actualité est requis.");
+                throw new Error("L'identifiant de l'évènement est requis.");
             }
 
             // Appel de l'API avec l'action
             const result = await updateEvenementAction(id, validation.data as FormData);
 
             if (!result.success) {
-                throw new Error(result.error || "Erreur lors de la modification de l'actualité");
+                throw new Error(result.error || "Erreur lors de la modification de l'évènement");
             }
 
             return result.data!;
         },
         onSuccess: async () => {
             await invalidateEvenementQuery();
-            toast.success("Actualité modifiée avec succès");
+            toast.success("Evènement modifié avec succès");
         },
         onError: async (error) => {
-            toast.error("Erreur modification actualité:", {
+            toast.error("Erreur modification évènement:", {
                 description: error.message,
             });
         },
@@ -91,20 +91,20 @@ export const useEvenementSupprimerMutation = () => {
     return useMutation({
         mutationFn: async (id: string) => {
             if (!id) {
-                throw new Error("L'identifiant de l'actualité est requis.");
+                throw new Error("L'identifiant de l'évènement est requis.");
             }
             const result = await deleteEvenementAction(id)
             if (!result.success) {
-                throw new Error(result.error || "Erreur lors de la suppression de l'actualité");
+                throw new Error(result.error || "Erreur lors de la suppression de l'évènement");
             }
             return result.data!;
         },
         onSuccess: async () => {
             await invalidateEvenementQuery();
-            toast.success("Actualité supprimée avec succès");
+            toast.success("Evènement supprimé avec succès");
         },
         onError: async (error) => {
-            toast.error("Erreur suppression actualité:", {
+            toast.error("Erreur suppression évènement:", {
                 description: error.message,
             });
         },

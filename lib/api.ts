@@ -19,6 +19,7 @@ export const api = new Api({
     if (user) {
       return {
         accessToken: user.accessToken ?? "",
+        // accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4YTY0OTM5NS0xODEwLTRiM2YtYWU2Ni02N2I3Mzc5NGNmMGMiLCJ0eXBlIjoiUEVSU09OTkVMIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU2MzE0MjE4LCJleHAiOjE3NTY0MDA2MTh9.a4MztE0rKXhRpxb4AYeSqk0RSXi2FOhdZu3idFY1ygo",
       }
     }
     return {
@@ -26,7 +27,7 @@ export const api = new Api({
     }
   },// Récupération du token
   signOut: async () => {
-    await logout()
+    // await logout()
   }, // Déconnexion automatique si la requête échoue avec un code 401
   debug: true, // Debug activé en mode développement
 });

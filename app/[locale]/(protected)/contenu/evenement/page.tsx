@@ -1,4 +1,3 @@
-
 import { EvenementStats } from "@/features/evenement/components";
 import { EvenementList } from "@/features/evenement/components/evenement-list";
 import { prefetchEvenementsList } from "@/features/evenement/queries/evenement-list.query";
@@ -7,11 +6,12 @@ import { BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 export default async function EvenementListPage() {
-  const t = await getTranslations("contenu.gestionActualite");
+  const t = await getTranslations("contenu.gestionEvenement");
 
   await Promise.all([
     prefetchEvenementsList({
       page: 1,
+      limit: 10,
     }),
     prefetchEvenementStats(),
   ]);
@@ -24,7 +24,7 @@ export default async function EvenementListPage() {
             <BookOpen className="w-8 h-8" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">{t("title")}</h1>
+            <h1 className="text-3xl font-bold capitalize">{t("title")}</h1>
             <p className="text-primary-100 mt-2">
               Gérez et organisez vos évènements avec une interface moderne et
               intuitive
@@ -33,7 +33,7 @@ export default async function EvenementListPage() {
         </div>
       </div>
 
-      <EvenementStats/>
+      <EvenementStats />
 
       <div className="bg-white dark:bg-default-100 rounded-xl shadow-sm border border-default-200/50 p-6">
         <EvenementList />

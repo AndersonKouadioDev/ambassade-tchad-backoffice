@@ -2,29 +2,17 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  TrendingUp,
-  Users,
-  CalendarCheck,
-  CalendarX,
-  FileText,
-  Eye,
-  BookOpen,
-} from "lucide-react";
-import { StatusBlock } from "@/components/blocks/status-block";
-import { useTranslations } from "next-intl";
+import { TrendingUp, Users, CalendarCheck, CalendarX } from "lucide-react";
 import { useEvenementStats } from "../../queries/evenement-stats.query";
 
 export function EvenementStats() {
-  const t = useTranslations("contenu.gestionActualite");
-
-  const { data: stats, isLoading } = useEvenementStats();
+  const { data: stats, isError, isLoading } = useEvenementStats();
 
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat("fr-FR").format(num);
   };
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[...Array(4)].map((_, index) => (
@@ -43,89 +31,55 @@ export function EvenementStats() {
     );
   }
 
-  if (!stats) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatusBlock
-          title={t("total_brouillon")}
-          total="8"
-          iconWrapperClass="bg-orange-100 dark:bg-orange-900/30"
-          chartColor="#FB923C"
-          icon={<FileText className="w-5 h-5 text-orange-600" />}
-        />
-        <StatusBlock
-          title={t("total_publie")}
-          total="15"
-          iconWrapperClass="bg-emerald-100 dark:bg-emerald-900/30"
-          chartColor="#10B981"
-          icon={<Eye className="w-5 h-5 text-emerald-600" />}
-        />
-        <StatusBlock
-          title={t("total_actualite")}
-          total="28"
-          icon={<BookOpen className="w-5 h-5 text-primary-600" />}
-          iconWrapperClass="bg-primary-100 dark:bg-primary-900/30"
-          chartColor="#2563EB"
-        />
-        <StatusBlock
-          title="Vues Total"
-          total="3,456"
-          icon={<Users className="w-5 h-5 text-primary" />}
-          iconWrapperClass="bg-primary/10 dark:bg-primary/30"
-          chartColor="#FBBF24"
-        />
-      </div>
-    );
-  }
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {/* Total des actualités */}
+      {/* Total des événements */}
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Total des actualités
+            Total des événements
           </CardTitle>
           <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {formatNumber(stats.total)}
+            {formatNumber(stats?.total || 0)}
           </div>
           <p className="text-xs text-muted-foreground">
-            Toutes les actualités confondues
+            Toutes les événements confondues
           </p>
         </CardContent>
       </Card>
 
-      {/* Actualités publiées */}
+      {/* Événements publiés */}
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Actualités publiées
+            Événements publiés
           </CardTitle>
           <CalendarCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-emerald-600">
-            {formatNumber(stats.published)}
+            {formatNumber(stats?.published || 0)}
           </div>
-          <p className="text-xs text-muted-foreground">Actualités en ligne</p>
+          <p className="text-xs text-muted-foreground">Événements en ligne</p>
         </CardContent>
       </Card>
 
-      {/* Actualités non publiées */}
+      {/* Événements non publiés */}
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Actualités en brouillon
+            Événements en brouillon
           </CardTitle>
           <CalendarX className="w-5 h-5 text-orange-600 dark:text-orange-400" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-orange-600">
-            {formatNumber(stats.unpublished)}
+            {formatNumber(stats?.unpublished || 0)}
           </div>
-          <p className="text-xs text-muted-foreground">Actualités en attente</p>
+          <p className="text-xs text-muted-foreground">Événements en attente</p>
         </CardContent>
       </Card>
 
@@ -139,10 +93,10 @@ export function EvenementStats() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-blue-600">
-            {formatNumber(stats.byAuthor?.length || 0)}
+            {formatNumber(stats?.byAuthor?.length || 0)}
           </div>
           <p className="text-xs text-muted-foreground">
-            Auteurs ayant créé des actualités
+            Auteurs ayant créé des événements
           </p>
         </CardContent>
       </Card>

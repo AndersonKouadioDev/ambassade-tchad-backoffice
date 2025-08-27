@@ -1,29 +1,24 @@
 "use server";
-import {evenementAPI} from "../apis/evenement.api";
-import {IEvenement, IEvenementRechercheParams} from "../types/evenement.type";
-import {handleServerActionError} from "@/utils/handleServerActionError";
-import {ActionResponse} from "@/types";
+import { evenementAPI } from "../apis/evenement.api";
+import { IEvenement, IEvenementRechercheParams, IEvenementStats } from "../types/evenement.type";
+import { handleServerActionError } from "@/utils/handleServerActionError";
+import { ActionResponse, PaginatedResponse } from "@/types";
 
 
-/**
- * Fonction pour créer un nouvel événement
- * @param formdata - Les données du formulaire à valider et envoyer
- * @returns Un objet indiquant le succès de l'opération et un message
- */
+// Création d'un Evenement
 export async function createEvenementAction(
     formdata: FormData
 ): Promise<ActionResponse<IEvenement>> {
     try {
-        // Création de l'évènement
         const result = await evenementAPI.create(formdata);
 
         return {
             success: true,
             data: result,
-            message: "Actualité créée avec succès.",
+            message: "Evenement créée avec succès.",
         };
     } catch (error) {
-        return handleServerActionError(error, "Erreur lors de la création de l'actualité.");
+        return handleServerActionError(error, "Erreur lors de la création de l'evenement.");
     }
 }
 
@@ -34,16 +29,15 @@ export async function updateEvenementAction(
     formData: FormData
 ): Promise<ActionResponse<IEvenement>> {
     try {
-        // mise à jour de l'Evenement
         const result = await evenementAPI.update(id, formData);
 
         return {
             success: true,
             data: result,
-            message: "Actualité créée avec succès.",
+            message: "Evenement modifié avec succès.",
         };
     } catch (error) {
-        return handleServerActionError(error, "Erreur lors de la création de l'actualité.");
+        return handleServerActionError(error, "Erreur lors de la modification de l'evenement.");
     }
 }
 
@@ -51,16 +45,13 @@ export async function updateEvenementAction(
 export async function deleteEvenementAction(
     id: string
 ): Promise<ActionResponse<IEvenement>> {
-    // Vérification de l'ID de l'evenement et verification d'espace dans id
     if (!id || id.trim() === "") {
         return {
             success: false,
             message: "ID de l'evenement requis.",
         };
     }
-    // Vérification de l'existence de l'événement
     try {
-        // Appel à l'API pour supprimer l'événement
         await evenementAPI.delete(id);
         return {
             success: true,
@@ -74,7 +65,7 @@ export async function deleteEvenementAction(
     }
 }
 
-// Les gets sont appelés dans les queries
+// Récupération d'un Evenement
 export async function getEvenementDetailAction(id: string): Promise<ActionResponse<IEvenement>> {
     try {
         const evenement = await evenementAPI.getById(id);
@@ -88,12 +79,32 @@ export async function getEvenementDetailAction(id: string): Promise<ActionRespon
     }
 }
 
-export async function getEvenementTousAction(params: IEvenementRechercheParams) {
+// Récupération de tous les Evenements
+export async function getEvenementTousAction(params: IEvenementRechercheParams): Promise<ActionResponse<PaginatedResponse<IEvenement>>> {
+    try {
+        const result = await evenementAPI.getAll(params);
 
-    return evenementAPI.getAll(params);
+        return {
+            success: true,
+            data: result,
+            message: "Événements récupérés avec succès.",
+        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération des événements.");
+    }
 }
 
-export async function getEvenementStatsAction() {
+// Récupération des stats des Evenements
+export async function getEvenementStatsAction(): Promise<ActionResponse<IEvenementStats>> {
+    try {
+        const result = await evenementAPI.getStats();
 
-    return evenementAPI.getStats();
+        return {
+            success: true,
+            data: result,
+            message: "Stats récupérées avec succès.",
+        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération des stats.");
+    }
 }

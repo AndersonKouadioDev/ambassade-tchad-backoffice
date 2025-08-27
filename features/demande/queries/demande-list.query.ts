@@ -26,7 +26,7 @@ export const demandesFilteredListQueryOption = (params: IDemandeRechercheParams)
         staleTime: 30 * 1000,
         refetchOnWindowFocus: false,
         refetchOnMount: true,
-      
+
     };
 };
 

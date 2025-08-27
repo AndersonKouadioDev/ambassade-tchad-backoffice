@@ -1,31 +1,38 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Calendar as CalendarIcon} from "lucide-react";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Badge} from "@/components/ui/badge";
-import {Switch} from "@/components/ui/switch";
-import {useRouter} from "next/navigation";
-import {Input} from "@/components/ui/input";
-import {Textarea} from "@/components/ui/textarea";
-import {EvenementDTO, evenementSchema} from "../../schemas/evenement.schema";
-import {Label} from "@/components/ui/label";
-import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
-import {Button} from "@/components/ui/button";
-import {Calendar} from "@/components/ui/calendar";
-import {format} from "date-fns";
-import {cn} from "@/lib/utils";
-import {useEvenementCreateMutation, useEvenementUpdateMutation} from "@/features/evenement/queries/evenement.mutation";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { EvenementDTO, evenementSchema } from "../../schemas/evenement.schema";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import {
+  useEvenementCreateMutation,
+  useEvenementUpdateMutation,
+} from "@/features/evenement/queries/evenement.mutation";
 import {
   ExistingImageFile,
   MixedImageFile,
-  NewImageFile
+  NewImageFile,
 } from "@/features/actualites/components/actualite-form/actualite-add-update-form";
-import {ImageDragDrop} from "@/components/blocks/image-drap-drop";
-import {useEvenementDetailQuery} from "@/features/evenement/queries/evenement-details.query";
-import {getFullUrlFile} from "@/utils/getFullUrlFile";
+import { ImageDragDrop } from "@/components/blocks/image-drap-drop";
+import { useEvenementDetailQuery } from "@/features/evenement/queries/evenement-details.query";
+import { getFullUrlFile } from "@/utils/getFullUrlFile";
 
 interface EvenementFormProps {
   id?: string;
@@ -48,7 +55,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
   const {
     mutateAsync: evenementCreateMutation,
     isPending: evenementCreatePending,
-  } = useEvenementCreateMutation()
+  } = useEvenementCreateMutation();
 
   const {
     mutateAsync: evenementUpdateMutation,
@@ -87,13 +94,13 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
 
       // Mapper les images existantes
       const existingImages: ExistingImageFile[] =
-          evenement?.imageUrl?.map((imageUrl, index) => ({
-            id: `existing-${index}`,
-            url: getFullUrlFile(imageUrl),
-            preview: getFullUrlFile(imageUrl),
-            name: imageUrl.split("/").pop() || `Image ${index + 1}`,
-            isExisting: true,
-          })) || [];
+        evenement?.imageUrl?.map((imageUrl, index) => ({
+          id: `existing-${index}`,
+          url: getFullUrlFile(imageUrl),
+          preview: getFullUrlFile(imageUrl),
+          name: imageUrl.split("/").pop() || `Image ${index + 1}`,
+          isExisting: true,
+        })) || [];
 
       setImageFiles(existingImages);
     }
@@ -108,8 +115,8 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
   const onSubmitForm = async (data: EvenementDTO) => {
     try {
       const newImages: File[] = imageFiles
-          .filter((imageFile): imageFile is NewImageFile => !imageFile.isExisting)
-          .map((newImage) => newImage.file);
+        .filter((imageFile): imageFile is NewImageFile => !imageFile.isExisting)
+        .map((newImage) => newImage.file);
 
       const submitData = {
         title: data.title,
@@ -118,7 +125,6 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
         location: data.location,
         published: data.published,
         images: newImages.length > 0 ? newImages : undefined,
-
       };
 
       if (evenement) {
@@ -127,7 +133,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
         await evenementCreateMutation(submitData);
       }
 
-      router.push("/contenu/actualite");
+      router.push("/contenu/evenement");
     } catch (error) {
       console.error("Erreur lors de la soumission:", error);
     }
@@ -234,9 +240,9 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
 
           {/* Images */}
           <ImageDragDrop
-              imageFiles={imageFiles}
-              setImageFiles={setImageFiles}
-              isUpdateMode={!!evenement}
+            imageFiles={imageFiles}
+            setImageFiles={setImageFiles}
+            isUpdateMode={!!evenement}
           />
 
           {/* Switch publié */}

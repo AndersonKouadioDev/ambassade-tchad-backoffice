@@ -38,9 +38,9 @@ export function EvenementDeleteModal({
     try {
       await supprimerEvenementMutation(evenement?.id || "");
       handleClose();
-      toast.success("Actualité supprimée avec succès.");
+      toast.success("Evenement supprimée avec succès.");
     } catch (error) {
-      toast.error("Erreur lors de la suppression de l'actualité", {
+      toast.error("Erreur lors de la suppression de l'evenement", {
         description:
           error instanceof Error ? error.message : "Une erreur est survenue",
       });
