@@ -26,9 +26,12 @@ export const ActualiteSearch: React.FC<EvenementSearchProps> = ({
 }) => {
   const [searchParams, setSearchParams] = useState<IEvenementRechercheParams>({
     title: "",
-    description: "",
-    published: undefined,
     authorId: "",
+    published: undefined,
+    location: "",
+    eventDate: "",
+    fromDate: "",
+    toDate: "",
     page: 1,
     limit: 10,
   });
@@ -42,9 +45,12 @@ export const ActualiteSearch: React.FC<EvenementSearchProps> = ({
   const handleReset = () => {
     const resetParams: IEvenementRechercheParams = {
       title: "",
-      description: "",
-      published: undefined,
       authorId: "",
+      published: undefined,
+      location: "",
+      eventDate: "",
+      fromDate: "",
+      toDate: "",
       page: 1,
       limit: 10,
     };
@@ -65,7 +71,10 @@ export const ActualiteSearch: React.FC<EvenementSearchProps> = ({
   const hasActiveFilters = () => {
     return (
       searchParams.title ||
-      searchParams.description ||
+      searchParams.location ||
+      searchParams.eventDate ||
+      searchParams.fromDate ||
+      searchParams.toDate ||
       searchParams.published !== undefined ||
       searchParams.authorId
     );
@@ -128,16 +137,6 @@ export const ActualiteSearch: React.FC<EvenementSearchProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Statut de publication */}
-
-            {/* Contenu */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Contenu</label>
-              <Input
-                placeholder="Rechercher dans le contenu..."
-                value={searchParams.description || ""}
-                onChange={(e) => handleInputChange("description", e.target.value)}
-              />
-            </div>
 
             {/* Auteur */}
             <div className="space-y-2">
@@ -207,14 +206,14 @@ export const ActualiteSearch: React.FC<EvenementSearchProps> = ({
               </Button>
             </Badge>
           )}
-          {searchParams.description && (
+          {searchParams.location && (
             <Badge className="flex items-center gap-1 bg-blue-100 text-blue-800">
-              description: {searchParams.description}
+              Lieu: {searchParams.location}
               <Button
                 variant="ghost"
                 size="sm"
                 className="h-auto p-0 ml-1"
-                onClick={() => handleInputChange("description", "")}
+                onClick={() => handleInputChange("location", "")}
               >
                 <X className="w-3 h-3" />
               </Button>
