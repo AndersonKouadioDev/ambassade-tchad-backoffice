@@ -16,6 +16,7 @@ export const evenementAPI: IEvenementAPI = {
             endpoint: `/events`,
             method: "GET",
             searchParams: params,
+            service: "public"
         });
     },
 
@@ -23,6 +24,7 @@ export const evenementAPI: IEvenementAPI = {
         return api.request<IEvenement>({
             endpoint: `/events/${id}`,
             method: "GET",
+            service: "public"
         });
     },
 

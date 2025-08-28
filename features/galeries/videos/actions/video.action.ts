@@ -1,10 +1,10 @@
 "use server";
 
-import {videoAPI} from "../apis/video.api";
-import {VideoDTO} from "../schemas/video.schema";
-import {IVideo, IVideoRechercheParams, IVideoStats} from "../types/video.type";
-import {ActionResponse, PaginatedResponse} from "@/types";
-import {handleServerActionError} from "@/utils/handleServerActionError";
+import { videoAPI } from "../apis/video.api";
+import { VideoDTO } from "../schemas/video.schema";
+import { IVideo, IVideoRechercheParams, IVideoStats } from "../types/video.type";
+import { ActionResponse, PaginatedResponse } from "@/types";
+import { handleServerActionError } from "@/utils/handleServerActionError";
 
 /**
  * Fonction pour créer une nouvelle video
@@ -64,7 +64,7 @@ export async function deleteVideoAction(
 
 // Les gets sont appelés dans les queries
 
-export async function getVideoDetailAction(id: string):Promise<ActionResponse<IVideo>> {
+export async function getVideoDetailAction(id: string): Promise<ActionResponse<IVideo>> {
     try {
         const video = await videoAPI.getById(id);
         return {
@@ -77,7 +77,7 @@ export async function getVideoDetailAction(id: string):Promise<ActionResponse<IV
     }
 }
 
-export async function getVideoTousAction(params: IVideoRechercheParams):Promise<ActionResponse<PaginatedResponse<IVideo>>> {
+export async function getVideoTousAction(params: IVideoRechercheParams): Promise<ActionResponse<PaginatedResponse<IVideo>>> {
     try {
         const videos = await videoAPI.getAll(params);
         return {
@@ -90,7 +90,7 @@ export async function getVideoTousAction(params: IVideoRechercheParams):Promise<
     }
 }
 
-export async function getVideoStatsAction():Promise<ActionResponse<IVideoStats>> {
+export async function getVideoStatsAction(): Promise<ActionResponse<IVideoStats>> {
     try {
         const stats = await videoAPI.getStats();
         return {

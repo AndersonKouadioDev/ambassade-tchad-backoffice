@@ -15,7 +15,7 @@ export const actualiteQueryOption = (id: string) => {
             const result = await getActualiteDetailAction(id);
 
             if (!result.success) {
-                throw new Error(result.error || "Une erreur est survenue lors de la récupération de l'actualité");
+                throw new Error(result.error);
             }
 
             return result.data!;

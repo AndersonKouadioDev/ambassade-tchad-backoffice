@@ -1,15 +1,19 @@
 "use client";
 
 import React from "react";
-import {useRouter} from "next/navigation";
-import {AlertTriangle, Search} from "lucide-react";
-import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card";
-import {useEvenementListTable} from "../hooks/useEvenementListTable";
-import {IEvenement} from "../types/evenement.type";
-import {EvenementCard} from "./evenement-list/evenement-card";
-import {EvenementFilters} from "./evenement-list/evenement-filters";
-import {EvenementPagination} from "./evenement-pagination/evenement-pagination";
-
+import { useRouter } from "next/navigation";
+import { AlertTriangle, Search } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { useEvenementListTable } from "../hooks/useEvenementListTable";
+import { IEvenement } from "../types/evenement.type";
+import { EvenementCard } from "./evenement-list/evenement-card";
+import { EvenementFilters } from "./evenement-list/evenement-filters";
+import { EvenementPagination } from "./evenement-pagination/evenement-pagination";
 
 export const EvenementList: React.FC = () => {
   const router = useRouter();
@@ -35,7 +39,9 @@ export const EvenementList: React.FC = () => {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Erreur lors du chargement</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Erreur lors du chargement
+          </h3>
           <p className="text-muted-foreground">
             Une erreur s&apos;est produite lors du chargement des evenements.
           </p>
@@ -81,7 +87,9 @@ export const EvenementList: React.FC = () => {
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold mb-2">Aucun evenement trouvée</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Aucun evenement trouvée
+          </h3>
           <p className="text-muted-foreground">
             Aucun evenement ne correspond à vos critères de recherche.
           </p>
@@ -90,10 +98,7 @@ export const EvenementList: React.FC = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {data.map((evenement: IEvenement) => (
-              <EvenementCard
-                key={evenement.id}
-                evenement={evenement}
-              />
+              <EvenementCard key={evenement.id} evenement={evenement} />
             ))}
           </div>
 
@@ -111,4 +116,4 @@ export const EvenementList: React.FC = () => {
       )}
     </div>
   );
-}; 
+};

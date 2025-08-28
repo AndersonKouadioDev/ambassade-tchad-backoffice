@@ -1,22 +1,19 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import {
-  SquarePen,
-  Trash2,
-  Calendar,
-  Image as ImageIcon,
-  Eye,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { SquarePen, Trash2, Calendar, Eye } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { Link } from "@/i18n/navigation";
 import { IPhoto } from "../../types/photo.type";
 import { formatImageUrl } from "@/features/actualites/utils/image-utils";
@@ -25,19 +22,13 @@ import { PhotoDeleteModal } from "../photo-modal/photo-delete-modal";
 interface PhotoListCardProps {
   photo: IPhoto;
   onView: (photo: IPhoto) => void;
-  onDelete: (photo: IPhoto) => void;
 }
 
 export const PhotoListCard: React.FC<PhotoListCardProps> = ({
   photo,
   onView,
-  onDelete,
 }) => {
   const router = useRouter();
-
-  const handleDeleteClick = () => {
-    onDelete(photo);
-  };
 
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
@@ -85,7 +76,6 @@ export const PhotoListCard: React.FC<PhotoListCardProps> = ({
               size="icon"
               onClick={(e) => {
                 e.stopPropagation();
-                setShowDeleteAlert(true);
                 router.push(`/contenu/galerie-photo/edit/${photo.id}`);
               }}
               title="Modifier"
@@ -132,19 +122,18 @@ export const PhotoListCard: React.FC<PhotoListCardProps> = ({
             </div>
           </div>
         </CardContent>
-
       </Card>
 
-
-      <PhotoDeleteModal photo={photo} isOpen={showDeleteAlert} setIsOpen={setShowDeleteAlert} />
-      
+      <PhotoDeleteModal
+        photo={photo}
+        isOpen={showDeleteAlert}
+        setIsOpen={setShowDeleteAlert}
+      />
     </>
   );
 };
 const PhotoImageCarousel = ({ photo }: { photo: IPhoto }) => {
-  const plugin = useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
-  )
+  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
   return (
     <Carousel
       plugins={[plugin.current]}
@@ -154,7 +143,7 @@ const PhotoImageCarousel = ({ photo }: { photo: IPhoto }) => {
     >
       <CarouselContent>
         {photo.imageUrl?.map((imageUrl, index) => (
-          <CarouselItem key={index} >
+          <CarouselItem key={index}>
             <Image
               src={formatImageUrl(imageUrl)}
               alt={`Image ${index + 1}`}
@@ -170,4 +159,3 @@ const PhotoImageCarousel = ({ photo }: { photo: IPhoto }) => {
     </Carousel>
   );
 };
-

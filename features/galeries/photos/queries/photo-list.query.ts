@@ -3,7 +3,8 @@ import getQueryClient from "@/lib/get-query-client";
 import { IPhotoRechercheParams } from "../types/photo.type";
 import { getPhotoTousAction } from "../actions/photo.action";
 import { photoKeyQuery } from "./index.query";
-
+import React from "react";
+import { toast } from "sonner";
 
 
 const queryClient = getQueryClient();
@@ -15,6 +16,9 @@ export const photoListQueryOption = (photoSearchParams: IPhotoRechercheParams) =
         queryKey: photoKeyQuery('list', photoSearchParams),    
         queryFn: async () => {
             const result = await getPhotoTousAction(photoSearchParams);
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la récupération des photos");
+            }
             return result.data!;
         }
         ,
@@ -25,7 +29,13 @@ export const photoListQueryOption = (photoSearchParams: IPhotoRechercheParams) =
 
 // Hook pour récupérer les photos
 export const usePhotosList = (photoSearchParams: IPhotoRechercheParams) => {
-    return useQuery(photoListQueryOption(photoSearchParams));
+    const query = useQuery(photoListQueryOption(photoSearchParams));
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error(query.error?.message);
+        }
+    }, [query]);
+    return query;
 };
 
 // Hook pour précharger les photos

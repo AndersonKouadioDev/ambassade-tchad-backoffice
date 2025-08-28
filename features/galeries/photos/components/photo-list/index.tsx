@@ -15,16 +15,14 @@ import { IPhoto } from "../../types/photo.type";
 import { PhotoListCard } from "./photo-card";
 
 export const PhotoListTable: React.FC = () => {
-
   const {
     data,
     isLoading,
     error,
     filters,
     handleView,
-    handleDelete,
     handleTextFilterChange,
-    } = usePhotoCardList();
+  } = usePhotoCardList();
 
   if (error) {
     return (
@@ -77,9 +75,7 @@ export const PhotoListTable: React.FC = () => {
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold mb-2">
-            Aucune photo trouvée
-          </h3>
+          <h3 className="text-lg font-semibold mb-2">Aucune photo trouvée</h3>
           <p className="text-muted-foreground">
             Aucune photo ne correspond à vos critères de recherche.
           </p>
@@ -88,12 +84,7 @@ export const PhotoListTable: React.FC = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {data?.map((photo: IPhoto) => (
-              <PhotoListCard
-                key={photo.id}
-                photo={photo}
-                onView={handleView}
-                onDelete={handleDelete}
-              />
+              <PhotoListCard key={photo.id} photo={photo} onView={handleView} />
             ))}
           </div>
 

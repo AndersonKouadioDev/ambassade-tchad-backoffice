@@ -1,41 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
-import {
-  ArrowLeft,
-  Calendar,
-  Clock,
-  Eye,
-  User,
-  Edit,
-  Trash2,
-  Share2,
-  BookOpen,
-  ImageIcon,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { formatImageUrl } from "@/features/actualites/utils/image-utils";
 import { usePhotoDetailQuery } from "@/features/galeries/photos/queries/photo-details.query";
 import { Link } from "@/i18n/navigation";
-import { formatImageUrl } from "@/features/actualites/utils/image-utils";
+import { cn } from "@/lib/utils";
+import {
+  ArrowLeft,
+  BookOpen,
+  Calendar,
+  Clock,
+  Edit,
+  Eye,
+  ImageIcon,
+  Share2,
+  Trash2,
+} from "lucide-react";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { PhotoDeleteModal } from "../photo-modal/photo-delete-modal";
-
 
 export default function PhotoInfo() {
   const params = useParams();
   const router = useRouter();
   const photoId = params?.id as string;
-  
+
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -47,7 +39,9 @@ export default function PhotoInfo() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement de la photo...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Chargement de la photo...
+          </p>
         </div>
       </div>
     );
@@ -60,8 +54,12 @@ export default function PhotoInfo() {
           <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto">
             <Eye className="w-8 h-8 text-red-600 dark:text-red-400" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Photo introuvable</h2>
-          <p className="text-gray-600 dark:text-gray-400">Cette photo n'existe pas ou a été supprimée.</p>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Photo introuvable
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Cette photo n&apos;existe pas ou a été supprimée.
+          </p>
           <Button onClick={() => router.back()} variant="outline">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Retour
@@ -84,7 +82,7 @@ export default function PhotoInfo() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.back()}
+                onClick={() => router.push("/contenu/galerie-photo")}
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -93,16 +91,14 @@ export default function PhotoInfo() {
               <Separator orientation="vertical" className="h-6" />
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-primary" />
-                <span className="font-medium text-gray-900 dark:text-white">Photo</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  Photo
+                </span>
               </div>
             </div>
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
-                <Share2 className="w-4 h-4 mr-2" />
-                Partager
-              </Button>
               <Link href={`/contenu/galerie-photo/edit/${photo.id}`}>
                 <Button variant="outline" size="sm">
                   <Edit className="w-4 h-4 mr-2" />
@@ -142,7 +138,7 @@ export default function PhotoInfo() {
                       onError={() => setImageError(true)}
                       priority
                     />
-                    
+
                     {/* Indicateur d'image */}
                     {(photo.imageUrl?.length ?? 0) > 1 && (
                       <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
@@ -184,7 +180,9 @@ export default function PhotoInfo() {
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 space-y-4">
                     <ImageIcon className="w-16 h-16" />
-                    <p className="text-lg font-medium">Aucune image disponible</p>
+                    <p className="text-lg font-medium">
+                      Aucune image disponible
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -216,7 +214,9 @@ export default function PhotoInfo() {
             {/* Informations de publication */}
             <Card>
               <CardHeader>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Informations</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Informations
+                </h3>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Date de création */}
@@ -230,11 +230,14 @@ export default function PhotoInfo() {
                     </p>
                     <p className="text-sm font-semibold text-blue-800 dark:text-blue-100">
                       {photo.createdAt
-                        ? new Date(photo.createdAt).toLocaleDateString("fr-FR", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })
+                        ? new Date(photo.createdAt).toLocaleDateString(
+                            "fr-FR",
+                            {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            }
+                          )
                         : "Date inconnue"}
                     </p>
                   </div>
@@ -251,10 +254,13 @@ export default function PhotoInfo() {
                     </p>
                     <p className="text-sm font-semibold text-purple-800 dark:text-purple-100">
                       {photo.createdAt
-                        ? new Date(photo.createdAt).toLocaleTimeString("fr-FR", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
+                        ? new Date(photo.createdAt).toLocaleTimeString(
+                            "fr-FR",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )
                         : "Heure inconnue"}
                     </p>
                   </div>
@@ -288,17 +294,23 @@ export default function PhotoInfo() {
             {/* Statistiques */}
             <Card>
               <CardHeader>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Statistiques</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Statistiques
+                </h3>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Images</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Images
+                  </span>
                   <span className="text-sm font-semibold text-gray-900 dark:text-white">
                     {photo.imageUrl?.length || 0}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Caractères</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Caractères
+                  </span>
                   <span className="text-sm font-semibold text-gray-900 dark:text-white">
                     {photo.description?.length || 0}
                   </span>

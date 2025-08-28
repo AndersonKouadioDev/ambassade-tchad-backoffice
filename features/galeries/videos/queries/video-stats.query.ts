@@ -1,7 +1,9 @@
 import getQueryClient from "@/lib/get-query-client";
-import {useQuery} from "@tanstack/react-query";
-import {getVideoStatsAction} from "../actions/video.action";
-import {videoKeyQuery} from "./index.query";
+import { useQuery } from "@tanstack/react-query";
+import { getVideoStatsAction } from "../actions/video.action";
+import { videoKeyQuery } from "./index.query";
+import React from "react";
+import { toast } from "sonner";
 
 const queryClient = getQueryClient();
 
@@ -11,6 +13,9 @@ export const videoStatsQueryOption = () => {
         queryKey: videoKeyQuery(),
         queryFn: async () => {
             const result = await getVideoStatsAction();
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la récupération des stats des videos");
+            }
             return result.data!;
         },
         keepPreviousData: true,
@@ -19,7 +24,13 @@ export const videoStatsQueryOption = () => {
 }
 // Hook pour récupérer les stats des videos
 export const useVideoStats = () => {
-    return useQuery(videoStatsQueryOption());
+    const query = useQuery(videoStatsQueryOption());
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error(query.error?.message);
+        }
+    }, [query]);
+    return query;
 };
 
 // Hook pour précharger les stats des videos

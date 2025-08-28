@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { IActualite } from "../../types/actualites.type";
 import { useSupprimerActualiteMutation } from "../../queries/actualite.mutation";
+import { useRouter } from "next/navigation";
 
 type Props = {
   isOpen: boolean;
@@ -20,11 +21,8 @@ type Props = {
   actualite: IActualite | null;
 };
 
-export function ActualiteDeleteModal({
-  isOpen,
-  setIsOpen,
-  actualite,
-}: Props) {
+export function ActualiteDeleteModal({ isOpen, setIsOpen, actualite }: Props) {
+  const router = useRouter();
   const { mutateAsync: supprimerActualiteMutation, isPending } =
     useSupprimerActualiteMutation();
 
@@ -32,7 +30,8 @@ export function ActualiteDeleteModal({
     if (!isPending) {
       setIsOpen(false);
     }
-  }, [isPending, setIsOpen]);
+    router.push("/contenu/actualite");
+  }, [isPending, setIsOpen, router]);
 
   const handleDelete = useCallback(async () => {
     try {
@@ -51,9 +50,7 @@ export function ActualiteDeleteModal({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            {`Supprimer ${actualite?.title} ?`}
-          </DialogTitle>
+          <DialogTitle>{`Supprimer ${actualite?.title} ?`}</DialogTitle>
           <DialogDescription>
             Êtes-vous sûr de vouloir supprimer cette actualité ?
           </DialogDescription>

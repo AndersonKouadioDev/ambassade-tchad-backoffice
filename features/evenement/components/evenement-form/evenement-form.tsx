@@ -25,24 +25,23 @@ import {
   useEvenementCreateMutation,
   useEvenementUpdateMutation,
 } from "@/features/evenement/queries/evenement.mutation";
-import {
-  ExistingImageFile,
-  MixedImageFile,
-  NewImageFile,
-} from "@/features/actualites/components/actualite-form/actualite-add-update-form";
-import { ImageDragDrop } from "@/components/blocks/image-drap-drop";
+
 import { useEvenementDetailQuery } from "@/features/evenement/queries/evenement-details.query";
 import { getFullUrlFile } from "@/utils/getFullUrlFile";
+import { useFileUpload } from "@/hooks/use-file-upload";
+import FileUploadView from "@/components/blocks/file-upload-view";
+import { createFileFromUrl } from "@/utils/createFileMetadataFromUrl";
 
 interface EvenementFormProps {
   id?: string;
 }
 
 export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
-  const { data: evenement } = useEvenementDetailQuery(id!);
+  const { data: evenement, isLoading: isLoadingEvenement } =
+    useEvenementDetailQuery(id!);
 
   const router = useRouter();
-  const [imageFiles, setImageFiles] = useState<MixedImageFile[]>([]);
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     evenement?.eventDate instanceof Date
       ? evenement.eventDate
@@ -50,6 +49,29 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
       ? new Date(evenement.eventDate)
       : undefined
   );
+
+  // Upload images
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const maxFiles = 10;
+  const maxSizeMB = 20;
+  const [
+    { files, isDragging, errors: fileErrors },
+    {
+      handleDragEnter,
+      handleDragLeave,
+      handleDragOver,
+      handleDrop,
+      openFileDialog,
+      removeFile,
+      clearFiles,
+      getInputProps,
+    },
+  ] = useFileUpload({
+    multiple: true,
+    maxFiles,
+    maxSize: maxSizeMB * 1024 * 1024,
+    initialFiles: imageFiles,
+  });
 
   // Hook de mutations
   const {
@@ -62,7 +84,8 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
     isPending: evenementUpdatePending,
   } = useEvenementUpdateMutation();
 
-  const isLoading = evenementCreatePending || evenementUpdatePending;
+  const isLoading =
+    evenementCreatePending || evenementUpdatePending || isLoadingEvenement;
 
   const {
     register,
@@ -87,24 +110,30 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
   });
 
   useEffect(() => {
-    if (evenement) {
-      setValue("title", evenement.title);
-      setValue("description", evenement.description);
-      setValue("published", evenement.published);
+    async function loadEvenement() {
+      if (evenement) {
+        setValue("title", evenement.title);
+        setValue("description", evenement.description);
+        setValue("published", evenement.published);
+        if (
+          evenement?.imageUrl &&
+          evenement.imageUrl.length > 0 &&
+          !isLoading
+        ) {
+          // Mapper les images existantes
+          const existingImages = await Promise.all(
+            evenement?.imageUrl?.map(
+              async (imageUrl) =>
+                await createFileFromUrl(getFullUrlFile(imageUrl))
+            ) || []
+          );
 
-      // Mapper les images existantes
-      const existingImages: ExistingImageFile[] =
-        evenement?.imageUrl?.map((imageUrl, index) => ({
-          id: `existing-${index}`,
-          url: getFullUrlFile(imageUrl),
-          preview: getFullUrlFile(imageUrl),
-          name: imageUrl.split("/").pop() || `Image ${index + 1}`,
-          isExisting: true,
-        })) || [];
-
-      setImageFiles(existingImages);
+          setImageFiles(existingImages);
+        }
+      }
     }
-  }, [evenement, setValue]);
+    loadEvenement();
+  }, [evenement, setValue, isLoading]);
 
   const handleCancel = () => {
     router.push("/contenu/evenement");
@@ -114,9 +143,7 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
 
   const onSubmitForm = async (data: EvenementDTO) => {
     try {
-      const newImages: File[] = imageFiles
-        .filter((imageFile): imageFile is NewImageFile => !imageFile.isExisting)
-        .map((newImage) => newImage.file);
+      const newImages: File[] = files.map((newImage) => newImage.file as File);
 
       const submitData = {
         title: data.title,
@@ -239,10 +266,20 @@ export const EvenementForm: React.FC<EvenementFormProps> = ({ id }) => {
           </div>
 
           {/* Images */}
-          <ImageDragDrop
-            imageFiles={imageFiles}
-            setImageFiles={setImageFiles}
-            isUpdateMode={!!evenement}
+          <FileUploadView
+            maxFiles={maxFiles}
+            maxSizeMB={maxSizeMB}
+            openFileDialog={openFileDialog}
+            handleDragEnter={handleDragEnter}
+            handleDragLeave={handleDragLeave}
+            handleDragOver={handleDragOver}
+            handleDrop={handleDrop}
+            files={files}
+            isDragging={isDragging}
+            errors={fileErrors}
+            removeFile={removeFile}
+            clearFiles={clearFiles}
+            getInputProps={getInputProps}
           />
 
           {/* Switch publié */}

@@ -1,49 +1,42 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Textarea} from "@/components/ui/textarea";
-import {Badge} from "@/components/ui/badge";
-import {Switch} from "@/components/ui/switch";
-import {Label} from "@/components/ui/label";
-import {ActualiteCreateDTO, actualiteCreateSchema,} from "../../schemas/actualites.schema";
-import {useRouter} from "next/navigation";
-import {ImageDragDrop, ImageFile} from "@/components/blocks/image-drap-drop";
-import {useActualiteCreateMutation, useActualiteUpdateMutation,} from "../../queries/actualite.mutation";
-import {useActualiteDetailQuery} from "../../queries/actualite-details.query";
-import {getFullUrlFile} from "@/utils/getFullUrlFile";
-import {Button} from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  ActualiteCreateDTO,
+  actualiteCreateSchema,
+} from "../../schemas/actualites.schema";
+import { useRouter } from "next/navigation";
+import {
+  useActualiteCreateMutation,
+  useActualiteUpdateMutation,
+} from "../../queries/actualite.mutation";
+import { useActualiteDetailQuery } from "../../queries/actualite-details.query";
+import { getFullUrlFile } from "@/utils/getFullUrlFile";
+import { Button } from "@/components/ui/button";
+import FileUploadView from "@/components/blocks/file-upload-view";
+import { createFileFromUrl } from "@/utils/createFileMetadataFromUrl";
+import { useFileUpload } from "@/hooks/use-file-upload";
 
 interface ActualiteFormProps {
   id?: string;
 }
 
-// Interface pour différencier les images existantes des nouvelles
-export interface ExistingImageFile extends Omit<ImageFile, "file"> {
-  file?: File;
-  url: string;
-  isExisting: true;
-}
-
-export interface NewImageFile extends ImageFile {
-  file: any;
-  isExisting: false;
-}
-
-export type MixedImageFile = ExistingImageFile | NewImageFile;
-
 export const ActualiteAddUpdateForm: React.FC<ActualiteFormProps> = ({
   id,
 }) => {
   // Récupération de l'actualite si id est fourni
-  const { data: actualite } = useActualiteDetailQuery(id!);
+  const { data: actualite, isLoading: isLoadingActualite } =
+    useActualiteDetailQuery(id!);
 
   const router = useRouter();
-
-  const [imageFiles, setImageFiles] = useState<MixedImageFile[]>([]);
 
   const {
     register,
@@ -60,31 +53,34 @@ export const ActualiteAddUpdateForm: React.FC<ActualiteFormProps> = ({
     },
   });
 
-  useEffect(() => {
-    if (actualite) {
-      setValue("title", actualite.title);
-      setValue("content", actualite.content);
-      setValue("published", actualite.published);
-
-      // Mapper les images existantes
-      const existingImages: ExistingImageFile[] =
-        actualite?.imageUrls?.map((imageUrl, index) => ({
-          id: `existing-${index}`,
-          url: getFullUrlFile(imageUrl),
-          preview: getFullUrlFile(imageUrl),
-          name: imageUrl.split("/").pop() || `Image ${index + 1}`,
-          isExisting: true,
-        })) || [];
-
-      setImageFiles(existingImages);
-    }
-  }, [actualite, setValue]);
-
   const handleCancel = () => {
     router.push("/contenu/actualite");
   };
 
   const watchedPublished = watch("published");
+
+  // Upload images
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const maxFiles = 10;
+  const maxSizeMB = 20;
+  const [
+    { files, isDragging, errors: fileErrors },
+    {
+      handleDragEnter,
+      handleDragLeave,
+      handleDragOver,
+      handleDrop,
+      openFileDialog,
+      removeFile,
+      clearFiles,
+      getInputProps,
+    },
+  ] = useFileUpload({
+    multiple: true,
+    maxFiles,
+    maxSize: maxSizeMB * 1024 * 1024,
+    initialFiles: imageFiles,
+  });
 
   // Hook de mutations
   const {
@@ -97,13 +93,38 @@ export const ActualiteAddUpdateForm: React.FC<ActualiteFormProps> = ({
     isPending: actualiteUpdatePending,
   } = useActualiteUpdateMutation();
 
-  const isLoading = actualiteCreatePending || actualiteUpdatePending;
+  const isLoading =
+    actualiteCreatePending || actualiteUpdatePending || isLoadingActualite;
+
+  useEffect(() => {
+    async function loadActualite() {
+      if (actualite) {
+        setValue("title", actualite.title);
+        setValue("content", actualite.content);
+        setValue("published", actualite.published);
+        if (
+          actualite?.imageUrls &&
+          actualite.imageUrls.length > 0 &&
+          !isLoading
+        ) {
+          // Mapper les images existantes
+          const existingImages = await Promise.all(
+            actualite?.imageUrls?.map(
+              async (imageUrl) =>
+                await createFileFromUrl(getFullUrlFile(imageUrl))
+            ) || []
+          );
+
+          setImageFiles(existingImages);
+        }
+      }
+    }
+    loadActualite();
+  }, [actualite, setValue, isLoading]);
 
   const onSubmitForm = async (data: ActualiteCreateDTO) => {
     try {
-      const newImages: File[] = imageFiles
-        .filter((imageFile): imageFile is NewImageFile => !imageFile.isExisting)
-        .map((newImage) => newImage.file);
+      const newImages: File[] = files.map((newImage) => newImage.file as File);
 
       const submitData = {
         title: data.title,
@@ -161,12 +182,21 @@ export const ActualiteAddUpdateForm: React.FC<ActualiteFormProps> = ({
               <p className="text-sm text-red-500">{errors.content.message}</p>
             )}
           </div>
-
           {/* Images */}
-          <ImageDragDrop
-            imageFiles={imageFiles}
-            setImageFiles={setImageFiles}
-            isUpdateMode={!!actualite}
+          <FileUploadView
+            maxFiles={maxFiles}
+            maxSizeMB={maxSizeMB}
+            openFileDialog={openFileDialog}
+            handleDragEnter={handleDragEnter}
+            handleDragLeave={handleDragLeave}
+            handleDragOver={handleDragOver}
+            handleDrop={handleDrop}
+            files={files}
+            isDragging={isDragging}
+            errors={fileErrors}
+            removeFile={removeFile}
+            clearFiles={clearFiles}
+            getInputProps={getInputProps}
           />
 
           {/* Statut de publication */}
@@ -187,7 +217,7 @@ export const ActualiteAddUpdateForm: React.FC<ActualiteFormProps> = ({
             <Button type="button" variant="outline" onClick={handleCancel}>
               Annuler
             </Button>
-            <Button type="submit"  disabled={isLoading}>
+            <Button type="submit" disabled={isLoading}>
               {isLoading
                 ? "Enregistrement..."
                 : actualite

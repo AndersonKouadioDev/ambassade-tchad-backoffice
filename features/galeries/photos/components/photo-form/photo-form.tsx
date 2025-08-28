@@ -8,40 +8,50 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { ImageDragDrop, ImageFile } from "@/components/blocks/image-drap-drop";
 import { getFullUrlFile } from "@/utils/getFullUrlFile";
 import { Button } from "@/components/ui/button";
 import { usePhotoDetailQuery } from "../../queries/photo-details.query";
 import { PhotoDTO, photoSchema } from "../../schemas/photo.schema";
-import { usePhotoCreateMutation, usePhotoUpdateMutation } from "../../queries/photo.mutation";
+import {
+  usePhotoCreateMutation,
+  usePhotoUpdateMutation,
+} from "../../queries/photo.mutation";
+import FileUploadView from "@/components/blocks/file-upload-view";
+import { createFileFromUrl } from "@/utils/createFileMetadataFromUrl";
+import { useFileUpload } from "@/hooks/use-file-upload";
 
 interface PhotoFormProps {
   id?: string;
 }
 
-// Interface pour différencier les images existantes des nouvelles
-export interface ExistingImageFile extends Omit<ImageFile, "file"> {
-  file?: File;
-  url: string;
-  isExisting: true;
-}
-
-export interface NewImageFile extends ImageFile {
-  file: any;
-  isExisting: false;
-}
-
-export type MixedImageFile = ExistingImageFile | NewImageFile;
-
-export const PhotoForm: React.FC<PhotoFormProps> = ({
-  id,
-}) => {
+export const PhotoForm: React.FC<PhotoFormProps> = ({ id }) => {
   // Récupération de la photo si id est fourni
-  const { data: photo } = usePhotoDetailQuery(id!);
+  const { data: photo, isLoading: isLoadingPhoto } = usePhotoDetailQuery(id!);
 
   const router = useRouter();
 
-  const [imageFiles, setImageFiles] = useState<MixedImageFile[]>([]);
+  // Upload images
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const maxFiles = 10;
+  const maxSizeMB = 20;
+  const [
+    { files, isDragging, errors: fileErrors },
+    {
+      handleDragEnter,
+      handleDragLeave,
+      handleDragOver,
+      handleDrop,
+      openFileDialog,
+      removeFile,
+      clearFiles,
+      getInputProps,
+    },
+  ] = useFileUpload({
+    multiple: true,
+    maxFiles,
+    maxSize: maxSizeMB * 1024 * 1024,
+    initialFiles: imageFiles,
+  });
 
   const {
     register,
@@ -56,49 +66,43 @@ export const PhotoForm: React.FC<PhotoFormProps> = ({
     },
   });
 
-  useEffect(() => {
-    if (photo) {
-      setValue("title", photo.title);
-      setValue("description", photo.description);
-
-      // Mapper les images existantes
-      const existingImages: ExistingImageFile[] =
-        photo?.imageUrl?.map((imageUrl, index) => ({
-          id: `existing-${index}`,
-          url: getFullUrlFile(imageUrl),
-          preview: getFullUrlFile(imageUrl),
-          name: imageUrl.split("/").pop() || `Image ${index + 1}`,
-          isExisting: true,
-        })) || [];
-
-      setImageFiles(existingImages);
-    }
-  }, [photo, setValue]);
-
   const handleCancel = () => {
     router.push("/contenu/galerie-photo");
   };
 
-
-
   // Hook de mutations
-  const {
-    mutateAsync: photoCreateMutation,
-    isPending: photoCreatePending,
-  } = usePhotoCreateMutation();
+  const { mutateAsync: photoCreateMutation, isPending: photoCreatePending } =
+    usePhotoCreateMutation();
 
-  const {
-    mutateAsync: photoUpdateMutation,
-    isPending: photoUpdatePending,
-  } = usePhotoUpdateMutation();
+  const { mutateAsync: photoUpdateMutation, isPending: photoUpdatePending } =
+    usePhotoUpdateMutation();
 
-  const isLoading = photoCreatePending || photoUpdatePending;
+  const isLoading = photoCreatePending || photoUpdatePending || isLoadingPhoto;
+
+  useEffect(() => {
+    async function loadPhoto() {
+      if (photo) {
+        setValue("title", photo.title);
+        setValue("description", photo.description);
+        if (photo?.imageUrl && photo.imageUrl.length > 0 && !isLoading) {
+          // Mapper les images existantes
+          const existingImages = await Promise.all(
+            photo?.imageUrl?.map(
+              async (imageUrl) =>
+                await createFileFromUrl(getFullUrlFile(imageUrl))
+            ) || []
+          );
+
+          setImageFiles(existingImages);
+        }
+      }
+    }
+    loadPhoto();
+  }, [photo, setValue, isLoading]);
 
   const onSubmitForm = async (data: PhotoDTO) => {
     try {
-      const newImages: File[] = imageFiles
-        .filter((imageFile): imageFile is NewImageFile => !imageFile.isExisting)
-        .map((newImage) => newImage.file);
+      const newImages: File[] = files.map((newImage) => newImage.file as File);
 
       const submitData = {
         title: data.title,
@@ -152,30 +156,36 @@ export const PhotoForm: React.FC<PhotoFormProps> = ({
               className={errors.description ? "border-red-500" : ""}
             />
             {errors.description && (
-              <p className="text-sm text-red-500">{errors.description.message}</p>
+              <p className="text-sm text-red-500">
+                {errors.description.message}
+              </p>
             )}
           </div>
 
           {/* Images */}
-          <ImageDragDrop
-            imageFiles={imageFiles}
-            setImageFiles={setImageFiles}
-            isUpdateMode={!!photo}
+          <FileUploadView
+            maxFiles={maxFiles}
+            maxSizeMB={maxSizeMB}
+            openFileDialog={openFileDialog}
+            handleDragEnter={handleDragEnter}
+            handleDragLeave={handleDragLeave}
+            handleDragOver={handleDragOver}
+            handleDrop={handleDrop}
+            files={files}
+            isDragging={isDragging}
+            errors={fileErrors}
+            removeFile={removeFile}
+            clearFiles={clearFiles}
+            getInputProps={getInputProps}
           />
-
-          
 
           {/* Boutons d'action */}
           <div className="flex gap-3 justify-end">
             <Button type="button" variant="outline" onClick={handleCancel}>
               Annuler
             </Button>
-            <Button type="submit"  disabled={isLoading}>
-              {isLoading
-                ? "Enregistrement..."
-                : photo
-                ? "Modifier"
-                : "Créer"}
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Enregistrement..." : photo ? "Modifier" : "Créer"}
             </Button>
           </div>
         </form>

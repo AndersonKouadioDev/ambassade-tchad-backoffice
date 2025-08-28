@@ -1,4 +1,5 @@
 "use server";
+
 import { ActionResponse, PaginatedResponse } from "@/types";
 import { actualiteAPI } from "../api/actualites.api";
 import { IActualite, IActualiteRechercheParams, IActualiteStatsResponse } from "../types/actualites.type";

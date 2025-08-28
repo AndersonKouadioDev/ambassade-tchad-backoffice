@@ -3,6 +3,8 @@ import getQueryClient from "@/lib/get-query-client";
 import {IVideoRechercheParams} from "../types/video.type";
 import {getVideoTousAction} from "../actions/video.action";
 import {videoKeyQuery} from "./index.query";
+import React from "react";
+import { toast } from "sonner";
 
 const queryClient = getQueryClient();
 
@@ -12,6 +14,9 @@ export const videoListQueryOption = (videoSearchParams: IVideoRechercheParams) =
         queryKey: videoKeyQuery('list', videoSearchParams),
         queryFn: async () => {
             const result = await getVideoTousAction(videoSearchParams);
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la récupération des videos");
+            }
             return result.data!;
         }
         ,
@@ -22,7 +27,13 @@ export const videoListQueryOption = (videoSearchParams: IVideoRechercheParams) =
 
 // Hook pour récupérer les videos
 export const useVideosList = (videoSearchParams: IVideoRechercheParams) => {
-    return useQuery(videoListQueryOption(videoSearchParams));
+    const query = useQuery(videoListQueryOption(videoSearchParams));
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error(query.error?.message);
+        }
+    }, [query]);
+    return query;
 };
 
 // Hook pour précharger les videos

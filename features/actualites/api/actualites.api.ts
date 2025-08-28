@@ -17,7 +17,8 @@ export const actualiteAPI: IActualiteAPI = {
         return api.request<PaginatedResponse<IActualite>>({
             endpoint: `/news`,
             method: "GET",
-            searchParams: params as SearchParams,
+            searchParams: params,
+            service: "public"
         });
     },
 
@@ -25,6 +26,7 @@ export const actualiteAPI: IActualiteAPI = {
         return api.request<IActualite>({
             endpoint: `/news/${id}`,
             method: "GET",
+            service: "public"
         });
     },
 

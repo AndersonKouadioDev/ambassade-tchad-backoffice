@@ -15,16 +15,14 @@ import { IVideo } from "../../types/video.type";
 import { VideoListCard } from "./video-card";
 
 export const VideoListTable = () => {
-
   const {
     data,
     isLoading,
     error,
     filters,
     handleView,
-    handleDelete,
     handleTextFilterChange,
-    } = useVideoCardList();
+  } = useVideoCardList();
 
   if (error) {
     return (
@@ -77,9 +75,7 @@ export const VideoListTable = () => {
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold mb-2">
-            Aucune video trouvée
-          </h3>
+          <h3 className="text-lg font-semibold mb-2">Aucune video trouvée</h3>
           <p className="text-muted-foreground">
             Aucune video ne correspond à vos critères de recherche.
           </p>
@@ -88,45 +84,11 @@ export const VideoListTable = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {data?.map((video: IVideo) => (
-              <VideoListCard
-                key={video.id}
-                video={video}
-                onView={handleView}
-                onDelete={handleDelete}
-              />
+              <VideoListCard key={video.id} video={video} onView={handleView} />
             ))}
           </div>
-
-          {/* {pagination.totalPages > 1 && (
-            <ActualitePagination
-              currentPage={pagination.currentPage}
-              totalPages={pagination.totalPages}
-              totalItems={pagination.totalItems}
-              itemsPerPage={pagination.itemsPerPage}
-              onPageChange={handlePageChange}
-              onItemsPerPageChange={handleItemsPerPageChange}
-            />
-          )} */}
         </>
       )}
-
-      {/* <ActualiteViewModal
-        actualite={selectedActualite}
-        isOpen={isViewModalOpen}
-        onClose={() => setIsViewModalOpen(false)}
-        onOpenImageGallery={handleOpenImageGallery}
-      /> */}
-
-      {/* {selectedActualite &&
-        selectedActualite.imageUrls &&
-        selectedActualite.imageUrls.length > 0 && (
-          <ActualiteImageGalleryModal
-            isOpen={isImageGalleryOpen}
-            onClose={() => setIsImageGalleryOpen(false)}
-            images={selectedActualite.imageUrls}
-            title={selectedActualite.title}
-          />
-        )} */}
     </div>
   );
 };

@@ -2,6 +2,8 @@ import getQueryClient from "@/lib/get-query-client";
 import {useQuery} from "@tanstack/react-query";
 import {getPhotoStatsAction} from "../actions/photo.action";
 import {photoKeyQuery} from "./index.query";
+import React from "react";
+import { toast } from "sonner";
 
 const queryClient = getQueryClient();
 
@@ -11,6 +13,9 @@ export const photoStatsQueryOption = () => {
         queryKey: photoKeyQuery(),
         queryFn: async () => {
             const result = await getPhotoStatsAction();
+            if (!result.success) {
+                throw new Error(result.error || "Erreur lors de la récupération des stats des photos");
+            }
             return result.data!;
         },
         keepPreviousData: true,
@@ -19,7 +24,13 @@ export const photoStatsQueryOption = () => {
 }
 // Hook pour récupérer les stats des photos
 export const usePhotoStats = () => {
-    return useQuery(photoStatsQueryOption());
+    const query = useQuery(photoStatsQueryOption());
+    React.useEffect(() => {
+        if (query.error || query.isError) {
+            toast.error(query.error?.message);
+        }
+    }, [query]);
+    return query;
 };
 
 // Hook pour précharger les stats des photos

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { AlertTriangle, Search } from "lucide-react";
 import {
   Card,
@@ -16,21 +15,14 @@ import { ActualiteFilters } from "./actualite-filters";
 import { ActualiteCard } from "./actualite-card";
 
 export const ActualiteListTable: React.FC = () => {
-  const router = useRouter();
-
   const {
     data,
     isLoading,
     error,
     filters,
-    pagination,
     handleTextFilterChange,
     handlePublishedFilterChange,
-    handlePageChange,
-    handleItemsPerPageChange,
     handleView,
-    handleDelete,
-    currentActualite,
   } = useActualiteListTable();
 
   if (error) {
@@ -100,7 +92,6 @@ export const ActualiteListTable: React.FC = () => {
                 key={actualite.id}
                 actualite={actualite}
                 onView={handleView}
-                onDelete={handleDelete}
               />
             ))}
           </div>

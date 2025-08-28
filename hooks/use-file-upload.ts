@@ -5,6 +5,7 @@ import {
   useCallback,
   useRef,
   useState,
+  useEffect,
   type ChangeEvent,
   type DragEvent,
   type InputHTMLAttributes,
@@ -29,7 +30,7 @@ export type FileUploadOptions = {
   maxSize?: number // in bytes
   accept?: string
   multiple?: boolean // Defaults to false
-  initialFiles?: FileMetadata[]
+  initialFiles?: File[] | FileMetadata[]
   onFilesChange?: (files: FileWithPreview[]) => void // Callback when files change
   onFilesAdded?: (addedFiles: FileWithPreview[]) => void // Callback when new files are added
 }
@@ -57,7 +58,16 @@ export type FileUploadActions = {
     ref: React.Ref<HTMLInputElement>
   }
 }
-
+/**
+ * Options for the file upload hook.
+ * @param maxFiles - Maximum number of files that can be uploaded (only used when multiple is true, defaults to Infinity)
+ * @param maxSize - Maximum size of a file in bytes
+ * @param accept - MIME types of files that are accepted
+ * @param multiple - Whether multiple files can be uploaded (defaults to false)
+ * @param initialFiles - Initial files to be displayed {name: string, size: number, type: string, url: string, id: string}
+ * @param onFilesChange - Callback when files change
+ * @param onFilesAdded - Callback when new files are added
+ */
 export const useFileUpload = (
   options: FileUploadOptions = {}
 ): [FileUploadState, FileUploadActions] => {
@@ -70,16 +80,26 @@ export const useFileUpload = (
     onFilesChange,
     onFilesAdded,
   } = options
-
   const [state, setState] = useState<FileUploadState>({
-    files: initialFiles.map((file) => ({
+    files: initialFiles.map((file, i) => ({
       file,
-      id: file.id,
-      preview: file.url,
+      id: file instanceof File ? file.name + i : file.id,
+      preview: file instanceof File ? URL.createObjectURL(file) : file.url,
     })),
     isDragging: false,
     errors: [],
   })
+  // useEffect to update files when initialFiles change
+  useEffect(() => {
+    setState((prev) => ({
+      ...prev,
+      files: initialFiles.map((file, i) => ({
+        file,
+        id: file instanceof File ? file.name + i : file.id,
+        preview: file instanceof File ? URL.createObjectURL(file) : file.url,
+      })),
+    }))
+  }, [initialFiles])
 
   const inputRef = useRef<HTMLInputElement>(null)
 

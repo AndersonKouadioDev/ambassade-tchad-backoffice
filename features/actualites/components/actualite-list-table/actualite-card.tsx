@@ -1,31 +1,28 @@
 "use client";
 
-import React, {useState} from "react";
-import {Calendar, Clock, Eye, SquarePen, Trash2, User,} from "lucide-react";
-import {Card, CardContent, CardFooter,} from "@/components/ui/card";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {Badge} from "@/components/ui/badge";
-import {cn} from "@/lib/utils";
-import {IActualite} from "../../types/actualites.type";
-import {useRouter} from "next/navigation";
-import {Button} from "@/components/ui/button";
-import {ActualiteDeleteModal} from "../actualite-modal/actualite-delete-modal";
-import {Link} from "@/i18n/navigation";
+import React, { useState } from "react";
+import { Calendar, Clock, Eye, SquarePen, Trash2, User } from "lucide-react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { IActualite } from "../../types/actualites.type";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ActualiteDeleteModal } from "../actualite-modal/actualite-delete-modal";
+import { Link } from "@/i18n/navigation";
 import CarouselImage from "@/components/blocks/carousel-image";
 
 interface ActualiteCardProps {
   actualite: IActualite;
   onView: (actualite: IActualite) => void;
-  onDelete: (actualite: IActualite) => void;
 }
 
 export const ActualiteCard: React.FC<ActualiteCardProps> = ({
   actualite,
   onView,
-  onDelete,
 }) => {
   const router = useRouter();
-  const [imageError, setImageError] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   const getInitials = (firstName?: string, lastName?: string) => {
@@ -35,17 +32,6 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
 
   const handleDeleteClick = () => {
     setShowDeleteAlert(true);
-  };
-
-  const handleConfirmDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onDelete(actualite);
-    setShowDeleteAlert(false);
-  };
-
-  const handleCancelDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowDeleteAlert(false);
   };
 
   return (
@@ -173,36 +159,36 @@ export const ActualiteCard: React.FC<ActualiteCardProps> = ({
                 {actualite.author?.firstName && actualite.author?.lastName
                   ? `${actualite.author.firstName} ${actualite.author.lastName}`
                   : actualite.author?.firstName
-                    ? actualite.author.firstName
-                    : actualite.author?.lastName
-                      ? actualite.author.lastName
-                      : actualite.author?.email
-                        ? actualite.author.email
-                        : `Auteur (${actualite.authorId.slice(0, 8)}...)`}
+                  ? actualite.author.firstName
+                  : actualite.author?.lastName
+                  ? actualite.author.lastName
+                  : actualite.author?.email
+                  ? actualite.author.email
+                  : `Auteur (${actualite.authorId.slice(0, 8)}...)`}
               </div>
 
               <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                 <Clock className="w-3.5 h-3.5" />
                 {actualite.createdAt
                   ? new Date(actualite.createdAt).toLocaleDateString("fr-FR", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
                   : "Date inconnue"}
               </div>
             </div>
           </div>
         </CardFooter>
-
       </Card>
 
-
-      <ActualiteDeleteModal actualite={actualite} isOpen={showDeleteAlert} setIsOpen={setShowDeleteAlert} />
-      
+      <ActualiteDeleteModal
+        actualite={actualite}
+        isOpen={showDeleteAlert}
+        setIsOpen={setShowDeleteAlert}
+      />
     </>
   );
 };
-

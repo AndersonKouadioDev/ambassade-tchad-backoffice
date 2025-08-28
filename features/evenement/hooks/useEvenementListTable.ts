@@ -46,7 +46,9 @@ export const useEvenementListTable = () => {
     }
 
     // Si published est 'all' ou undefined, ne pas l'inclure du tout
-
+    if (filters.published && filters.published !== 'all') {
+      params.published = filters.published === 'true';
+    }
     return params;
   }, [filters]);
 

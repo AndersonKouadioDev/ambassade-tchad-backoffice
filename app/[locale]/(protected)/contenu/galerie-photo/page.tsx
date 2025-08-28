@@ -1,4 +1,3 @@
-
 import { PhotoStats } from "@/features/galeries/photos/components";
 import { prefetchPhotosList } from "@/features/galeries/photos/queries/photo-list.query";
 import { prefetchPhotoStats } from "@/features/galeries/photos/queries/photo-stats.query";
@@ -7,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { PhotoListTable } from "@/features/galeries/photos/components/photo-list";
 
 export default async function PhotoListPage() {
-  const t = await getTranslations("contenu.gestionActualite");
+  const t = await getTranslations("contenu.gestionPhoto");
 
   // Prechargement des données
   await Promise.all([
@@ -27,14 +26,14 @@ export default async function PhotoListPage() {
           <div>
             <h1 className="text-3xl font-bold">{t("title")}</h1>
             <p className="text-primary-100 mt-2">
-              Gérez et organisez vos actualités avec une interface moderne et
+              Gérez et organisez vos photos avec une interface moderne et
               intuitive
             </p>
           </div>
         </div>
       </div>
 
-      <PhotoStats/>
+      <PhotoStats />
 
       <div className="bg-white dark:bg-default-100 rounded-xl shadow-sm border border-default-200/50 p-6">
         <PhotoListTable />

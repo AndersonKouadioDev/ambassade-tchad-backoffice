@@ -1,6 +1,5 @@
 import { PaginatedResponse } from "@/types";
 import { api } from "@/lib/api";
-import { SearchParams } from "ak-api-http";
 import { IPhoto, IPhotoRechercheParams, IPhotoStats } from "../types/photo.type";
 export interface IPhotoAPI {
     getAll: (params: IPhotoRechercheParams) => Promise<PaginatedResponse<IPhoto>>;
@@ -16,7 +15,8 @@ export const photoAPI: IPhotoAPI = {
         return api.request<PaginatedResponse<IPhoto>>({
             endpoint: `/photos`,
             method: "GET",
-            searchParams: params as SearchParams
+            searchParams: params,
+            service: "public"
         });
     },
 
@@ -24,6 +24,7 @@ export const photoAPI: IPhotoAPI = {
         return api.request<IPhoto>({
             endpoint: `/photos/${id}`,
             method: "GET",
+            service: "public"
         });
     },
 
@@ -34,7 +35,7 @@ export const photoAPI: IPhotoAPI = {
         });
     },
 
-        create(formData: FormData): Promise<IPhoto> {
+    create(formData: FormData): Promise<IPhoto> {
 
         return api.request<IPhoto>({
             endpoint: `/photos`,

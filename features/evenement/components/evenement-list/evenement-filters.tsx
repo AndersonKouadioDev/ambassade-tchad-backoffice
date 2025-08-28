@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import {Search, Plus, Calendar} from "lucide-react";
+import { Search, Plus, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,10 +15,13 @@ import {
 interface EvenentFiltersProps {
   filters: {
     title: string;
-    published: 'true' | 'false' | 'all' | null;
+    published: "true" | "false" | "all" | null;
     eventDate: string;
   };
-  onTextFilterChange: (filterName: 'title' | 'description' | 'authorId' | 'eventDate', value: string) => void;
+  onTextFilterChange: (
+    filterName: "title" | "authorId" | "eventDate",
+    value: string
+  ) => void;
   onPublishedFilterChange: (value: string) => void;
   onCreate: () => void;
 }
@@ -45,14 +48,14 @@ export const EvenementFilters: React.FC<EvenentFiltersProps> = ({
         <div className="relative">
           <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
-              placeholder="Rechercher par date d'évènement..."
-              type="date"
-              value={filters.eventDate || ""}
-              onChange={(e) => onTextFilterChange("eventDate", e.target.value)}
-              className="pl-10 w-full"
+            placeholder="Rechercher par date d'évènement..."
+            type="date"
+            value={filters.eventDate || ""}
+            onChange={(e) => onTextFilterChange("eventDate", e.target.value)}
+            className="pl-10 w-full"
           />
         </div>
-        
+
         <Select
           value={filters.published || "all"}
           onValueChange={onPublishedFilterChange}
@@ -66,7 +69,6 @@ export const EvenementFilters: React.FC<EvenentFiltersProps> = ({
             <SelectItem value="false">Brouillon</SelectItem>
           </SelectContent>
         </Select>
-
       </div>
 
       <Button onClick={onCreate} className="w-full sm:w-auto">
@@ -75,4 +77,4 @@ export const EvenementFilters: React.FC<EvenentFiltersProps> = ({
       </Button>
     </div>
   );
-}; 
+};
